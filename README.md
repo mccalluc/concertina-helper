@@ -1,6 +1,16 @@
 # concertina-helper
 Python script to find good fingerings for musical passages on the Anglo-German concertina.
 
+## Getting started
+
+```
+git clone https://github.com/mccalluc/concertina-helper.git
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+pip install -r requirements-dev.txt
+```
+
 ## Other tools
 
 ### Fingerings over passages
