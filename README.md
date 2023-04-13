@@ -22,5 +22,5 @@ pip install -r requirements-dev.txt
 ### Just notes and chords
 
 - [Anglo Piano](https://anglopiano.com/): Web page with piano and a variety of concertina layouts. Shows all possible fingerings for notes and chords.
-- [KonzertinaNetz](https://www.konzertinanetz.de/): Auf Deutsch. Includes windows .exe for download.
+- [KonzertinaNetz](https://www.konzertinanetz.de/): Auf Deutsch. Includes windows `.exe` for download.
 - [german-concertina-notes](https://github.com/daniel-leinweber/german-concertina-notes): HTML and JS, but not deployed to a site.
