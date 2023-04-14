@@ -16,11 +16,10 @@ class BisonoricFingering(Fingering):
     def __init__(self, direction: Direction, fingering: UnisonoricFingering):
         self.direction = direction
         self.fingering = fingering
-    pass
 
-class Layout(ABC):
-    @abstractmethod
-    def get_fingerings(pitch: Pitch) -> set(Fingering): pass
+class Layout:
+    def get_fingerings(self, pitch: Pitch) -> set[Fingering]:
+        pass
 
 
 class UnisonoricLayout(Layout):
@@ -41,6 +40,11 @@ class BisonoricLayout(Layout):
         )
 
 def names_to_pitches(matrix: list[list[str]]) -> list[list[Pitch]]:
+    '''
+    >>> pitch_matrix = names_to_pitches([['C4']])
+    >>> pitch_matrix[0][0].name
+    'C4'
+    '''
     return [[Pitch.from_name(name) for name in row] for row in matrix]
 
 cg_anglo_wheatstone_push_layout = UnisonoricLayout(
