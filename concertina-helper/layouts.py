@@ -6,29 +6,26 @@ class Direction(Enum):
     PUSH = auto()
     PULL = auto()
 
-class Fingering(ABC):
+class UnisonoricFingering:
     pass
 
-class UnisonoricFingering(Fingering):
-    pass
-
-class BisonoricFingering(Fingering):
+class BisonoricFingering:
     def __init__(self, direction: Direction, fingering: UnisonoricFingering):
         self.direction = direction
         self.fingering = fingering
 
 class Layout:
-    def get_fingerings(self, pitch: Pitch) -> set[Fingering]:
-        pass
-
+    pass
 
 class UnisonoricLayout(Layout):
     def __init__(self, left: list[list[Pitch]], right: list[list[Pitch]]):
         self.left = left
         self.right = right
+    def get_fingerings(self, pitch: Pitch) -> set[UnisonoricFingering]:
+        return set()
 
 class BisonoricLayout(Layout):
-    def __init__(self, push_layout: UnisonoricLayout = None, pull_layout: UnisonoricLayout = None):
+    def __init__(self, push_layout: UnisonoricLayout, pull_layout: UnisonoricLayout):
         self.push_layout = push_layout
         self.pull_layout = pull_layout
     def get_fingerings(self, pitch: Pitch) -> set[BisonoricFingering]:
