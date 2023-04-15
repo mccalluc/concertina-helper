@@ -1,3 +1,4 @@
+from __future__ import annotations
 from abc import ABC, abstractmethod
 from enum import Enum, auto
 from pyabc2 import Pitch
@@ -6,8 +7,13 @@ class Direction(Enum):
     PUSH = auto()
     PULL = auto()
 
+Mask = list[list[bool]]
+
 class UnisonoricFingering:
-    pass
+    def __init__(self, layout: UnisonoricLayout, left_mask: Mask, right_mask: Mask):
+        self.layout = layout
+        self.left_mask = left_mask
+        self.right_mask = right_mask
 
 class BisonoricFingering:
     def __init__(self, direction: Direction, fingering: UnisonoricFingering):
@@ -17,12 +23,19 @@ class BisonoricFingering:
 class Layout:
     pass
 
+
+def split_masks(left_mask: Mask, right_mask: Mask) -> set[tuple[Mask, Mask]]:
+    return set() # TODO
+
 class UnisonoricLayout(Layout):
     def __init__(self, left: list[list[Pitch]], right: list[list[Pitch]]):
         self.left = left
         self.right = right
     def get_fingerings(self, pitch: Pitch) -> set[UnisonoricFingering]:
-        return set()
+        return split_masks(
+            [[pitch == button for button in row] for row in self.left],
+            [[pitch == button for button in row] for row in self.right]
+        )
 
 class BisonoricLayout(Layout):
     def __init__(self, push_layout: UnisonoricLayout, pull_layout: UnisonoricLayout):
