@@ -14,6 +14,20 @@ class UnisonoricFingering:
         self.layout = layout
         self.left_mask = left_mask
         self.right_mask = right_mask
+    def __repr__(self) -> str:
+        return f'UnisonoricFingering({repr(self.layout)}, {repr(self.left_mask)}, {repr(self.right_mask)})'
+    def __str__(self) -> str:
+        lines = []
+        for i, (left_mask_row, right_mask_row) in enumerate(zip(self.left_mask, self.right_mask)):
+            cols = []
+            for j, button in enumerate(left_mask_row):
+                cols.append(self.layout.left[i][j].name.ljust(3) if button else '---')
+            cols.append('   ')
+            for j, button in enumerate(right_mask_row):
+                cols.append(self.layout.right[i][j].name.ljust(3) if button else '---')
+            lines.append(' '.join(cols))
+        return '\n'.join(lines)
+
 
 class BisonoricFingering:
     def __init__(self, direction: Direction, fingering: UnisonoricFingering):
@@ -32,10 +46,24 @@ class UnisonoricLayout(Layout):
         self.left = left
         self.right = right
     def get_fingerings(self, pitch: Pitch) -> set[UnisonoricFingering]:
-        return split_masks(
-            [[pitch == button for button in row] for row in self.left],
-            [[pitch == button for button in row] for row in self.right]
-        )
+        return set() # TODO
+    #     return split_masks(
+    #         [[pitch == button for button in row] for row in self.left],
+    #         [[pitch == button for button in row] for row in self.right]
+    #     )
+    def __repr__(self) -> str:
+        return f'UnisonoricLayout({repr(self.left)}, {repr(self.right)})'
+    def __str__(self) -> str:
+        lines = []
+        for left_row, right_row in zip(self.left, self.right):
+            cols = []
+            for button in left_row:
+                cols.append(button.name.ljust(3))
+            cols.append('   ')
+            for button in right_row:
+                cols.append(button.name.ljust(3))
+            lines.append(' '.join(cols))
+        return '\n'.join(lines)
 
 class BisonoricLayout(Layout):
     def __init__(self, push_layout: UnisonoricLayout, pull_layout: UnisonoricLayout):

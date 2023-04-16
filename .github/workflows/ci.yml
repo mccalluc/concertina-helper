@@ -19,6 +19,4 @@ jobs:
           pip install -r requirements.txt
           pip install -r requirements-dev.txt 
 
-      - run: pytest
-
-      - run: mypy .
+      - run: ./test.sh
