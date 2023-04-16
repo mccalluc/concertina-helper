@@ -1,10 +1,10 @@
-from layouts import UnisonoricLayout, UnisonoricFingering, names_to_pitches
+from layouts import UnisonoricLayout, UnisonoricFingering, _names_to_pitches
 
 u_layout = UnisonoricLayout(
-    names_to_pitches(
+    _names_to_pitches(
     [['C4', 'E4', 'G4'],
      ['G4', 'B4', 'D5']]),
-    names_to_pitches(
+    _names_to_pitches(
     [['C5', 'E5', 'G5'],
      ['G5', 'B5', 'D6']]),
 )
