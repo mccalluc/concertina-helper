@@ -8,3 +8,5 @@ pytest --verbose --doctest-modules
 
 mypy concertina_helper
 
+flake8 && echo 'flake8 passes'
+
