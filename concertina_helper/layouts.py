@@ -43,6 +43,12 @@ class BisonoricFingering:
         self.direction = direction
         self.fingering = fingering
 
+    def __repr__(self) -> str:
+        return f'BisonoricFingering({repr(self.direction)}, {repr(self.fingering)})'
+
+    def __str__(self) -> str:
+        return f'{self.direction.name}\n{self.fingering}'
+
 
 class Layout:
     pass
@@ -110,6 +116,12 @@ class BisonoricLayout(Layout):
             {BisonoricFingering(Direction.PULL, pf) for pf in pull_fingerings}
         )
 
+    def __repr__(self) -> str:
+        return f'BisonoricLayout({repr(self.push_layout)}, {repr(self.pull_layout)})'
+
+    def __str__(self) -> str:
+        return f'{Direction.PUSH.name}:\n{self.push_layout}\n{Direction.PULL.name}:\n{self.pull_layout}'
+
 
 def _names_to_pitches(matrix: list[list[str]]) -> list[list[Pitch]]:
     '''
@@ -138,7 +150,7 @@ __cg_anglo_wheatstone_pull_layout = UnisonoricLayout(
             ['A3', 'F#4', 'A4', 'C5', 'E5']]),
     _names_to_pitches(
         [['D#5', 'G5', 'Bb5', 'D#6', 'F6'],
-         ['B5', 'D5', 'F5', 'A5', 'B5'],
+         ['B4', 'D5', 'F5', 'A5', 'B5'],
             ['F#5', 'A5', 'C6', 'E6', 'F#6']])
 )
 
