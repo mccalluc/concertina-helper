@@ -2,7 +2,7 @@ from pyabc2 import Pitch
 
 from layouts import (
     UnisonoricLayout, UnisonoricFingering,
-    BisonoricLayout,
+    BisonoricLayout, BisonoricFingering,
     Direction, _names_to_pitches)
 
 
@@ -49,9 +49,8 @@ b_layout = BisonoricLayout(
     UnisonoricLayout(
         _names_to_pitches([['D4', 'F4', 'A4'],
                            ['A4', 'C5', 'E5']]),
-        _names_to_pitches(
-            [['B4', 'D5', 'F5'],
-             ['F#5', 'A5', 'C6']])
+        _names_to_pitches([['B4', 'D5', 'F5'],
+                           ['F#5', 'A5', 'C6']])
     )
 )
 
@@ -109,9 +108,16 @@ def test_UnisonoricFingering_str():
 # Test BisonoricFingering methods:
 
 
+b_fingering = BisonoricFingering(Direction.PUSH, u_fingering)
+
+
 def test_BisonoricFingering_repr():
-    pass
+    assert 'BisonoricFingering(Direction.PUSH, UnisonoricFingering(UnisonoricLayout(' \
+        in repr(b_fingering)
 
 
 def test_BisonoricFingering_str():
-    pass
+    assert str(b_fingering) == \
+        'PUSH:\n' \
+        '--- --- G4      --- --- G5 \n' \
+        'G4  --- ---     G5  --- ---'

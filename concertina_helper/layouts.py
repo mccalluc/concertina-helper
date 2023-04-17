@@ -44,10 +44,11 @@ class BisonoricFingering:
         self.fingering = fingering
 
     def __repr__(self) -> str:
-        return f'BisonoricFingering({repr(self.direction)}, {repr(self.fingering)})'
+        return f'BisonoricFingering(Direction.{self.direction.name}, ' \
+            f'{repr(self.fingering)})'
 
     def __str__(self) -> str:
-        return f'{self.direction.name}\n{self.fingering}'
+        return f'{self.direction.name}:\n{self.fingering}'
 
 
 class Layout:
