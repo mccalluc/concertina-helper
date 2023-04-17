@@ -51,15 +51,7 @@ class BisonoricFingering:
         return f'{self.direction.name}:\n{self.fingering}'
 
 
-class Layout:
-    pass
-
-
-def split_masks(left_mask: Mask, right_mask: Mask) -> set[tuple[Mask, Mask]]:
-    return set()  # TODO
-
-
-class UnisonoricLayout(Layout):
+class UnisonoricLayout:
     def __init__(self, left: list[list[Pitch]], right: list[list[Pitch]]):
         self.left = left
         self.right = right
@@ -104,7 +96,7 @@ class UnisonoricLayout(Layout):
         return '\n'.join(lines)
 
 
-class BisonoricLayout(Layout):
+class BisonoricLayout:
     def __init__(self, push_layout: UnisonoricLayout, pull_layout: UnisonoricLayout):
         self.push_layout = push_layout
         self.pull_layout = pull_layout
