@@ -1,4 +1,5 @@
 from layouts import UnisonoricLayout, UnisonoricFingering, _names_to_pitches
+from pyabc2 import Pitch
 
 u_layout = UnisonoricLayout(
     _names_to_pitches(
@@ -33,3 +34,13 @@ def test_UnisonoricFingering_str():
     assert str(u_fingering) == \
     '--- --- G4      --- --- G5 \n' \
     'G4  --- ---     G5  --- ---'
+
+def test_UnisonoricFingering_get_fingering():
+    fingerings = u_layout.get_fingerings(Pitch.from_name('G4'))
+    assert len(fingerings) == 2
+    fingering_1 = list(fingerings)[0]
+    assert (
+        fingering_1.left_mask == [[False, False, False], [True, False, False]]
+        or fingering_1.left_mask == [[False, False, True], [False, False, False]]
+    )
+    assert fingering_1.right_mask == [[False, False, False], [False, False, False]] 

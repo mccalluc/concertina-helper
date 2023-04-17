@@ -20,11 +20,12 @@ class UnisonoricFingering:
         lines = []
         for i, (left_mask_row, right_mask_row) in enumerate(zip(self.left_mask, self.right_mask)):
             cols = []
+            filler = '---'
             for j, button in enumerate(left_mask_row):
-                cols.append(self.layout.left[i][j].name.ljust(3) if button else '---')
+                cols.append(self.layout.left[i][j].name.ljust(len(filler)) if button else filler)
             cols.append('   ')
             for j, button in enumerate(right_mask_row):
-                cols.append(self.layout.right[i][j].name.ljust(3) if button else '---')
+                cols.append(self.layout.right[i][j].name.ljust(len(filler)) if button else filler)
             lines.append(' '.join(cols))
         return '\n'.join(lines)
 
@@ -45,12 +46,28 @@ class UnisonoricLayout(Layout):
     def __init__(self, left: list[list[Pitch]], right: list[list[Pitch]]):
         self.left = left
         self.right = right
+    def _get_masks(self) -> tuple[Mask, Mask]:
+        return (
+            [[False for _ in row] for row in self.left],
+            [[False for _ in row] for row in self.right]
+        )
     def get_fingerings(self, pitch: Pitch) -> set[UnisonoricFingering]:
-        return set() # TODO
-    #     return split_masks(
-    #         [[pitch == button for button in row] for row in self.left],
-    #         [[pitch == button for button in row] for row in self.right]
-    #     )
+        fingerings = set()
+        # left:
+        for i, row in enumerate(self.left):
+            for j, button in enumerate(row):
+                if pitch == button:
+                    left, right = self._get_masks()
+                    left[i][j] = True
+                    fingerings.add(UnisonoricFingering(self, left, right))
+        # right:
+        for i, row in enumerate(self.right):
+            for j, button in enumerate(row):
+                if pitch == button:
+                    left, right = self._get_masks()
+                    right[i][j] = True
+                    fingerings.add(UnisonoricFingering(self, left, right))
+        return fingerings
     def __repr__(self) -> str:
         return f'UnisonoricLayout({repr(self.left)}, {repr(self.right)})'
     def __str__(self) -> str:
