@@ -120,7 +120,8 @@ class BisonoricLayout(Layout):
         return f'BisonoricLayout({repr(self.push_layout)}, {repr(self.pull_layout)})'
 
     def __str__(self) -> str:
-        return f'{Direction.PUSH.name}:\n{self.push_layout}\n{Direction.PULL.name}:\n{self.pull_layout}'
+        return f'{Direction.PUSH.name}:\n{self.push_layout}\n' \
+            f'{Direction.PULL.name}:\n{self.pull_layout}'
 
 
 def _names_to_pitches(matrix: list[list[str]]) -> list[list[Pitch]]:

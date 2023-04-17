@@ -35,16 +35,16 @@ def test_UnisonoricLayout_get_fingerings():
     )
     assert fingering_1.right_mask == [
         [False, False, False], [False, False, False]]
-  
+
 
 b_layout = BisonoricLayout(
     u_layout,
     UnisonoricLayout(
         _names_to_pitches([['D4', 'F4', 'A4'],
-         ['A4', 'C5', 'E5']]),
-    _names_to_pitches(
-        [['B4', 'D5', 'F5'],
-            ['F#5', 'A5', 'C6']])
+                           ['A4', 'C5', 'E5']]),
+        _names_to_pitches(
+            [['B4', 'D5', 'F5'],
+             ['F#5', 'A5', 'C6']])
     )
 )
 
@@ -55,13 +55,12 @@ def test_BisonoricLayout_repr():
 
 def test_BisonoricLayout_str():
     assert str(b_layout) == \
-        '''PUSH:
-C4  E4  G4      C5  E5  G5 
-G4  B4  D5      G5  B5  D6 
-PULL:
-D4  F4  A4      B4  D5  F5 
-A4  C5  E5      F#5 A5  C6 '''
-
+        'PUSH:\n' \
+        'C4  E4  G4      C5  E5  G5 \n' \
+        'G4  B4  D5      G5  B5  D6 \n' \
+        'PULL:\n' \
+        'D4  F4  A4      B4  D5  F5 \n' \
+        'A4  C5  E5      F#5 A5  C6 '
 
 
 def test_BisonoricLayout_get_fingerings():
