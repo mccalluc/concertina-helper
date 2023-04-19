@@ -24,6 +24,7 @@ weird_layout = UnisonoricLayout(
          ['G5', 'B5', 'D6', 'G6']]),
 )
 
+
 class TestUnisonoricLayout:
     def test_repr(self):
         assert "UnisonoricLayout([[Pitch(value=48, name='C4')," in repr(u_layout)
@@ -57,6 +58,7 @@ b_layout = BisonoricLayout(
                            ['F#5', 'A5', 'C6']])
     )
 )
+
 
 class TestBisonoricLayout:
     def test_repr(self):
@@ -111,6 +113,7 @@ class TestUnisonoricFingering:
 
 
 b_fingering = BisonoricFingering(Direction.PUSH, u_fingering)
+
 
 class TestBisonoricFingering:
     def test_repr(self):

@@ -57,7 +57,7 @@ class UnisonoricLayout:
     def __init__(self, left: PitchMatrix, right: PitchMatrix):
         self.left = left
         self.right = right
-    
+
     @property
     def shape(self) -> Shape:
         return (
@@ -112,7 +112,7 @@ class BisonoricLayout:
                 f'Push and pull layout shapes must match: {push_layout.shape} != {pull_layout.shape}')
         self.push_layout = push_layout
         self.pull_layout = pull_layout
-    
+
     @property
     def shape(self) -> Shape:
         return (
@@ -143,6 +143,7 @@ def _names_to_pitches(matrix: list[list[str]]) -> PitchMatrix:
     'C4'
     '''
     return [[Pitch.from_name(name) for name in row] for row in matrix]
+
 
 cg_anglo_wheatstone_layout = BisonoricLayout(
     push_layout=UnisonoricLayout(
