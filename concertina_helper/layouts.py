@@ -109,7 +109,8 @@ class BisonoricLayout:
     def __init__(self, push_layout: UnisonoricLayout, pull_layout: UnisonoricLayout):
         if push_layout.shape != pull_layout.shape:
             raise Exception(
-                f'Push and pull layout shapes must match: {push_layout.shape} != {pull_layout.shape}')
+                'Push and pull layout shapes must match: '
+                f'{push_layout.shape} != {pull_layout.shape}')
         self.push_layout = push_layout
         self.pull_layout = pull_layout
 

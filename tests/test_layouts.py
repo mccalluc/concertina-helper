@@ -117,7 +117,7 @@ b_fingering = BisonoricFingering(Direction.PUSH, u_fingering)
 
 class TestBisonoricFingering:
     def test_repr(self):
-        assert 'BisonoricFingering(Direction.PUSH, UnisonoricFingering(UnisonoricLayout(' \
+        assert 'BisonoricFingering(Direction.PUSH, UnisonoricFingering(' \
             in repr(b_fingering)
 
     def test_str(self):
