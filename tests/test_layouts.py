@@ -1,3 +1,7 @@
+import re
+
+import pytest
+
 from pyabc2 import Pitch
 
 from layouts import (
@@ -77,7 +81,11 @@ class TestBisonoricLayout:
         weird_bisonoric_layout = BisonoricLayout(weird_layout, weird_layout)
         assert weird_bisonoric_layout.shape == ([1, 2], [3, 4])
 
-    # TODO: test shape validation
+    def test_shape_validation(self):
+        with pytest.raises(ValueError, match=re.escape(
+                'Push and pull layout shapes must match: '
+                '([3, 3], [3, 3]) != ([1, 2], [3, 4])')):
+            BisonoricLayout(u_layout, weird_layout)
 
     def test_get_fingerings(self):
         fingerings = b_layout.get_fingerings(Pitch.from_name('B4'))
