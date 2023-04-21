@@ -7,7 +7,7 @@ from textwrap import indent
 
 from pyabc2 import Tune, Note
 
-from layouts import cg_anglo_wheatstone_layout
+from .layouts import cg_anglo_wheatstone_layout
 
 def main():
     parser = argparse.ArgumentParser(
@@ -31,7 +31,7 @@ prints suggested fingerings.
     return 0
 
 
-def print_fingerings(tune: list[list[Note]]):
+def print_fingerings(tune: Tune):
     for i, measure in enumerate(tune.measures):
         print(f'Measure {i + 1}')
         for note in measure:
