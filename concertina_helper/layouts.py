@@ -1,6 +1,7 @@
 from __future__ import annotations
 from enum import Enum, auto
 from collections.abc import Callable
+from dataclasses import dataclass
 
 from pyabc2 import Pitch
 
@@ -10,21 +11,30 @@ class Direction(Enum):
     PULL = auto()
 
 
-Mask = list[list[bool]]
+@dataclass(frozen=True)
+class PitchProxy:
+    # pyabc2 Pitch is not hashable,
+    # but we want something that is less error prone than just a string.
+    name: str
+
+    # TODO: post_init validation: fail if name != normalized name
+
+    @property
+    def pitch(self):
+        return Pitch.from_name(self.name)
+
+
+Mask = tuple[tuple[bool, ...], ...]
 Shape = tuple[list[int], list[int]]
-PitchMatrix = list[list[Pitch]]
+PitchProxyMatrix = tuple[tuple[PitchProxy, ...], ...]
 PitchToStr = Callable[[Pitch], str]
 
 
+@dataclass(frozen=True)
 class UnisonoricFingering:
-    def __init__(self, layout: UnisonoricLayout, left_mask: Mask, right_mask: Mask):
-        self.layout = layout
-        self.left_mask = left_mask
-        self.right_mask = right_mask
-
-    def __repr__(self) -> str:
-        return f'UnisonoricFingering({repr(self.layout)}, ' \
-            f'{repr(self.left_mask)}, {repr(self.right_mask)})'
+    layout: UnisonoricLayout
+    left_mask: Mask
+    right_mask: Mask
 
     def __str__(self) -> str:
         filler = '--- '
@@ -64,14 +74,10 @@ class UnisonoricFingering:
         return '\n'.join(lines)
 
 
+@dataclass(frozen=True)
 class BisonoricFingering:
-    def __init__(self, direction: Direction, fingering: UnisonoricFingering):
-        self.direction = direction
-        self.fingering = fingering
-
-    def __repr__(self) -> str:
-        return f'BisonoricFingering(Direction.{self.direction.name}, ' \
-            f'{repr(self.fingering)})'
+    direction: Direction
+    fingering: UnisonoricFingering
 
     def __str__(self) -> str:
         return f'{self.direction.name}:\n{self.fingering}'
@@ -86,10 +92,10 @@ class BisonoricFingering:
             f'{self.fingering.format(button_down_f, button_up_f)}'
 
 
+@dataclass(frozen=True)
 class UnisonoricLayout:
-    def __init__(self, left: PitchMatrix, right: PitchMatrix):
-        self.left = left
-        self.right = right
+    left: PitchProxyMatrix
+    right: PitchProxyMatrix
 
     @property
     def shape(self) -> Shape:
@@ -109,21 +115,20 @@ class UnisonoricLayout:
         # left:
         for i, row in enumerate(self.left):
             for j, button in enumerate(row):
-                if pitch == button:
+                if pitch == button.pitch:
                     left, right = self._get_masks()
                     left[i][j] = True
+                    # TODO: Util method that gives us nested boolean tuples with one set to true, by coordinate.
+                    breakpoint()
                     fingerings.add(UnisonoricFingering(self, left, right))
         # right:
         for i, row in enumerate(self.right):
             for j, button in enumerate(row):
-                if pitch == button:
+                if pitch == button.pitch:
                     left, right = self._get_masks()
                     right[i][j] = True
                     fingerings.add(UnisonoricFingering(self, left, right))
         return fingerings
-
-    def __repr__(self) -> str:
-        return f'UnisonoricLayout({repr(self.left)}, {repr(self.right)})'
 
     def __str__(self) -> str:
         lines = []
@@ -138,14 +143,16 @@ class UnisonoricLayout:
         return '\n'.join(lines)
 
 
+@dataclass(frozen=True, kw_only=True)
 class BisonoricLayout:
-    def __init__(self, push_layout: UnisonoricLayout, pull_layout: UnisonoricLayout):
-        if push_layout.shape != pull_layout.shape:
+    push_layout: UnisonoricLayout
+    pull_layout: UnisonoricLayout
+
+    def __post_init__(self):
+        if self.push_layout.shape != self.pull_layout.shape:
             raise ValueError(
                 'Push and pull layout shapes must match: '
-                f'{push_layout.shape} != {pull_layout.shape}')
-        self.push_layout = push_layout
-        self.pull_layout = pull_layout
+                f'{self.push_layout.shape} != {self.pull_layout.shape}')
 
     @property
     def shape(self) -> Shape:
@@ -162,21 +169,21 @@ class BisonoricLayout:
             {BisonoricFingering(Direction.PULL, pf) for pf in pull_fingerings}
         )
 
-    def __repr__(self) -> str:
-        return f'BisonoricLayout({repr(self.push_layout)}, {repr(self.pull_layout)})'
-
     def __str__(self) -> str:
         return f'{Direction.PUSH.name}:\n{self.push_layout}\n' \
             f'{Direction.PULL.name}:\n{self.pull_layout}'
 
 
-def _names_to_pitches(matrix: list[list[str]]) -> PitchMatrix:
+def _names_to_pitches(matrix: list[list[str]]) -> PitchProxyMatrix:
     '''
     >>> pitch_matrix = _names_to_pitches([['C4']])
     >>> pitch_matrix[0][0].name
     'C4'
     '''
-    return [[Pitch.from_name(name) for name in row] for row in matrix]
+    return tuple(tuple(PitchProxy(name) for name in row) for row in matrix)
+
+
+
 
 
 cg_anglo_wheatstone_layout = BisonoricLayout(

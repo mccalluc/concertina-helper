@@ -15,6 +15,11 @@ classifiers = [
   "Topic :: Artistic Software"
 ]
 dynamic = ["version", "description"]
+
+# In general, dependencies should not be pinned to precise versions,
+# but because these are both < v1.0, their interfaces could change
+# unpredictably in a new release, so we'll pin for now.
+# TODO: Confirm we get a CI failure without astar listed here.
 dependencies = ["pyabc2==0.1.0.dev2"]
 
 [project.scripts]

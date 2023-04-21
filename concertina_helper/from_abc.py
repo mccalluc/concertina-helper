@@ -3,11 +3,13 @@
 import argparse
 from pathlib import Path
 from textwrap import indent
+from itertools import chain
 from signal import signal, SIGPIPE, SIG_DFL
 
 from pyabc2 import Tune
 
-from concertina_helper.layouts import cg_anglo_wheatstone_layout
+from concertina_helper.layouts import cg_anglo_wheatstone_layout, BisonoricFingering
+from concertina_helper.finger_finder import FingerFinder
 
 
 def main():  # pragma: no cover
@@ -37,18 +39,23 @@ prints possible fingerings.
     path = Path(args.abc)
 
     verbose = args.verbose
-    print(get_fingerings(path, verbose))
+    print(get_best_fingerings(path, verbose))
 
 
-def get_fingerings(path: Path, verbose: bool):
+# TODO: Move both of these to a utils package, or maybe methods on a (Tune, Layout) dataclass.
+
+def get_all_fingerings(tune: Tune) -> list[set[BisonoricFingering]]:
+    layout = cg_anglo_wheatstone_layout
+    return list(chain([[layout.get_fingerings(note.to_pitch()) for note in measure] for measure in tune.measures]))
+
+
+def get_best_fingerings(path: Path, verbose: bool):
     tune = Tune(path.read_text())
-    lines = []
-    for i, measure in enumerate(tune.measures):
-        lines.append(f'Measure {i + 1}')
-        for note in measure:
-            pitch = note.to_pitch()
-            lines.append(indent(pitch.name, ' '*2))
-            fingerings = cg_anglo_wheatstone_layout.get_fingerings(pitch)
-            for f in fingerings:
-                lines.append(indent(str(f) if verbose else f.format(), ' '*4))
-    return '\n'.join(lines)
+    # TODO: Capture measure notation again... maybe a (measure, note) tuple?
+    all_fingerings = get_all_fingerings(tune)
+    ff = FingerFinder(all_fingerings)
+    start = all_fingerings[0][0]
+    goal = all_fingerings[-1][0]
+    best = ff.astar(start, goal)
+    print(best[0]) # TODO
+    print('???')
