@@ -1,5 +1,7 @@
 from __future__ import annotations
 from enum import Enum, auto
+from collections.abc import Callable
+
 from pyabc2 import Pitch
 
 
@@ -11,6 +13,7 @@ class Direction(Enum):
 Mask = list[list[bool]]
 Shape = tuple[list[int], list[int]]
 PitchMatrix = list[list[Pitch]]
+PitchToStr = Callable[[Pitch], str]
 
 
 class UnisonoricFingering:
@@ -24,19 +27,40 @@ class UnisonoricFingering:
             f'{repr(self.left_mask)}, {repr(self.right_mask)})'
 
     def __str__(self) -> str:
+        filler = '--- '
+
+        def button_down_f(pitch):
+            return pitch.name.ljust(len(filler))
+
+        def button_up_f(pitch):
+            return filler
+        return self.format(button_down_f, button_up_f)
+
+    def __format_button_row(
+            self,
+            layout_row: list[Pitch], mask_row: list[bool],
+            button_down_f: PitchToStr, button_up_f: PitchToStr) -> str:
+        return ''.join(
+            (button_down_f if button else button_up_f)(pitch)
+            for pitch, button in zip(layout_row, mask_row)
+        )
+
+    def format(
+            self,
+            button_down_f: PitchToStr = lambda pitch: '⬤',
+            button_up_f: PitchToStr = lambda pitch: '◯') -> str:
         lines = []
         enumerated_mask_rows = enumerate(zip(self.left_mask, self.right_mask))
         for i, (left_mask_row, right_mask_row) in enumerated_mask_rows:
             cols = []
-            filler = '---'
-            for j, button in enumerate(left_mask_row):
-                cols.append(self.layout.left[i][j].name.ljust(
-                    len(filler)) if button else filler)
+            cols.append(self.__format_button_row(
+                self.layout.left[i], left_mask_row,
+                button_down_f, button_up_f))
             cols.append('   ')
-            for j, button in enumerate(right_mask_row):
-                cols.append(self.layout.right[i][j].name.ljust(
-                    len(filler)) if button else filler)
-            lines.append(' '.join(cols))
+            cols.append(self.__format_button_row(
+                self.layout.right[i], right_mask_row,
+                button_down_f, button_up_f))
+            lines.append(''.join(cols))
         return '\n'.join(lines)
 
 

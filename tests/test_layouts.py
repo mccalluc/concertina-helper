@@ -116,8 +116,8 @@ class TestUnisonoricFingering:
 
     def test_str(self):
         assert str(u_fingering) == \
-            '--- --- G4      --- --- G5 \n' \
-            'G4  --- ---     G5  --- ---'
+            '--- --- G4     --- --- G5  \n' \
+            'G4  --- ---    G5  --- --- '
 
 
 b_fingering = BisonoricFingering(Direction.PUSH, u_fingering)
@@ -131,5 +131,5 @@ class TestBisonoricFingering:
     def test_str(self):
         assert str(b_fingering) == \
             'PUSH:\n' \
-            '--- --- G4      --- --- G5 \n' \
-            'G4  --- ---     G5  --- ---'
+            '--- --- G4     --- --- G5  \n' \
+            'G4  --- ---    G5  --- --- '
