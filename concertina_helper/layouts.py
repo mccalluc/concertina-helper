@@ -47,8 +47,8 @@ class UnisonoricFingering:
 
     def format(
             self,
-            button_down_f: PitchToStr = lambda pitch: '⬤',
-            button_up_f: PitchToStr = lambda pitch: '◯') -> str:
+            button_down_f: PitchToStr = lambda pitch: '@',
+            button_up_f: PitchToStr = lambda pitch: '-') -> str:
         lines = []
         enumerated_mask_rows = enumerate(zip(self.left_mask, self.right_mask))
         for i, (left_mask_row, right_mask_row) in enumerated_mask_rows:
