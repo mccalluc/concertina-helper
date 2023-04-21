@@ -3,7 +3,8 @@ set -o errexit
 
 export PYTHONPATH="${PYTHONPATH}:concertina_helper"
 
-pytest --verbose --doctest-modules
+pytest --verbose --doctest-modules \
+       --cov=. --cov-report=html --cov-fail-under=100 --cov-branch
 
 mypy concertina_helper
 
