@@ -116,8 +116,20 @@ class TestUnisonoricFingering:
 
     def test_str(self):
         assert str(u_fingering) == \
-            '--- --- G4      --- --- G5 \n' \
-            'G4  --- ---     G5  --- ---'
+            '--- --- G4     --- --- G5  \n' \
+            'G4  --- ---    G5  --- --- '
+
+    def test_format_defaults(self):
+        assert u_fingering.format() == \
+            '..@   ..@\n' \
+            '@..   @..'
+
+    def test_format_custom(self):
+        assert u_fingering.format(
+            button_down_f=lambda pitch: pitch.class_name.ljust(2),
+            button_up_f=lambda _: '. ') == \
+            '. . G    . . G \n' \
+            'G . .    G . . '
 
 
 b_fingering = BisonoricFingering(Direction.PUSH, u_fingering)
@@ -131,5 +143,5 @@ class TestBisonoricFingering:
     def test_str(self):
         assert str(b_fingering) == \
             'PUSH:\n' \
-            '--- --- G4      --- --- G5 \n' \
-            'G4  --- ---     G5  --- ---'
+            '--- --- G4     --- --- G5  \n' \
+            'G4  --- ---    G5  --- --- '

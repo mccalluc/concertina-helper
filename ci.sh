@@ -11,7 +11,7 @@ flake8
 
 flit install --symlink
 
-from-abc tests/cherrytree.abc | head
+from-abc tests/cherrytree.abc --verbose | head
 
 echo 'PASS!'
 
