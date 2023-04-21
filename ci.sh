@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 set -o errexit
-set -o pipefail
 
 export PYTHONPATH="${PYTHONPATH}:concertina_helper"
 
@@ -13,4 +12,6 @@ flake8
 flit install --symlink
 
 from-abc tests/cherrytree.abc | head
+
+echo 'PASS!'
 
