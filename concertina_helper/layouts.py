@@ -48,7 +48,7 @@ class UnisonoricFingering:
     def format(
             self,
             button_down_f: PitchToStr = lambda pitch: '@',
-            button_up_f: PitchToStr = lambda pitch: '-') -> str:
+            button_up_f: PitchToStr = lambda pitch: '.') -> str:
         lines = []
         enumerated_mask_rows = enumerate(zip(self.left_mask, self.right_mask))
         for i, (left_mask_row, right_mask_row) in enumerated_mask_rows:
@@ -76,6 +76,15 @@ class BisonoricFingering:
     def __str__(self) -> str:
         return f'{self.direction.name}:\n{self.fingering}'
 
+    def format(
+        self,
+        button_down_f: PitchToStr = lambda pitch: '@',
+        button_up_f: PitchToStr = lambda pitch: '.',
+        direction_f: Callable[[Direction], str] =
+            lambda direction: direction.name) -> str:
+        return f'{direction_f(self.direction)}:\n' \
+            f'{self.fingering.format(button_down_f, button_up_f)}'
+
 
 class UnisonoricLayout:
     def __init__(self, left: PitchMatrix, right: PitchMatrix):
@@ -91,8 +100,8 @@ class UnisonoricLayout:
 
     def _get_masks(self) -> tuple[Mask, Mask]:
         return (
-            [[False for _ in row] for row in self.left],
-            [[False for _ in row] for row in self.right]
+            [[False] * len(row) for row in self.left],
+            [[False] * len(row) for row in self.right]
         )
 
     def get_fingerings(self, pitch: Pitch) -> set[UnisonoricFingering]:

@@ -121,8 +121,8 @@ class TestUnisonoricFingering:
 
     def test_format_defaults(self):
         assert u_fingering.format() == \
-            '--@   --@\n' \
-            '@--   @--'
+            '..@   ..@\n' \
+            '@..   @..'
 
     def test_format_custom(self):
         assert u_fingering.format(

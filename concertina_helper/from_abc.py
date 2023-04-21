@@ -43,4 +43,4 @@ def print_fingerings(tune: Tune):
             print(indent(pitch.name, ' '*2))
             fingerings = cg_anglo_wheatstone_layout.get_fingerings(pitch)
             for f in fingerings:
-                print(indent(str(f), ' '*4))
+                print(indent(f.format(), ' '*4))
