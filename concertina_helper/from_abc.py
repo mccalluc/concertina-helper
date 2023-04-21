@@ -2,22 +2,27 @@
 
 import argparse
 from pathlib import Path
-import sys
 from textwrap import indent
+from signal import signal, SIGPIPE, SIG_DFL
 
-from pyabc2 import Tune, Note
+from pyabc2 import Tune
 
 from .layouts import cg_anglo_wheatstone_layout
+
+# Ignore broken pipes, so piping output to "head" will not error.
+# https://stackoverflow.com/a/30091579
+signal(SIGPIPE, SIG_DFL)
+
 
 def main():
     parser = argparse.ArgumentParser(
         description='''
 Given a file containing ABC notation,
 and a concertina type,
-prints suggested fingerings.
+prints possible fingerings.
 ''')
     parser.add_argument(
-        '--abc', type=Path, required=True,
+        'abc', type=Path,
         help='Path of ABC file')
     parser.add_argument(
         '--layout', choices=['Wheatstone'], default='Wheatstone')
@@ -28,7 +33,6 @@ prints suggested fingerings.
     path = Path(args.abc)
     tune = Tune(path.read_text())
     print_fingerings(tune)
-    return 0
 
 
 def print_fingerings(tune: Tune):
@@ -40,8 +44,3 @@ def print_fingerings(tune: Tune):
             fingerings = cg_anglo_wheatstone_layout.get_fingerings(pitch)
             for f in fingerings:
                 print(indent(str(f), ' '*4))
-
-
-if __name__ == "__main__":
-    exit_status = main()
-    sys.exit(exit_status)

@@ -6,9 +6,19 @@ build-backend = "flit_core.buildapi"
 name = "concertina_helper"
 authors = [{name = "Chuck McCallum", email = "mccallucc@gmail.com"}]
 readme = "README.md"
+requires-python = "~=3.10"
 license = {file = "LICENSE"}
-classifiers = ["License :: OSI Approved :: MIT License"]
+classifiers = [
+  "Private :: Do Not Upload",
+  "License :: OSI Approved :: MIT License",
+  "Typing :: Typed",
+  "Topic :: Artistic Software"
+]
 dynamic = ["version", "description"]
+dependencies = ["pyabc2==0.1.0.dev2"]
+
+[project.scripts]
+from-abc = "concertina_helper.from_abc:main"
 
 [project.urls]
 Home = "https://github.com/mccalluc/concertina-helper"
