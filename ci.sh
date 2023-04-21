@@ -4,7 +4,9 @@ set -o errexit
 export PYTHONPATH="${PYTHONPATH}:concertina_helper"
 
 pytest --verbose --doctest-modules \
-       --cov=. --cov-report=html --cov-fail-under=100 --cov-branch
+       --cov=. --cov-fail-under=100 --cov-branch \
+       --cov-report=html --cov-report=term-missing \
+       --no-cov-on-fail
 
 mypy concertina_helper
 

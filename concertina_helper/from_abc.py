@@ -7,14 +7,15 @@ from signal import signal, SIGPIPE, SIG_DFL
 
 from pyabc2 import Tune
 
-from .layouts import cg_anglo_wheatstone_layout
-
-# Ignore broken pipes, so piping output to "head" will not error.
-# https://stackoverflow.com/a/30091579
-signal(SIGPIPE, SIG_DFL)
+from concertina_helper.layouts import cg_anglo_wheatstone_layout
 
 
-def main():
+def main():  # pragma: no cover
+    #
+    # Ignore broken pipes, so piping output to "head" will not error.
+    # https://stackoverflow.com/a/30091579
+    signal(SIGPIPE, SIG_DFL)
+
     parser = argparse.ArgumentParser(
         description='''
 Given a file containing ABC notation,
@@ -34,17 +35,20 @@ prints possible fingerings.
 
     args = parser.parse_args()
     path = Path(args.abc)
-    tune = Tune(path.read_text())
+
     verbose = args.verbose
-    print_fingerings(tune, verbose)
+    print(get_fingerings(path, verbose))
 
 
-def print_fingerings(tune: Tune, verbose: bool):
+def get_fingerings(path: Path, verbose: bool):
+    tune = Tune(path.read_text())
+    lines = []
     for i, measure in enumerate(tune.measures):
-        print(f'Measure {i + 1}')
+        lines.append(f'Measure {i + 1}')
         for note in measure:
             pitch = note.to_pitch()
-            print(indent(pitch.name, ' '*2))
+            lines.append(indent(pitch.name, ' '*2))
             fingerings = cg_anglo_wheatstone_layout.get_fingerings(pitch)
             for f in fingerings:
-                print(indent(str(f) if verbose else f.format(), ' '*4))
+                lines.append(indent(str(f) if verbose else f.format(), ' '*4))
+    return '\n'.join(lines)
