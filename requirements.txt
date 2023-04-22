@@ -1,1 +1,2 @@
 pyabc2==0.1.0.dev2
+astar==0.97

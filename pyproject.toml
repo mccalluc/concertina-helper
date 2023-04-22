@@ -20,7 +20,9 @@ dynamic = ["version", "description"]
 # but because these are both < v1.0, their interfaces could change
 # unpredictably in a new release, so we'll pin for now.
 # TODO: Confirm we get a CI failure without astar listed here.
-dependencies = ["pyabc2==0.1.0.dev2"]
+dependencies = [
+  "pyabc2==0.1.0.dev2"
+]
 
 [project.scripts]
 from-abc = "concertina_helper.from_abc:main"
