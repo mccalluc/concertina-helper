@@ -127,7 +127,8 @@ class UnisonoricLayout:
                     left, right = self._get_masks()
                     left[i][j] = True
                     fingerings.add(UnisonoricFingering(
-                        self, self.__list_mask_to_mask(left), self.__list_mask_to_mask(right)))
+                        self, self.__list_mask_to_mask(left),
+                        self.__list_mask_to_mask(right)))
         # right:
         for i, row in enumerate(self.right):
             for j, button in enumerate(row):
@@ -135,7 +136,8 @@ class UnisonoricLayout:
                     left, right = self._get_masks()
                     right[i][j] = True
                     fingerings.add(UnisonoricFingering(
-                        self, self.__list_mask_to_mask(left), self.__list_mask_to_mask(right)))
+                        self, self.__list_mask_to_mask(left),
+                        self.__list_mask_to_mask(right)))
         return frozenset(fingerings)
 
     def __str__(self) -> str:

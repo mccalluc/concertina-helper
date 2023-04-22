@@ -1,5 +1,4 @@
 from typing import Iterable
-from itertools import chain
 from dataclasses import dataclass
 
 from astar import AStar  # type: ignore
@@ -45,4 +44,5 @@ class FingerFinder(AStar):
         # They are all equally good.
         return current.position == goal.position
 
-    # TODO: Add a wrapper for the astar() method that determines the start and end from self.index.
+    # TODO: Add a wrapper for the astar() method that determines
+    # the start and end from self.index.

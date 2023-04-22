@@ -2,7 +2,6 @@
 
 import argparse
 from pathlib import Path
-from textwrap import indent
 from itertools import chain
 from signal import signal, SIGPIPE, SIG_DFL
 
@@ -42,11 +41,15 @@ prints possible fingerings.
     print(get_best_fingerings(path, verbose))
 
 
-# TODO: Move both of these to a utils package, or maybe methods on a (Tune, Layout) dataclass.
+# TODO: Move both of these to a utils package,
+# or maybe methods on a (Tune, Layout) dataclass.
 
 def get_all_fingerings(tune: Tune) -> list[set[BisonoricFingering]]:
     layout = cg_anglo_wheatstone_layout
-    return list(chain(*[[layout.get_fingerings(note.to_pitch()) for note in measure] for measure in tune.measures]))
+    return list(chain(*[
+        [layout.get_fingerings(note.to_pitch()) for note in measure]
+        for measure in tune.measures
+    ]))
 
 
 def get_best_fingerings(path: Path, verbose: bool):
@@ -54,7 +57,8 @@ def get_best_fingerings(path: Path, verbose: bool):
     # TODO: Capture measure notation again... maybe a (measure, note) tuple?
     all_fingerings = get_all_fingerings(tune)
     ff = FingerFinder(all_fingerings)
-    # TODO: Instead of picking an arbitrary start and stop, there should be a helper method on ff.
+    # TODO: Instead of picking an arbitrary start and stop,
+    # there should be a helper method on ff.
     start = list(all_fingerings[0])[0]
     goal = list(all_fingerings[-1])[0]
     best = ff.astar(start, goal)
