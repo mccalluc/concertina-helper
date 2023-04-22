@@ -45,6 +45,7 @@ class TestUnisonoricLayout:
         fingerings = u_layout.get_fingerings(Pitch.from_name('G4'))
         assert len(fingerings) == 2
         fingering_1 = list(fingerings)[0]
+        # TODO: get rid of "or"
         assert (
             fingering_1.left_mask == ((False, False, False), (True, False, False))
             or fingering_1.left_mask == ((False, False, True), (False, False, False))
@@ -78,14 +79,15 @@ class TestBisonoricLayout:
             'A4  C5  E5      F#5 A5  C6 '
 
     def test_shape(self):
-        weird_bisonoric_layout = BisonoricLayout(weird_layout, weird_layout)
+        weird_bisonoric_layout = BisonoricLayout(
+            push_layout=weird_layout, pull_layout=weird_layout)
         assert weird_bisonoric_layout.shape == ([1, 2], [3, 4])
 
     def test_shape_validation(self):
         with pytest.raises(ValueError, match=re.escape(
                 'Push and pull layout shapes must match: '
                 '([3, 3], [3, 3]) != ([1, 2], [3, 4])')):
-            BisonoricLayout(u_layout, weird_layout)
+            BisonoricLayout(push_layout=u_layout, pull_layout=weird_layout)
 
     def test_get_fingerings(self):
         fingerings = b_layout.get_fingerings(Pitch.from_name('B4'))
@@ -110,7 +112,8 @@ u_fingering = UnisonoricFingering(
 class TestUnisonoricFingering:
     def test_repr(self):
         r = repr(u_fingering)
-        assert "UnisonoricFingering(layout=UnisonoricLayout(left=((PitchProxy(name='C4')" in r
+        assert "UnisonoricFingering(layout=UnisonoricLayout(" \
+            "left=((PitchProxy(name='C4')" in r
         assert "left_mask=[[False, False, True], [True, False, False]]" in r
 
     def test_str(self):
@@ -136,7 +139,8 @@ b_fingering = BisonoricFingering(Direction.PUSH, u_fingering)
 
 class TestBisonoricFingering:
     def test_repr(self):
-        assert 'BisonoricFingering(direction=Direction.PUSH, fingering=UnisonoricFingering(' \
+        assert 'BisonoricFingering(direction=Direction.PUSH, ' \
+            'fingering=UnisonoricFingering(' \
             in repr(b_fingering)
 
     def test_str(self):

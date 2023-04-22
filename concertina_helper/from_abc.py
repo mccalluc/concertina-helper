@@ -38,7 +38,11 @@ prints possible fingerings.
     path = Path(args.abc)
 
     verbose = args.verbose
-    print(get_best_fingerings(path, verbose))
+    for fingering in get_best_fingerings(path):
+        if verbose:
+            print(str(fingering))
+        else:
+            print(fingering.format())
 
 
 # TODO: Move both of these to a utils package,
@@ -52,15 +56,15 @@ def get_all_fingerings(tune: Tune) -> list[set[BisonoricFingering]]:
     ]))
 
 
-def get_best_fingerings(path: Path, verbose: bool):
+def get_best_fingerings(path: Path) -> list[BisonoricFingering]:
     tune = Tune(path.read_text())
     # TODO: Capture measure notation again... maybe a (measure, note) tuple?
     all_fingerings = get_all_fingerings(tune)
     ff = FingerFinder(all_fingerings)
     # TODO: Instead of picking an arbitrary start and stop,
-    # there should be a helper method on ff.
-    start = list(all_fingerings[0])[0]
-    goal = list(all_fingerings[-1])[0]
-    best = ff.astar(start, goal)
-    print(best[0])  # TODO
-    print('???')
+    # there should be a wrapper method on ff.
+    start = list(ff.index[0])[0]
+    max_index = max(ff.index.keys())
+    goal = list(ff.index[max_index])[0]
+
+    return [node.fingering for node in ff.astar(start, goal)]

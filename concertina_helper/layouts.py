@@ -25,6 +25,7 @@ class PitchProxy:
     @property
     def pitch(self):
         return Pitch.from_name(self.name)
+
     @property
     def class_name(self):
         return self.pitch.class_name
