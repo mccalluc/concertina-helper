@@ -46,7 +46,7 @@ prints possible fingerings.
 
 def get_all_fingerings(tune: Tune) -> list[set[BisonoricFingering]]:
     layout = cg_anglo_wheatstone_layout
-    return list(chain([[layout.get_fingerings(note.to_pitch()) for note in measure] for measure in tune.measures]))
+    return list(chain(*[[layout.get_fingerings(note.to_pitch()) for note in measure] for measure in tune.measures]))
 
 
 def get_best_fingerings(path: Path, verbose: bool):
@@ -54,8 +54,9 @@ def get_best_fingerings(path: Path, verbose: bool):
     # TODO: Capture measure notation again... maybe a (measure, note) tuple?
     all_fingerings = get_all_fingerings(tune)
     ff = FingerFinder(all_fingerings)
-    start = all_fingerings[0][0]
-    goal = all_fingerings[-1][0]
+    # TODO: Instead of picking an arbitrary start and stop, there should be a helper method on ff.
+    start = list(all_fingerings[0])[0]
+    goal = list(all_fingerings[-1])[0]
     best = ff.astar(start, goal)
-    print(best[0]) # TODO
+    print(best[0])  # TODO
     print('???')

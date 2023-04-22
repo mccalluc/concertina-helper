@@ -2,7 +2,7 @@ from typing import Iterable
 from itertools import chain
 from dataclasses import dataclass
 
-from astar import AStar
+from astar import AStar  # type: ignore
 
 from .layouts import BisonoricFingering
 
@@ -43,7 +43,6 @@ class FingerFinder(AStar):
     def is_goal_reached(self, current: Node, goal: Node) -> bool:
         # There could be multiple fingerings for the last note.
         # They are all equally good.
-        return current.index == goal.index
-    
-    # TODO: Add a wrapper for the astar() method that determines the start and end from self.index.
+        return current.position == goal.position
 
+    # TODO: Add a wrapper for the astar() method that determines the start and end from self.index.

@@ -27,7 +27,7 @@ class PitchProxy:
 Mask = tuple[tuple[bool, ...], ...]
 Shape = tuple[list[int], list[int]]
 PitchProxyMatrix = tuple[tuple[PitchProxy, ...], ...]
-PitchToStr = Callable[[Pitch], str]
+PitchProxyToStr = Callable[[PitchProxy], str]
 
 
 @dataclass(frozen=True)
@@ -48,8 +48,8 @@ class UnisonoricFingering:
 
     def __format_button_row(
             self,
-            layout_row: list[Pitch], mask_row: list[bool],
-            button_down_f: PitchToStr, button_up_f: PitchToStr) -> str:
+            layout_row: tuple[PitchProxy, ...], mask_row: tuple[bool, ...],
+            button_down_f: PitchProxyToStr, button_up_f: PitchProxyToStr) -> str:
         return ''.join(
             (button_down_f if button else button_up_f)(pitch)
             for pitch, button in zip(layout_row, mask_row)
@@ -57,8 +57,8 @@ class UnisonoricFingering:
 
     def format(
             self,
-            button_down_f: PitchToStr = lambda pitch: '@',
-            button_up_f: PitchToStr = lambda pitch: '.') -> str:
+            button_down_f: PitchProxyToStr = lambda pitch: '@',
+            button_up_f: PitchProxyToStr = lambda pitch: '.') -> str:
         lines = []
         enumerated_mask_rows = enumerate(zip(self.left_mask, self.right_mask))
         for i, (left_mask_row, right_mask_row) in enumerated_mask_rows:
@@ -84,8 +84,8 @@ class BisonoricFingering:
 
     def format(
         self,
-        button_down_f: PitchToStr = lambda pitch: '@',
-        button_up_f: PitchToStr = lambda pitch: '.',
+        button_down_f: PitchProxyToStr = lambda pitch: '@',
+        button_up_f: PitchProxyToStr = lambda pitch: '.',
         direction_f: Callable[[Direction], str] =
             lambda direction: direction.name) -> str:
         return f'{direction_f(self.direction)}:\n' \
@@ -104,31 +104,39 @@ class UnisonoricLayout:
             [len(row) for row in self.right],
         )
 
-    def _get_masks(self) -> tuple[Mask, Mask]:
+    def __list_mask_to_mask(self, list_mask: list[list[bool]]) -> Mask:
+        return tuple(
+            tuple(
+                button for button in row
+            ) for row in list_mask
+        )
+
+    def _get_masks(self):
         return (
             [[False] * len(row) for row in self.left],
             [[False] * len(row) for row in self.right]
         )
 
-    def get_fingerings(self, pitch: Pitch) -> set[UnisonoricFingering]:
+    def get_fingerings(self, pitch: Pitch) -> frozenset[UnisonoricFingering]:
         fingerings = set()
+        # TODO: Clean up!
         # left:
         for i, row in enumerate(self.left):
             for j, button in enumerate(row):
                 if pitch == button.pitch:
                     left, right = self._get_masks()
                     left[i][j] = True
-                    # TODO: Util method that gives us nested boolean tuples with one set to true, by coordinate.
-                    breakpoint()
-                    fingerings.add(UnisonoricFingering(self, left, right))
+                    fingerings.add(UnisonoricFingering(
+                        self, self.__list_mask_to_mask(left), self.__list_mask_to_mask(right)))
         # right:
         for i, row in enumerate(self.right):
             for j, button in enumerate(row):
                 if pitch == button.pitch:
                     left, right = self._get_masks()
                     right[i][j] = True
-                    fingerings.add(UnisonoricFingering(self, left, right))
-        return fingerings
+                    fingerings.add(UnisonoricFingering(
+                        self, self.__list_mask_to_mask(left), self.__list_mask_to_mask(right)))
+        return frozenset(fingerings)
 
     def __str__(self) -> str:
         lines = []
@@ -181,9 +189,6 @@ def _names_to_pitches(matrix: list[list[str]]) -> PitchProxyMatrix:
     'C4'
     '''
     return tuple(tuple(PitchProxy(name) for name in row) for row in matrix)
-
-
-
 
 
 cg_anglo_wheatstone_layout = BisonoricLayout(
