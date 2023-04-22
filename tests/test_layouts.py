@@ -31,7 +31,7 @@ weird_layout = UnisonoricLayout(
 
 class TestUnisonoricLayout:
     def test_repr(self):
-        assert "UnisonoricLayout([[Pitch(value=48, name='C4')," in repr(u_layout)
+        assert "UnisonoricLayout(left=((PitchProxy(name='C4')," in repr(u_layout)
 
     def test_str(self):
         assert str(u_layout) == \
@@ -46,16 +46,16 @@ class TestUnisonoricLayout:
         assert len(fingerings) == 2
         fingering_1 = list(fingerings)[0]
         assert (
-            fingering_1.left_mask == [[False, False, False], [True, False, False]]
-            or fingering_1.left_mask == [[False, False, True], [False, False, False]]
+            fingering_1.left_mask == ((False, False, False), (True, False, False))
+            or fingering_1.left_mask == ((False, False, True), (False, False, False))
         )
-        assert fingering_1.right_mask == [
-            [False, False, False], [False, False, False]]
+        assert fingering_1.right_mask == (
+            (False, False, False), (False, False, False))
 
 
 b_layout = BisonoricLayout(
-    u_layout,
-    UnisonoricLayout(
+    push_layout=u_layout,
+    pull_layout=UnisonoricLayout(
         _names_to_pitches([['D4', 'F4', 'A4'],
                            ['A4', 'C5', 'E5']]),
         _names_to_pitches([['B4', 'D5', 'F5'],
@@ -66,7 +66,7 @@ b_layout = BisonoricLayout(
 
 class TestBisonoricLayout:
     def test_repr(self):
-        assert "BisonoricLayout(UnisonoricLayout([[Pitch(" in repr(b_layout)
+        assert "BisonoricLayout(push_layout=UnisonoricLayout(left=((" in repr(b_layout)
 
     def test_str(self):
         assert str(b_layout) == \
@@ -110,9 +110,8 @@ u_fingering = UnisonoricFingering(
 class TestUnisonoricFingering:
     def test_repr(self):
         r = repr(u_fingering)
-        assert "UnisonoricFingering(UnisonoricLayout([[Pitch(value=48, name='C4')" in r
-        assert "[[False, False, True], [True, False, False]], "\
-            "[[False, False, True], [True, False, False]])" in r
+        assert "UnisonoricFingering(layout=UnisonoricLayout(left=((PitchProxy(name='C4')" in r
+        assert "left_mask=[[False, False, True], [True, False, False]]" in r
 
     def test_str(self):
         assert str(u_fingering) == \
@@ -137,7 +136,7 @@ b_fingering = BisonoricFingering(Direction.PUSH, u_fingering)
 
 class TestBisonoricFingering:
     def test_repr(self):
-        assert 'BisonoricFingering(Direction.PUSH, UnisonoricFingering(' \
+        assert 'BisonoricFingering(direction=Direction.PUSH, fingering=UnisonoricFingering(' \
             in repr(b_fingering)
 
     def test_str(self):

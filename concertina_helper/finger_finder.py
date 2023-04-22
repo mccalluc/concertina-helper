@@ -14,7 +14,6 @@ class Node:
 
 class FingerFinder(AStar):
     def __init__(self, fingerings: list[set[BisonoricFingering]]):
-        breakpoint()
         self.index = {
             i: frozenset(Node(i, f) for f in f_set)
             for i, f_set in enumerate(fingerings)

@@ -10,6 +10,9 @@ class Direction(Enum):
     PUSH = auto()
     PULL = auto()
 
+    def __repr__(self):
+        return f'Direction.{self.name}'
+
 
 @dataclass(frozen=True)
 class PitchProxy:
@@ -22,6 +25,9 @@ class PitchProxy:
     @property
     def pitch(self):
         return Pitch.from_name(self.name)
+    @property
+    def class_name(self):
+        return self.pitch.class_name
 
 
 Mask = tuple[tuple[bool, ...], ...]
