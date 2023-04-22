@@ -6,7 +6,7 @@ set -o errexit
 
 pip install flit
 flit install --symlink
-from-abc tests/cherrytree.abc --verbose
+from-abc tests/cherrytree.abc --verbose # TODO: reenable pipe check
 
 # test developer functions:
 

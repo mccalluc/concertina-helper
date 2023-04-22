@@ -16,11 +16,12 @@ classifiers = [
 ]
 dynamic = ["version", "description"]
 
-# In general, dependencies should not be pinned to precise versions,
+# In general, dependencies should not be pinned to exact versions,
 # but because these are both < v1.0, their interfaces could change
 # unpredictably in a new release, so we'll pin for now.
 dependencies = [
-  "pyabc2==0.1.0.dev2"
+  "pyabc2==0.1.0.dev2",
+  "astar==0.97"
 ]
 
 [project.scripts]
