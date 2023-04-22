@@ -4,6 +4,7 @@ set -o errexit
 # test end-user functions:
 # TODO: find a better way to confirm that dev dependencies aren't necessary at runtime.
 
+pip install flit
 flit install --symlink
 from-abc tests/cherrytree.abc --verbose | head
 
