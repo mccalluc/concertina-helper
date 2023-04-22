@@ -6,7 +6,7 @@ set -o errexit
 
 pip install flit
 flit install --symlink
-from-abc tests/cherrytree.abc --verbose | head
+from-abc tests/cherrytree.abc --verbose
 
 # test developer functions:
 
