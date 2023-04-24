@@ -6,7 +6,7 @@ from signal import signal, SIGPIPE, SIG_DFL
 
 from pyabc2 import Tune
 
-from concertina_helper.layouts import cg_anglo_wheatstone_layout
+from concertina_helper.bisonoric import cg_anglo_wheatstone_layout
 from concertina_helper.tune_on_layout import TuneOnLayout
 
 

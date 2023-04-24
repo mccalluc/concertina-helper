@@ -3,11 +3,11 @@ from dataclasses import dataclass
 
 from astar import AStar  # type: ignore
 
-from .layouts import BisonoricFingering
+from .bisonoric import AnnotatedBisonoricFingering
 
 
-def find_best_fingerings(all_fingerings: list[set[BisonoricFingering]]) \
-        -> list[BisonoricFingering]:
+def find_best_fingerings(all_fingerings: list[set[AnnotatedBisonoricFingering]]) \
+        -> list[AnnotatedBisonoricFingering]:
     finder = FingerFinder(all_fingerings)
     return finder.find()
 
@@ -15,11 +15,11 @@ def find_best_fingerings(all_fingerings: list[set[BisonoricFingering]]) \
 @dataclass(frozen=True)
 class Node:
     position: int
-    fingering: BisonoricFingering
+    annotated_fingering: AnnotatedBisonoricFingering
 
 
 class FingerFinder(AStar):
-    def __init__(self, fingerings: list[set[BisonoricFingering]]):
+    def __init__(self, fingerings: list[set[AnnotatedBisonoricFingering]]):
         self.index = {
             i: frozenset(Node(i, f) for f in f_set)
             for i, f_set in enumerate(fingerings)
@@ -29,7 +29,7 @@ class FingerFinder(AStar):
         start = list(self.index[0])[0]
         max_index = max(self.index.keys())
         goal = list(self.index[max_index])[0]
-        return [node.fingering for node in self.astar(start, goal)]
+        return [node.annotated_fingering for node in self.astar(start, goal)]
 
     def heuristic_cost_estimate(self, current: Node, goal: Node) -> float:
         return goal.position - current.position
@@ -37,8 +37,8 @@ class FingerFinder(AStar):
     def distance_between(self, n1: Node, n2: Node) -> float:
         # TODO: Make the weightings here configurable.
         distance = abs(n1.position - n2.position)
-        f1 = n1.fingering
-        f2 = n2.fingering
+        f1 = n1.annotated_fingering.fingering
+        f2 = n2.annotated_fingering.fingering
         if f1.direction != f2.direction:
             # Maybe the cost of bellows change should depend on note length?
             distance += 1
