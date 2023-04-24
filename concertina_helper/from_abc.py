@@ -8,7 +8,7 @@ from signal import signal, SIGPIPE, SIG_DFL
 from pyabc2 import Tune
 
 from concertina_helper.layouts import cg_anglo_wheatstone_layout, BisonoricFingering
-from concertina_helper.finger_finder import FingerFinder
+from concertina_helper.finger_finder import find_fingers
 
 
 def main():  # pragma: no cover
@@ -58,13 +58,6 @@ def get_all_fingerings(tune: Tune) -> list[set[BisonoricFingering]]:
 
 def get_best_fingerings(path: Path) -> list[BisonoricFingering]:
     tune = Tune(path.read_text())
-    # TODO: Capture measure notation again... maybe a (measure, note) tuple?
     all_fingerings = get_all_fingerings(tune)
-    ff = FingerFinder(all_fingerings)
-    # TODO: Instead of picking an arbitrary start and stop,
-    # there should be a wrapper method on ff.
-    start = list(ff.index[0])[0]
-    max_index = max(ff.index.keys())
-    goal = list(ff.index[max_index])[0]
-
-    return [node.fingering for node in ff.astar(start, goal)]
+    best_fingerings = find_fingers(all_fingerings)
+    return best_fingerings

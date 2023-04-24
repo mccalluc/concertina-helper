@@ -6,6 +6,12 @@ from astar import AStar  # type: ignore
 from .layouts import BisonoricFingering
 
 
+def find_fingers(all_fingerings: list[set[BisonoricFingering]]) \
+        -> list[BisonoricFingering]:
+    finder = FingerFinder(all_fingerings)
+    return finder.find()
+
+
 @dataclass(frozen=True)
 class Node:
     position: int
@@ -18,6 +24,12 @@ class FingerFinder(AStar):
             i: frozenset(Node(i, f) for f in f_set)
             for i, f_set in enumerate(fingerings)
         }
+
+    def find(self):
+        start = list(self.index[0])[0]
+        max_index = max(self.index.keys())
+        goal = list(self.index[max_index])[0]
+        return [node.fingering for node in self.astar(start, goal)]
 
     def heuristic_cost_estimate(self, current: Node, goal: Node) -> float:
         return goal.position - current.position
@@ -42,6 +54,3 @@ class FingerFinder(AStar):
         # There could be multiple fingerings for the last note.
         # They are all equally good.
         return current.position == goal.position
-
-    # TODO: Add a wrapper for the astar() method that determines
-    # the start and end from self.index.
