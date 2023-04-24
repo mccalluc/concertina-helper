@@ -6,7 +6,7 @@ from astar import AStar  # type: ignore
 from .layouts import BisonoricFingering
 
 
-def find_fingers(all_fingerings: list[set[BisonoricFingering]]) \
+def find_best_fingerings(all_fingerings: list[set[BisonoricFingering]]) \
         -> list[BisonoricFingering]:
     finder = FingerFinder(all_fingerings)
     return finder.find()

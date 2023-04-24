@@ -4,7 +4,7 @@ import pytest
 
 from pyabc2 import Pitch
 
-from layouts import (
+from concertina_helper.layouts import (
     UnisonoricLayout, UnisonoricFingering,
     BisonoricLayout, BisonoricFingering,
     Direction, _names_to_pitches)

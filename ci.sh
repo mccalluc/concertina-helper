@@ -1,22 +1,20 @@
 #!/usr/bin/env bash
 set -o errexit
 
-# test end-user functions:
+# end-user tests:
 # TODO: find a better way to confirm that dev dependencies aren't necessary at runtime.
 # https://github.com/mccalluc/concertina-helper/issues/23
 
 pip install flit
 flit install --symlink
-from-abc tests/cherrytree.abc --verbose
+from-abc tests/g-major.abc --verbose
 # TODO: reenable pipe check
 # https://github.com/mccalluc/concertina-helper/issues/24
 
-# test developer functions:
+# developer tests:
 
 pip install -r requirements.txt
 pip install -r requirements-dev.txt 
-
-export PYTHONPATH="${PYTHONPATH}:concertina_helper"
 
 pytest --verbose --doctest-modules \
        --cov=. --cov-fail-under=100 --cov-branch \
