@@ -14,11 +14,11 @@ class PitchProxy:
     # TODO: post_init validation: fail if name != normalized name
 
     @property
-    def pitch(self):
+    def pitch(self) -> Pitch:
         return Pitch.from_name(self.name)
 
     @property
-    def class_name(self):
+    def class_name(self) -> str:
         return self.pitch.class_name
 
 

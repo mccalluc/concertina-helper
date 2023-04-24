@@ -65,10 +65,10 @@ class UnisonoricFingering:
     def __str__(self) -> str:
         filler = '--- '
 
-        def button_down_f(pitch):
+        def button_down_f(pitch: PitchProxy) -> str:
             return pitch.name.ljust(len(filler))
 
-        def button_up_f(pitch):
+        def button_up_f(pitch: PitchProxy) -> str:
             return filler
         return self.format(button_down_f, button_up_f)
 
