@@ -2,16 +2,15 @@
 
 import argparse
 from pathlib import Path
-from textwrap import indent
 from signal import signal, SIGPIPE, SIG_DFL
 
 from pyabc2 import Tune
 
-from concertina_helper.layouts import cg_anglo_wheatstone_layout
+from concertina_helper.bisonoric import cg_anglo_wheatstone_layout
+from concertina_helper.tune_on_layout import TuneOnLayout
 
 
 def main():  # pragma: no cover
-    #
     # Ignore broken pipes, so piping output to "head" will not error.
     # https://stackoverflow.com/a/30091579
     signal(SIGPIPE, SIG_DFL)
@@ -34,21 +33,13 @@ prints possible fingerings.
     )
 
     args = parser.parse_args()
-    path = Path(args.abc)
 
-    verbose = args.verbose
-    print(get_fingerings(path, verbose))
-
-
-def get_fingerings(path: Path, verbose: bool):
-    tune = Tune(path.read_text())
-    lines = []
-    for i, measure in enumerate(tune.measures):
-        lines.append(f'Measure {i + 1}')
-        for note in measure:
-            pitch = note.to_pitch()
-            lines.append(indent(pitch.name, ' '*2))
-            fingerings = cg_anglo_wheatstone_layout.get_fingerings(pitch)
-            for f in fingerings:
-                lines.append(indent(str(f) if verbose else f.format(), ' '*4))
-    return '\n'.join(lines)
+    tune = Tune(args.abc.read_text())
+    layout = cg_anglo_wheatstone_layout
+    t_l = TuneOnLayout(tune, layout)
+    for annotated_fingering in t_l.get_best_fingerings():
+        print(f'Measure {annotated_fingering.measure}')
+        if args.verbose:
+            print(str(annotated_fingering.fingering))
+        else:
+            print(annotated_fingering.fingering.format())

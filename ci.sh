@@ -1,7 +1,20 @@
 #!/usr/bin/env bash
 set -o errexit
 
-export PYTHONPATH="${PYTHONPATH}:concertina_helper"
+# end-user tests:
+# TODO: find a better way to confirm that dev dependencies aren't necessary at runtime.
+# https://github.com/mccalluc/concertina-helper/issues/23
+
+pip install flit
+flit install --symlink
+from-abc tests/g-major.abc --verbose
+# TODO: reenable pipe check
+# https://github.com/mccalluc/concertina-helper/issues/24
+
+# developer tests:
+
+pip install -r requirements.txt
+pip install -r requirements-dev.txt 
 
 pytest --verbose --doctest-modules \
        --cov=. --cov-fail-under=100 --cov-branch \
@@ -11,10 +24,6 @@ pytest --verbose --doctest-modules \
 mypy concertina_helper
 
 flake8
-
-flit install --symlink
-
-from-abc tests/cherrytree.abc --verbose | head
 
 echo 'PASS!'
 
