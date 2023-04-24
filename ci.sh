@@ -21,7 +21,7 @@ pytest --verbose --doctest-modules \
        --cov-report=html --cov-report=term-missing \
        --no-cov-on-fail
 
-mypy concertina_helper
+mypy concertina_helper --disallow-untyped-defs
 
 flake8
 

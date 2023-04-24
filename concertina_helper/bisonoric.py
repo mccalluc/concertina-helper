@@ -13,7 +13,7 @@ class Direction(Enum):
     PUSH = auto()
     PULL = auto()
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'Direction.{self.name}'
 
 
@@ -22,7 +22,7 @@ class BisonoricLayout:
     push_layout: UnisonoricLayout
     pull_layout: UnisonoricLayout
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         if self.push_layout.shape != self.pull_layout.shape:
             raise ValueError(
                 'Push and pull layout shapes must match: '

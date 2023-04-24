@@ -25,13 +25,13 @@ class FingerFinder(AStar):
             for i, f_set in enumerate(fingerings)
         }
 
-    def find(self):
+    def find(self) -> list[AnnotatedBisonoricFingering]:
         start = Node(-1, None)
         max_index = max(self.index.keys())
         goal = list(self.index[max_index])[0]
         # is_goal_reached() only checks position,
         # so I think we can use any final node.
-        # ... but then why is the goal parameter needed?
+        # ... but then why is the goal parameter needed on astar(start, goal)?
 
         return [
             node.annotated_fingering for node in self.astar(start, goal)
@@ -57,7 +57,7 @@ class FingerFinder(AStar):
             # TODO: Penalize pull at the start of a measure?
         return distance
 
-    def neighbors(self, node) -> Iterable[Node]:
+    def neighbors(self, node: Node) -> Iterable[Node]:
         return self.index[node.position + 1]
 
     def is_goal_reached(self, current: Node, goal: Node) -> bool:
