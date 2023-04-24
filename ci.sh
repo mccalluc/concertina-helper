@@ -5,16 +5,16 @@ set -o errexit
 # TODO: find a better way to confirm that dev dependencies aren't necessary at runtime.
 # https://github.com/mccalluc/concertina-helper/issues/23
 
-# pip install flit
-# flit install --symlink
-# from-abc tests/g-major.abc --verbose
-# # TODO: reenable pipe check
-# # https://github.com/mccalluc/concertina-helper/issues/24
+pip install flit
+flit install --symlink
+from-abc tests/g-major.abc --verbose
+# TODO: reenable pipe check
+# https://github.com/mccalluc/concertina-helper/issues/24
 
-# # developer tests:
+# developer tests:
 
-# pip install -r requirements.txt
-# pip install -r requirements-dev.txt 
+pip install -r requirements.txt
+pip install -r requirements-dev.txt 
 
 pytest --verbose --doctest-modules \
        --cov=. --cov-fail-under=100 --cov-branch \

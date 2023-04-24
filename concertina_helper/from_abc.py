@@ -37,8 +37,9 @@ prints possible fingerings.
     tune = Tune(args.abc.read_text())
     layout = cg_anglo_wheatstone_layout
     t_l = TuneOnLayout(tune, layout)
-    for fingering in t_l.get_best_fingerings():
+    for annotated_fingering in t_l.get_best_fingerings():
+        print(f'Measure {annotated_fingering.measure}')
         if args.verbose:
-            print(str(fingering))
+            print(str(annotated_fingering.fingering))
         else:
-            print(fingering.format())
+            print(annotated_fingering.fingering.format())

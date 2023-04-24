@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 from pyabc2 import Pitch
 
-from .util import *
+from .type_defs import Shape, PitchProxy, PitchProxyToStr, PitchProxyMatrix, Mask
 
 
 @dataclass(frozen=True)
@@ -18,41 +18,29 @@ class UnisonoricLayout:
             [len(row) for row in self.right],
         )
 
-    def __list_mask_to_mask(self, list_mask: list[list[bool]]) -> Mask:
-        return tuple(
-            tuple(
-                button for button in row
-            ) for row in list_mask
-        )
-
-    def _get_masks(self):
-        return (
-            [[False] * len(row) for row in self.left],
-            [[False] * len(row) for row in self.right]
-        )
+    def __make_masks(self, pitch: Pitch, ppm: PitchProxyMatrix) -> set[Mask]:
+        masks = set()
+        for i, row in enumerate(ppm):
+            for j, button in enumerate(row):
+                if pitch == button.pitch:
+                    mutable_mask = [[False] * len(row) for row in ppm]
+                    mutable_mask[i][j] = True
+                    mask = tuple(
+                        tuple(row) for row in mutable_mask
+                    )
+                    masks.add(mask)
+        return masks
 
     def get_fingerings(self, pitch: Pitch) -> frozenset[UnisonoricFingering]:
         fingerings = set()
-        # TODO: Clean up!
-        # left:
-        for i, row in enumerate(self.left):
-            for j, button in enumerate(row):
-                if pitch == button.pitch:
-                    left, right = self._get_masks()
-                    left[i][j] = True
-                    fingerings.add(UnisonoricFingering(
-                        self, self.__list_mask_to_mask(left),
-                        self.__list_mask_to_mask(right)))
-        # right:
-        for i, row in enumerate(self.right):
-            for j, button in enumerate(row):
-                if pitch == button.pitch:
-                    left, right = self._get_masks()
-                    right[i][j] = True
-                    fingerings.add(UnisonoricFingering(
-                        self,
-                        self.__list_mask_to_mask(left),
-                        self.__list_mask_to_mask(right)))
+
+        left_all_false = tuple((False,) * len(row) for row in self.left)
+        right_all_false = tuple((False,) * len(row) for row in self.right)
+
+        for left_mask in self.__make_masks(pitch, self.left):
+            fingerings.add(UnisonoricFingering(self, left_mask, right_all_false))
+        for right_mask in self.__make_masks(pitch, self.right):
+            fingerings.add(UnisonoricFingering(self, left_all_false, right_mask))
         return frozenset(fingerings)
 
     def __str__(self) -> str:

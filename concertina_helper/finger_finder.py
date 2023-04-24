@@ -26,7 +26,7 @@ class FingerFinder(AStar):
         }
 
     def find(self):
-        start = list(self.index[0])[0]
+        start = list(self.index[0])[0]  # TODO: Add a None node at the start.
         max_index = max(self.index.keys())
         goal = list(self.index[max_index])[0]
         return [node.annotated_fingering for node in self.astar(start, goal)]
