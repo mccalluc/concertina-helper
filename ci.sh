@@ -3,10 +3,13 @@ set -o errexit
 
 # test end-user functions:
 # TODO: find a better way to confirm that dev dependencies aren't necessary at runtime.
+# https://github.com/mccalluc/concertina-helper/issues/23
 
 pip install flit
 flit install --symlink
-from-abc tests/cherrytree.abc --verbose # TODO: reenable pipe check
+from-abc tests/cherrytree.abc --verbose
+# TODO: reenable pipe check
+# https://github.com/mccalluc/concertina-helper/issues/24
 
 # test developer functions:
 

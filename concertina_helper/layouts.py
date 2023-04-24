@@ -143,7 +143,8 @@ class UnisonoricLayout:
                     left, right = self._get_masks()
                     right[i][j] = True
                     fingerings.add(UnisonoricFingering(
-                        self, self.__list_mask_to_mask(left),
+                        self,
+                        self.__list_mask_to_mask(left),
                         self.__list_mask_to_mask(right)))
         return frozenset(fingerings)
 
