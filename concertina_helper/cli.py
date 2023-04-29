@@ -29,7 +29,7 @@ prints possible fingerings.
         '--verbose', action='store_true')
     parser.add_argument(
         '--layout_transpose', default=0, type=int, metavar='SEMITONES',
-        help='Semitones (positive or negative) to transpose the layout')
+        help='Semitones to transpose the layout; Negative transposes down')
 
     layout_group = parser.add_mutually_exclusive_group(required=True)
     layout_group.add_argument(
