@@ -6,7 +6,8 @@ from signal import signal, SIGPIPE, SIG_DFL
 
 from pyabc2 import Tune
 
-from concertina_helper.layouts.layout_loader import wheatstone_cg_layout
+from concertina_helper.layouts.layout_loader import (
+    wheatstone_cg_layout, load_bisonoric_layout)
 from concertina_helper.tune_on_layout import TuneOnLayout
 
 
@@ -22,20 +23,27 @@ and a concertina type,
 prints possible fingerings.
 ''')
     parser.add_argument(
-        'abc', type=Path,
+        'abc_path', type=Path,
         help='Path of ABC file')
-    parser.add_argument(
-        '--layout', choices=['Wheatstone'], default='Wheatstone')
-    parser.add_argument(
-        '--key', choices=['CG'], default='CG')
     parser.add_argument(
         '--verbose', action='store_true'
     )
 
+    layout_group = parser.add_mutually_exclusive_group(required=True)
+    layout_group.add_argument(
+        '--layout_path', type=Path,
+        help='Path of YAML file with concertina layout')
+    layout_group.add_argument(
+        '--layout_name', choices=['wheatstone-cg'],
+        help='Name of concertina layout')
+
     args = parser.parse_args()
 
-    tune = Tune(args.abc.read_text())
-    layout = wheatstone_cg_layout
+    tune = Tune(args.abc_path.read_text())
+    if args.layout_path is not None:
+        layout = load_bisonoric_layout(args.layout_path)
+    else:
+        layout = wheatstone_cg_layout  # TODO
     t_l = TuneOnLayout(tune, layout)
     for annotated_fingering in t_l.get_best_fingerings():
         print(f'Measure {annotated_fingering.measure}')

@@ -7,7 +7,7 @@ set -o errexit
 
 pip install flit
 flit install --symlink
-from-abc tests/g-major.abc --verbose
+from-abc tests/g-major.abc --layout_name wheatstone-cg --verbose
 # TODO: reenable pipe check
 # https://github.com/mccalluc/concertina-helper/issues/24
 
