@@ -70,36 +70,3 @@ class BisonoricFingering:
 class AnnotatedBisonoricFingering:
     fingering: BisonoricFingering
     measure: int
-
-
-def _names_to_pitches(matrix: list[list[str]]) -> PitchProxyMatrix:
-    '''
-    >>> pitch_matrix = _names_to_pitches([['C4']])
-    >>> pitch_matrix[0][0].name
-    'C4'
-    '''
-    return tuple(tuple(PitchProxy(name) for name in row) for row in matrix)
-
-
-cg_anglo_wheatstone_layout = BisonoricLayout(
-    push_layout=UnisonoricLayout(
-        _names_to_pitches(
-            [['E3', 'A3', 'C#4', 'A4', 'G#4'],
-             ['C3', 'G3', 'C4', 'E4', 'G4'],
-                ['B3', 'D4', 'G4', 'B4', 'D5']]),
-        _names_to_pitches(
-            [['C#5', 'A5', 'G#5', 'C#6', 'A6'],
-             ['C5', 'E5', 'G5', 'C6', 'E6'],
-                ['G5', 'B5', 'D6', 'G6', 'B6']]),
-    ),
-    pull_layout=UnisonoricLayout(
-        _names_to_pitches(
-            [['F3', 'Bb3', 'D#4', 'G4', 'Bb4'],
-             ['G3', 'B3', 'D4', 'F4', 'A4'],
-                ['A3', 'F#4', 'A4', 'C5', 'E5']]),
-        _names_to_pitches(
-            [['D#5', 'G5', 'Bb5', 'D#6', 'F6'],
-             ['B4', 'D5', 'F5', 'A5', 'B5'],
-                ['F#5', 'A5', 'C6', 'E6', 'F#6']])
-    ),
-)

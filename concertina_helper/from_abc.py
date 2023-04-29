@@ -6,7 +6,7 @@ from signal import signal, SIGPIPE, SIG_DFL
 
 from pyabc2 import Tune
 
-from concertina_helper.bisonoric import cg_anglo_wheatstone_layout
+from concertina_helper.layout_loader import wheatstone_cg_layout
 from concertina_helper.tune_on_layout import TuneOnLayout
 
 
@@ -35,7 +35,7 @@ prints possible fingerings.
     args = parser.parse_args()
 
     tune = Tune(args.abc.read_text())
-    layout = cg_anglo_wheatstone_layout
+    layout = wheatstone_cg_layout
     t_l = TuneOnLayout(tune, layout)
     for annotated_fingering in t_l.get_best_fingerings():
         print(f'Measure {annotated_fingering.measure}')

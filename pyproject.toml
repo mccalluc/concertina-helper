@@ -21,7 +21,8 @@ dynamic = ["version", "description"]
 # unpredictably in a new release, so we'll pin for now.
 dependencies = [
   "pyabc2==0.1.0.dev2",
-  "astar==0.97"
+  "astar==0.97",
+  "pyyaml~=6.0"
 ]
 
 [project.scripts]

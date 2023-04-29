@@ -8,7 +8,9 @@ from concertina_helper.unisonoric import (
     UnisonoricLayout, UnisonoricFingering)
 from concertina_helper.bisonoric import (
     BisonoricLayout, BisonoricFingering,
-    Direction, _names_to_pitches)
+    Direction)
+from concertina_helper.layout_loader import (
+    _names_to_pitches)
 
 
 u_layout = UnisonoricLayout(

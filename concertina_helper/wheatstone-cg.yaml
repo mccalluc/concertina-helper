@@ -1,0 +1,18 @@
+push:
+  left:
+    - E3 A3 C#4 A4 G#4
+    - C3 G3 C4  E4 G4
+    - B3 D4 G4  B4 D5
+  right:
+    - C#5 A5 G#5 C#6 A6
+    - C5  E5 G5  C6  E6
+    - G5  B5 D6  G6  B6
+pull:
+  left:
+    - F3 Bb3 D#4 G4 Bb4
+    - G3 B3  D4  F4 A4
+    - A3 F#4 A4  C5 E5
+  right:
+    - D#5 G5 Bb5 D#6 F6
+    - B4  D5 F5  A5  B5
+    - F#5 A5 C6  E6  F#6
