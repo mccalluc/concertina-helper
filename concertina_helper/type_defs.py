@@ -1,5 +1,5 @@
 from __future__ import annotations
-from collections.abc import Callable
+from collections.abc import Callable, Iterator
 from dataclasses import dataclass
 
 from pyabc2 import Pitch
@@ -20,7 +20,7 @@ class PitchProxy:
     @property
     def class_name(self) -> str:
         return self.pitch.class_name
-    
+
     def transpose(self, semitones: int) -> PitchProxy:
         return PitchProxy(Pitch(self.pitch.value + semitones).name)
 
@@ -28,7 +28,7 @@ class PitchProxy:
 @dataclass(frozen=True)
 class PitchProxyMatrix:
     matrix: tuple[tuple[PitchProxy, ...], ...]
-    
+
     def transpose(self, semitones: int) -> PitchProxyMatrix:
         return PitchProxyMatrix(
             tuple(
@@ -39,11 +39,11 @@ class PitchProxyMatrix:
                 for row in self.matrix
             )
         )
-    
-    def __getitem__(self, i):
+
+    def __getitem__(self, i: int) -> tuple[PitchProxy, ...]:
         return self.matrix[i]
 
-    def __iter__(self):
+    def __iter__(self) -> Iterator[tuple[PitchProxy, ...]]:
         return iter(self.matrix)
 
 

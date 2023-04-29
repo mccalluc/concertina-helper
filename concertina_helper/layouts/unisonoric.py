@@ -55,7 +55,7 @@ class UnisonoricLayout:
             lines.append(' '.join(cols))
         return '\n'.join(lines)
 
-    def transpose(self, semitones) -> UnisonoricLayout:
+    def transpose(self, semitones: int) -> UnisonoricLayout:
         return UnisonoricLayout(
             self.left.transpose(semitones),
             self.right.transpose(semitones))
