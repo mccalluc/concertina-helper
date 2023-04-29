@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from pyabc2 import Pitch
 
 from .unisonoric import UnisonoricFingering, UnisonoricLayout
-from .type_defs import Shape, PitchProxy, PitchProxyToStr, PitchProxyMatrix
+from ..type_defs import Shape, PitchProxyToStr
 
 
 class Direction(Enum):

@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 from astar import AStar  # type: ignore
 
-from .bisonoric import AnnotatedBisonoricFingering
+from .layouts.bisonoric import AnnotatedBisonoricFingering
 
 
 def find_best_fingerings(all_fingerings: list[set[AnnotatedBisonoricFingering]]) \

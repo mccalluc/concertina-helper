@@ -3,7 +3,7 @@ from pathlib import Path
 from pyabc2 import Tune
 
 from concertina_helper.tune_on_layout import TuneOnLayout
-from concertina_helper.layout_loader import wheatstone_cg_layout
+from concertina_helper.layouts.layout_loader import wheatstone_cg_layout
 
 tune = Tune(Path('tests/g-major.abc').read_text())
 

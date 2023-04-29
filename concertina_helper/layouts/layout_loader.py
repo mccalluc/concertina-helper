@@ -3,7 +3,7 @@ import re
 
 from yaml import safe_load
 
-from .type_defs import PitchProxy, PitchProxyMatrix
+from ..type_defs import PitchProxy, PitchProxyMatrix
 from .bisonoric import BisonoricLayout
 from .unisonoric import UnisonoricLayout
 
@@ -51,4 +51,5 @@ def load_bisonoric_layout(layout_path: Path) -> BisonoricLayout:
 #     return _parse_unisonoric_layout(layout_spec)
 
 
-wheatstone_cg_layout = load_bisonoric_layout(Path(__file__).parent / 'wheatstone-cg.yaml')
+wheatstone_cg_layout = load_bisonoric_layout(
+    Path(__file__).parent / 'wheatstone-cg.yaml')

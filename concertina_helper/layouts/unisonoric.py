@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 from pyabc2 import Pitch
 
-from .type_defs import Shape, PitchProxy, PitchProxyToStr, PitchProxyMatrix, Mask
+from ..type_defs import Shape, PitchProxy, PitchProxyToStr, PitchProxyMatrix, Mask
 
 
 @dataclass(frozen=True)

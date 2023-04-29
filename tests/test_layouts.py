@@ -4,12 +4,12 @@ import pytest
 
 from pyabc2 import Pitch
 
-from concertina_helper.unisonoric import (
+from concertina_helper.layouts.unisonoric import (
     UnisonoricLayout, UnisonoricFingering)
-from concertina_helper.bisonoric import (
+from concertina_helper.layouts.bisonoric import (
     BisonoricLayout, BisonoricFingering,
     Direction)
-from concertina_helper.layout_loader import (
+from concertina_helper.layouts.layout_loader import (
     _names_to_pitches)
 
 
