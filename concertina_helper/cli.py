@@ -26,12 +26,14 @@ prints possible fingerings.
         'abc_path', type=Path,
         help='Path of ABC file')
     parser.add_argument(
-        '--verbose', action='store_true'
-    )
+        '--verbose', action='store_true')
+    parser.add_argument(
+        '--layout_transpose', default=0, type=int, metavar='SEMITONES',
+        help='Semitones (positive or negative) to transpose the layout')
 
     layout_group = parser.add_mutually_exclusive_group(required=True)
     layout_group.add_argument(
-        '--layout_path', type=Path,
+        '--layout_path', type=Path, metavar='PATH',
         help='Path of YAML file with concertina layout')
     layout_group.add_argument(
         '--layout_name', choices=list_layout_names(),
@@ -39,10 +41,11 @@ prints possible fingerings.
 
     args = parser.parse_args()
 
-    if args.layout_path:
-        layout = load_bisonoric_layout_by_path(args.layout_path)
-    else:
-        layout = load_bisonoric_layout_by_name(args.layout_name)
+    layout = (
+        load_bisonoric_layout_by_path(args.layout_path)
+        if args.layout_path else
+        load_bisonoric_layout_by_name(args.layout_name)
+    ).transpose(args.layout_transpose)
 
     tune = Tune(args.abc_path.read_text())
     t_l = TuneOnLayout(tune, layout)
