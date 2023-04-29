@@ -38,18 +38,25 @@ def _parse_bisonoric_layout(layout_spec: dict) -> BisonoricLayout:
     return BisonoricLayout(push_layout=push_layout, pull_layout=pull_layout)
 
 
-def load_bisonoric_layout(layout_path: Path) -> BisonoricLayout:
+def load_bisonoric_layout_by_path(layout_path: Path) -> BisonoricLayout:
     layout_yaml = layout_path.read_text()
     layout_spec = safe_load(layout_yaml)
     return _parse_bisonoric_layout(layout_spec)
 
 
+def load_bisonoric_layout_by_name(layout_name: str) -> BisonoricLayout:
+    if not re.fullmatch(r'\w+', layout_name):
+        raise ValueError('invalid layout name')
+    layout_path = Path(__file__).parent / f'{layout_name}.yaml'
+    return load_bisonoric_layout_by_path(layout_path)
+
+
+def list_layout_names() -> list[str]:
+    return [path.stem for path in Path(__file__).parent.glob('*.yaml')]
+
+
 # TODO: Add a test and uncomment.
-# def load_unisonoric_layout(layout_path: Path) -> UnisonoricLayout:
+# def load_unisonoric_layout_by_path(layout_path: Path) -> UnisonoricLayout:
 #     layout_yaml = layout_path.read_text()
 #     layout_spec = safe_load(layout_yaml)
 #     return _parse_unisonoric_layout(layout_spec)
-
-
-wheatstone_cg_layout = load_bisonoric_layout(
-    Path(__file__).parent / 'wheatstone-cg.yaml')
