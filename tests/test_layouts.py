@@ -4,11 +4,13 @@ import pytest
 
 from pyabc2 import Pitch
 
-from concertina_helper.unisonoric import (
+from concertina_helper.layouts.unisonoric import (
     UnisonoricLayout, UnisonoricFingering)
-from concertina_helper.bisonoric import (
+from concertina_helper.layouts.bisonoric import (
     BisonoricLayout, BisonoricFingering,
-    Direction, _names_to_pitches)
+    Direction)
+from concertina_helper.layouts.layout_loader import (
+    _names_to_pitches, load_bisonoric_layout_by_name)
 
 
 u_layout = UnisonoricLayout(
@@ -30,9 +32,19 @@ weird_layout = UnisonoricLayout(
 )
 
 
+def test_load_bisonoric_layout_by_name_invalid():
+    with pytest.raises(ValueError, match='invalid layout name'):
+        load_bisonoric_layout_by_name('.')
+
+
+def test_load_bisonoric_layout_by_name_missing():
+    with pytest.raises(FileNotFoundError):
+        load_bisonoric_layout_by_name('no_such')
+
+
 class TestUnisonoricLayout:
     def test_repr(self):
-        assert "UnisonoricLayout(left=((PitchProxy(name='C4')," in repr(u_layout)
+        assert "UnisonoricLayout(left=PitchProxyMatrix" in repr(u_layout)
 
     def test_str(self):
         assert str(u_layout) == \
@@ -68,7 +80,8 @@ b_layout = BisonoricLayout(
 
 class TestBisonoricLayout:
     def test_repr(self):
-        assert "BisonoricLayout(push_layout=UnisonoricLayout(left=((" in repr(b_layout)
+        assert "BisonoricLayout(push_layout=UnisonoricLayout(" \
+            + "left=PitchProxyMatrix" in repr(b_layout)
 
     def test_str(self):
         assert str(b_layout) == \
@@ -78,6 +91,15 @@ class TestBisonoricLayout:
             'PULL:\n' \
             'D4  F4  A4      B4  D5  F5 \n' \
             'A4  C5  E5      F#5 A5  C6 '
+
+    def test_transpose(self):
+        assert str(b_layout.transpose(-2)) == \
+            'PUSH:\n' \
+            'Bb3 D4  F4      Bb4 D5  F5 \n' \
+            'F4  A4  C5      F5  A5  C6 \n' \
+            'PULL:\n' \
+            'C4  Eb4 G4      A4  C5  Eb5\n' \
+            'G4  Bb4 D5      E5  G5  Bb5'
 
     def test_shape(self):
         weird_bisonoric_layout = BisonoricLayout(
@@ -114,7 +136,7 @@ class TestUnisonoricFingering:
     def test_repr(self):
         r = repr(u_fingering)
         assert "UnisonoricFingering(layout=UnisonoricLayout(" \
-            "left=((PitchProxy(name='C4')" in r
+            "left=PitchProxyMatrix(matrix=" in r
         assert "left_mask=[[False, False, True], [True, False, False]]" in r
 
     def test_str(self):

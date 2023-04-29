@@ -2,7 +2,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from itertools import chain
 
-from .bisonoric import BisonoricLayout, AnnotatedBisonoricFingering
+from .layouts.bisonoric import BisonoricLayout, AnnotatedBisonoricFingering
 from .finger_finder import find_best_fingerings
 
 from pyabc2 import Tune

@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 from pyabc2 import Pitch
 
-from .type_defs import Shape, PitchProxy, PitchProxyToStr, PitchProxyMatrix, Mask
+from ..type_defs import Shape, PitchProxy, PitchProxyToStr, PitchProxyMatrix, Mask
 
 
 @dataclass(frozen=True)
@@ -54,6 +54,11 @@ class UnisonoricLayout:
                 cols.append(button.name.ljust(3))
             lines.append(' '.join(cols))
         return '\n'.join(lines)
+
+    def transpose(self, semitones: int) -> UnisonoricLayout:
+        return UnisonoricLayout(
+            self.left.transpose(semitones),
+            self.right.transpose(semitones))
 
 
 @dataclass(frozen=True)
