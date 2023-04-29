@@ -20,9 +20,33 @@ class PitchProxy:
     @property
     def class_name(self) -> str:
         return self.pitch.class_name
+    
+    def transpose(self, semitones: int) -> PitchProxy:
+        return PitchProxy(Pitch(self.pitch.value + semitones).name)
+
+
+@dataclass(frozen=True)
+class PitchProxyMatrix:
+    matrix: tuple[tuple[PitchProxy, ...], ...]
+    
+    def transpose(self, semitones: int) -> PitchProxyMatrix:
+        return PitchProxyMatrix(
+            tuple(
+                tuple(
+                    proxy.transpose(semitones)
+                    for proxy in row
+                )
+                for row in self.matrix
+            )
+        )
+    
+    def __getitem__(self, i):
+        return self.matrix[i]
+
+    def __iter__(self):
+        return iter(self.matrix)
 
 
 Mask = tuple[tuple[bool, ...], ...]
 Shape = tuple[list[int], list[int]]
-PitchProxyMatrix = tuple[tuple[PitchProxy, ...], ...]
 PitchProxyToStr = Callable[[PitchProxy], str]

@@ -14,7 +14,7 @@ def _names_to_pitches(matrix: list[list[str]]) -> PitchProxyMatrix:
     >>> pitch_matrix[0][0].name
     'C4'
     '''
-    return tuple(tuple(PitchProxy(name) for name in row) for row in matrix)
+    return PitchProxyMatrix(tuple(tuple(PitchProxy(name) for name in row) for row in matrix))
 
 
 def _parse_matrix(rows: list[str]) -> PitchProxyMatrix:

@@ -55,6 +55,11 @@ class UnisonoricLayout:
             lines.append(' '.join(cols))
         return '\n'.join(lines)
 
+    def transpose(self, semitones) -> UnisonoricLayout:
+        return UnisonoricLayout(
+            self.left.transpose(semitones),
+            self.right.transpose(semitones))
+
 
 @dataclass(frozen=True)
 class UnisonoricFingering:

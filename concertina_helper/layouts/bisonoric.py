@@ -47,6 +47,11 @@ class BisonoricLayout:
         return f'{Direction.PUSH.name}:\n{self.push_layout}\n' \
             f'{Direction.PULL.name}:\n{self.pull_layout}'
 
+    def transpose(self, semitones) -> BisonoricLayout:
+        return BisonoricLayout(
+            push_layout=self.push_layout.transpose(semitones),
+            pull_layout=self.pull_layout.transpose(semitones))
+
 
 @dataclass(frozen=True)
 class BisonoricFingering:
