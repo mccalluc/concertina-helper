@@ -10,7 +10,7 @@ from concertina_helper.layouts.layout_loader import wheatstone_cg_layout
 from concertina_helper.tune_on_layout import TuneOnLayout
 
 
-def main() -> None:  # pragma: no cover
+def from_abc() -> None:  # pragma: no cover
     # Ignore broken pipes, so piping output to "head" will not error.
     # https://stackoverflow.com/a/30091579
     signal(SIGPIPE, SIG_DFL)
