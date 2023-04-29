@@ -52,6 +52,10 @@ def load_bisonoric_layout_by_name(layout_name: str) -> BisonoricLayout:
 
 
 def list_layout_names() -> list[str]:
+    '''
+    >>> list_layout_names()
+    ['wheatstone_cg']
+    '''
     return [path.stem for path in Path(__file__).parent.glob('*.yaml')]
 
 

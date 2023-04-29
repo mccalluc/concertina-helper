@@ -10,7 +10,7 @@ from concertina_helper.layouts.bisonoric import (
     BisonoricLayout, BisonoricFingering,
     Direction)
 from concertina_helper.layouts.layout_loader import (
-    _names_to_pitches)
+    _names_to_pitches, load_bisonoric_layout_by_name)
 
 
 u_layout = UnisonoricLayout(
@@ -30,6 +30,16 @@ weird_layout = UnisonoricLayout(
         [['C5', 'E5', 'G5'],
          ['G5', 'B5', 'D6', 'G6']]),
 )
+
+
+def test_load_bisonoric_layout_by_name_invalid():
+    with pytest.raises(ValueError, match='invalid layout name'):
+        load_bisonoric_layout_by_name('.')
+
+
+def test_load_bisonoric_layout_by_name_missing():
+    with pytest.raises(FileNotFoundError):
+        load_bisonoric_layout_by_name('no_such')
 
 
 class TestUnisonoricLayout:
