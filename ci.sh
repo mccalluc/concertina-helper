@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -o errexit
 
+die() { set +v; echo "$*" 1>&2 ; exit 1; }
+
 # end-user tests:
 # TODO: find a better way to confirm that dev dependencies aren't necessary at runtime.
 # https://github.com/mccalluc/concertina-helper/issues/23
@@ -10,6 +12,10 @@ flit install --symlink
 from-abc tests/g-major.abc --layout_name wheatstone_cg --layout_transpose -2 --verbose
 # TODO: reenable pipe check
 # https://github.com/mccalluc/concertina-helper/issues/24
+
+perl -ne 'print if /usage:/../```/ and ! /```/' README.md > /tmp/expected.txt
+from-abc --help > /tmp/actual.txt
+diff /tmp/expected.txt /tmp/actual.txt || die "Update CLI usage in README.md"
 
 # developer tests:
 
