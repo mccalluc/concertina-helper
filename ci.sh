@@ -9,7 +9,7 @@ die() { set +v; echo "$*" 1>&2 ; exit 1; }
 
 pip install flit
 flit install --symlink
-from-abc tests/g-major.abc --layout_name wheatstone_cg --layout_transpose -2 --verbose
+from-abc tests/g-major.abc --layout_name 30_wheatstone_cg --layout_transpose -2 --verbose
 # TODO: reenable pipe check
 # https://github.com/mccalluc/concertina-helper/issues/24
 

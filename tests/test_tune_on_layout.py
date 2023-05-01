@@ -6,7 +6,7 @@ from concertina_helper.tune_on_layout import TuneOnLayout
 from concertina_helper.layouts.layout_loader import load_bisonoric_layout_by_name
 
 tune = Tune(Path('tests/g-major.abc').read_text())
-layout = load_bisonoric_layout_by_name('wheatstone_cg')
+layout = load_bisonoric_layout_by_name('30_wheatstone_cg')
 
 
 def test_get_all_fingerings():

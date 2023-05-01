@@ -89,7 +89,7 @@ def list_layout_names() -> list[str]:
     `concertina_helper.layouts.bisonoric.BisonoricLayout.transpose`.
 
     >>> list_layout_names()
-    ['wheatstone_cg']
+    ['20_cg', '30_wheatstone_cg', '30_jefferies_cg']
     '''
     return [path.stem for path in Path(__file__).parent.glob('*.yaml')]
 
