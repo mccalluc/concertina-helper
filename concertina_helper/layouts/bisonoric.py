@@ -10,6 +10,10 @@ from ..type_defs import Shape, PitchProxyToStr
 
 
 class Direction(Enum):
+    '''
+    `PUSH` and `PULL`are paired with a unisonoric fingering
+    to create a bisonoric fingering
+    '''
     PUSH = auto()
     PULL = auto()
 
@@ -19,6 +23,11 @@ class Direction(Enum):
 
 @dataclass(frozen=True, kw_only=True)
 class BisonoricLayout:
+    '''
+    Represents a bisonoric concertina layout:
+    the layout of the buttons on the left and right,
+    and the pitches they produce on push and pull.
+    '''
     push_layout: UnisonoricLayout
     pull_layout: UnisonoricLayout
 
@@ -36,6 +45,9 @@ class BisonoricLayout:
         )
 
     def get_fingerings(self, pitch: Pitch) -> set[BisonoricFingering]:
+        '''
+        Given a pitch, return all possible fingerings as a set.
+        '''
         push_fingerings = self.push_layout.get_fingerings(pitch)
         pull_fingerings = self.pull_layout.get_fingerings(pitch)
         return (
@@ -48,6 +60,10 @@ class BisonoricLayout:
             f'{Direction.PULL.name}:\n{self.pull_layout}'
 
     def transpose(self, semitones: int) -> BisonoricLayout:
+        '''
+        Given a number of semitones, return a new layout,
+        transposed up or down.
+        '''
         return BisonoricLayout(
             push_layout=self.push_layout.transpose(semitones),
             pull_layout=self.pull_layout.transpose(semitones))

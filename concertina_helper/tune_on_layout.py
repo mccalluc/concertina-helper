@@ -10,10 +10,16 @@ from pyabc2 import Tune
 
 @dataclass
 class TuneOnLayout:
+    '''
+    Represents a particular tune on a particular layout
+    '''
     tune: Tune
     layout: BisonoricLayout
 
     def get_all_fingerings(self) -> list[set[AnnotatedBisonoricFingering]]:
+        '''
+        For each note in the tune, returns all possible fingerings.
+        '''
         return list(chain(*[
             [
                 {
@@ -26,4 +32,7 @@ class TuneOnLayout:
         ]))
 
     def get_best_fingerings(self) -> list[AnnotatedBisonoricFingering]:
+        '''
+        For each note in the tune, returns only the best fingering.
+        '''
         return find_best_fingerings(self.get_all_fingerings())

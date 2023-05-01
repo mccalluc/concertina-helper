@@ -1,7 +1,8 @@
 # concertina-helper
-Python script to find good fingerings for musical passages on the Anglo-German concertina.
+Python script to find good fingerings on bisonoric concertinas for tunes in
+[ABC notation](https://abcnotation.com/), and a supporting API.
 
-## Getting started
+## CLI usage
 
 (Plan to push to PyPi eventually: [Issue](https://github.com/mccalluc/concertina-helper/issues/2))
 ```
@@ -33,10 +34,22 @@ options:
                         Name of concertina layout
 ```
 
+## API usage
 
-## Other tools
+See [API documentation](https://mccalluc.github.io/concertina-helper).
 
-### Fingerings over passages
+## Development
+
+
+```
+pip install -r requirements.txt
+pip install -r requirements-dev.txt
+./ci.sh
+```
+
+## Related tools
+
+### Generate fingerings for tunes
 
 - [Anglo Concertina Fingering Generator](https://jvandonsel.github.io/fingering/fingering.html): Web page which takes ABC notation, and returns ABC notation, and renders it using [abcjs](https://www.abcjs.net/)
 - [concertina-pbqp](https://github.com/resistor/concertina-pbqp): C++; Models it as an NP-hard problem, but uses a solver library for an approximate solution. 
@@ -45,8 +58,3 @@ options:
 
 - [Anglo Piano](https://anglopiano.com/): Web page with piano and a variety of concertina layouts. Shows all possible fingerings for notes and chords.
 - [KonzertinaNetz](https://www.konzertinanetz.de/): Auf Deutsch. Includes windows `.exe` for download.
-
-### Incomplete projects
-
-- [juliamullen/concertina](https://github.com/juliamullen/concertina): Some Python classes.
-- [german-concertina-notes](https://github.com/daniel-leinweber/german-concertina-notes): HTML and JS, but not deployed to a site.

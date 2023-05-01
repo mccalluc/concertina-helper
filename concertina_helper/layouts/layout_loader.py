@@ -45,12 +45,38 @@ def _parse_bisonoric_layout(layout_spec: dict) -> BisonoricLayout:
 
 
 def load_bisonoric_layout_by_path(layout_path: Path) -> BisonoricLayout:
+    '''
+    Expects the file at `layout_path` to be YAML, with a structure like this:
+    ```
+    push:
+        left:
+            - C3 G3 C4  E4 G4
+            - B3 D4 G4  B4 D5
+        right:
+            - C5  E5 G5  C6  E6
+            - G5  B5 D6  G6  B6
+    pull:
+        left:
+            - G3 B3  D4  F4 A4
+            - A3 F#4 A4  C5 E5
+        right:
+            - B4  D5 F5  A5  B5
+            - F#5 A5 C6  E6  F#6
+    ```
+    - `push` and `pull` at the top level.
+    - `left` and `right` inside.
+    - Each contains a list of strings, representing rows of buttons.
+    - The strings are the pitches of that row of keys, space delimitted.
+    '''
     layout_yaml = layout_path.read_text()
     layout_spec = safe_load(layout_yaml)
     return _parse_bisonoric_layout(layout_spec)
 
 
 def load_bisonoric_layout_by_name(layout_name: str) -> BisonoricLayout:
+    '''
+    The `layout_name` must be one of the names returned by `list_layout_names()`.
+    '''
     if not re.fullmatch(r'\w+', layout_name):
         raise ValueError('invalid layout name')
     layout_path = Path(__file__).parent / f'{layout_name}.yaml'
@@ -59,8 +85,14 @@ def load_bisonoric_layout_by_name(layout_name: str) -> BisonoricLayout:
 
 def list_layout_names() -> list[str]:
     '''
+    Lists all preconfigured layouts.
+    To change the key of a layout, use
+    `concertina_helper.layouts.bisonoric.BisonoricLayout.transpose`.
+
+    ```
     >>> list_layout_names()
     ['wheatstone_cg']
+    ```
     '''
     return [path.stem for path in Path(__file__).parent.glob('*.yaml')]
 
