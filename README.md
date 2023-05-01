@@ -4,14 +4,8 @@ Python script to find good fingerings on bisonoric concertinas for tunes in
 
 ## CLI usage
 
-(Plan to push to PyPi eventually: [Issue](https://github.com/mccalluc/concertina-helper/issues/2))
-```
-git clone https://github.com/mccalluc/concertina-helper.git
-cd concertina-helper
-pip install flit
-flit install --symlink
-from-abc --help
-```
+See [`demo-cli.sh`](https://github.com/mccalluc/concertina-helper/blob/main/demo-cli.sh)
+for examples of CLI usage.
 ```
 usage: from-abc [-h] [--verbose] [--layout_transpose SEMITONES]
                 (--layout_path PATH | --layout_name {20_cg,30_jefferies_cg,30_wheatstone_cg})
@@ -36,16 +30,12 @@ options:
 
 ## API usage
 
-See [API documentation](https://mccalluc.github.io/concertina-helper).
+See [API documentation](https://mccalluc.github.io/concertina-helper) for details.
 
 ## Development
 
-
-```
-pip install -r requirements.txt
-pip install -r requirements-dev.txt
-./ci.sh
-```
+See [`demo-api.sh`](https://github.com/mccalluc/concertina-helper/blob/main/demo-cli.sh)
+for for typical developer setup. The demo scripts are also used for CI.
 
 ## Related tools
 
