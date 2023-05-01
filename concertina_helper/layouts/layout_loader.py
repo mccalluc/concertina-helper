@@ -32,15 +32,15 @@ def _parse_matrix(rows: list[str]) -> PitchProxyMatrix:
     return _names_to_pitches([re.split(r'\s+', row.strip()) for row in rows])
 
 
-def _parse_unisonoric_layout(layout_spec: dict) -> UnisonoricLayout:
+def parse_unisonoric_layout(layout_spec: dict) -> UnisonoricLayout:
     left_matrix = _parse_matrix(layout_spec['left'])
     right_matrix = _parse_matrix(layout_spec['right'])
     return UnisonoricLayout(left_matrix, right_matrix)
 
 
-def _parse_bisonoric_layout(layout_spec: dict) -> BisonoricLayout:
-    push_layout = _parse_unisonoric_layout(layout_spec['push'])
-    pull_layout = _parse_unisonoric_layout(layout_spec['pull'])
+def parse_bisonoric_layout(layout_spec: dict) -> BisonoricLayout:
+    push_layout = parse_unisonoric_layout(layout_spec['push'])
+    pull_layout = parse_unisonoric_layout(layout_spec['pull'])
     return BisonoricLayout(push_layout=push_layout, pull_layout=pull_layout)
 
 
@@ -70,7 +70,7 @@ def load_bisonoric_layout_by_path(layout_path: Path) -> BisonoricLayout:
     '''
     layout_yaml = layout_path.read_text()
     layout_spec = safe_load(layout_yaml)
-    return _parse_bisonoric_layout(layout_spec)
+    return parse_bisonoric_layout(layout_spec)
 
 
 def load_bisonoric_layout_by_name(layout_name: str) -> BisonoricLayout:
