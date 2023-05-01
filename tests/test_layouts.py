@@ -49,8 +49,8 @@ class TestUnisonoricLayout:
 
     def test_str(self):
         assert str(u_layout) == \
-            'C4  E4  G4      C5  E5  G5 \n' \
-            'G4  B4  D5      G5  B5  D6 '
+            'C4  E4  G4      C5  E5  G5\n' \
+            'G4  B4  D5      G5  B5  D6'
 
     def test_shape(self):
         assert weird_layout.shape == ([1, 2], [3, 4])
@@ -94,17 +94,17 @@ class TestBisonoricLayout:
     def test_str(self):
         assert str(b_layout) == \
             'PUSH:\n' \
-            'C4  E4  G4      C5  E5  G5 \n' \
-            'G4  B4  D5      G5  B5  D6 \n' \
+            'C4  E4  G4      C5  E5  G5\n' \
+            'G4  B4  D5      G5  B5  D6\n' \
             'PULL:\n' \
-            'D4  F4  A4      B4  D5  F5 \n' \
-            'A4  C5  E5      F#5 A5  C6 '
+            'D4  F4  A4      B4  D5  F5\n' \
+            'A4  C5  E5      F#5 A5  C6'
 
     def test_transpose(self):
         assert str(b_layout.transpose(-2)) == \
             'PUSH:\n' \
-            'Bb3 D4  F4      Bb4 D5  F5 \n' \
-            'F4  A4  C5      F5  A5  C6 \n' \
+            'Bb3 D4  F4      Bb4 D5  F5\n' \
+            'F4  A4  C5      F5  A5  C6\n' \
             'PULL:\n' \
             'C4  Eb4 G4      A4  C5  Eb5\n' \
             'G4  Bb4 D5      E5  G5  Bb5'
@@ -168,6 +168,7 @@ class TestUnisonoricFingering:
         with pytest.raises(TypeError):
             u_fingering | 'not a fingering!'
 
+
 b_fingering = BisonoricFingering(Direction.PUSH, u_fingering)
 
 
@@ -196,7 +197,7 @@ class TestBisonoricFingering:
             'PUSH:\n' \
             '. . G    . . G\n' \
             'G . .    G . .'
-    
+
     def test_invalid_union(self):
         with pytest.raises(TypeError):
             b_fingering | 'not a fingering!'

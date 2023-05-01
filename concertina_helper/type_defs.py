@@ -72,7 +72,7 @@ class Mask:
 
     def __iter__(self) -> Iterator[tuple[bool, ...]]:
         return iter(self.bool_matrix)
-    
+
     def __or__(self, other: Any) -> Mask:
         if type(self) != type(other):
             raise TypeError('mixed operand types')
@@ -89,7 +89,6 @@ class Mask:
                 in zip(self, other)
             )
         )
-
 
 
 Shape = tuple[list[int], list[int]]

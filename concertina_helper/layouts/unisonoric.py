@@ -53,7 +53,7 @@ class UnisonoricLayout:
             cols.append('   ')
             for button in right_row:
                 cols.append(button.name.ljust(3))
-            lines.append(' '.join(cols))
+            lines.append(' '.join(cols).strip())
         return '\n'.join(lines)
 
     def transpose(self, semitones: int) -> UnisonoricLayout:
