@@ -1,5 +1,6 @@
 from __future__ import annotations
 from enum import Enum, auto
+from typing import Any
 from collections.abc import Callable
 from dataclasses import dataclass
 
@@ -27,6 +28,37 @@ class BisonoricLayout:
     Represents a bisonoric concertina layout:
     the layout of the buttons on the left and right,
     and the pitches they produce on push and pull.
+
+    >>> from concertina_helper.layouts.layout_loader import (
+    ...     load_bisonoric_layout_by_name)
+    >>> layout = load_bisonoric_layout_by_name('30_wheatstone_cg')
+    >>> print(layout)
+    PUSH:
+    E3  A3  C#4 A4  G#4     C#5 A5  G#5 C#6 A6
+    C3  G3  C4  E4  G4      C5  E5  G5  C6  E6
+    B3  D4  G4  B4  D5      G5  B5  D6  G6  B6
+    PULL:
+    F3  Bb3 D#4 G4  Bb4     D#5 G5  Bb5 D#6 F6
+    G3  B3  D4  F4  A4      B4  D5  F5  A5  B5
+    A3  F#4 A4  C5  E5      F#5 A5  C6  E6  F#6
+
+    With a layout, you can get all fingerings for a particular pitch.
+    Fingerings can be combined to produce chords:
+
+    >>> c = layout.get_fingerings(Pitch.from_name('C4')).pop()
+    >>> e = layout.get_fingerings(Pitch.from_name('E4')).pop()
+    >>> print(c | e)
+    PUSH:
+    --- --- --- --- ---    --- --- --- --- ---
+    --- --- C4  E4  ---    --- --- --- --- ---
+    --- --- --- --- ---    --- --- --- --- ---
+
+    Fingerings with different bellow directions can not be combined:
+    >>> f = layout.get_fingerings(Pitch.from_name('F4')).pop()
+    >>> print(c | f)
+    Traceback (most recent call last):
+    ...
+    ValueError: different bellows directions
     '''
     push_layout: UnisonoricLayout
     pull_layout: UnisonoricLayout
@@ -71,6 +103,9 @@ class BisonoricLayout:
 
 @dataclass(frozen=True)
 class BisonoricFingering:
+    '''
+    Represents a fingering on a bisonoric concertina.
+    '''
     direction: Direction
     fingering: UnisonoricFingering
 
@@ -85,6 +120,13 @@ class BisonoricFingering:
             lambda direction: direction.name) -> str:
         return f'{direction_f(self.direction)}:\n' \
             f'{self.fingering.format(button_down_f, button_up_f)}'
+
+    def __or__(self, other: Any) -> BisonoricFingering:
+        if type(self) != type(other):
+            raise TypeError('mixed operand types')
+        if self.direction != other.direction:
+            raise ValueError('different bellows directions')
+        return BisonoricFingering(self.direction, self.fingering | other.fingering)
 
 
 @dataclass(frozen=True, kw_only=True)

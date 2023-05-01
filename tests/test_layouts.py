@@ -11,6 +11,7 @@ from concertina_helper.layouts.bisonoric import (
     Direction)
 from concertina_helper.layouts.layout_loader import (
     _names_to_pitches, load_bisonoric_layout_by_name)
+from concertina_helper.type_defs import Mask
 
 
 u_layout = UnisonoricLayout(
@@ -48,8 +49,8 @@ class TestUnisonoricLayout:
 
     def test_str(self):
         assert str(u_layout) == \
-            'C4  E4  G4      C5  E5  G5 \n' \
-            'G4  B4  D5      G5  B5  D6 '
+            'C4  E4  G4      C5  E5  G5\n' \
+            'G4  B4  D5      G5  B5  D6'
 
     def test_shape(self):
         assert weird_layout.shape == ([1, 2], [3, 4])
@@ -57,14 +58,21 @@ class TestUnisonoricLayout:
     def test_get_fingerings(self):
         fingerings = u_layout.get_fingerings(Pitch.from_name('G4'))
         assert len(fingerings) == 2
-        fingering_1 = list(fingerings)[0]
-        # TODO: get rid of "or"
-        assert (
-            fingering_1.left_mask == ((False, False, False), (True, False, False))
-            or fingering_1.left_mask == ((False, False, True), (False, False, False))
-        )
-        assert fingering_1.right_mask == (
-            (False, False, False), (False, False, False))
+        assert any([
+            fingering.left_mask == Mask(((False, False, False), (True, False, False)))
+            for fingering in fingerings])
+        assert any([
+            fingering.left_mask == Mask(((False, False, True), (False, False, False)))
+            for fingering in fingerings])
+        assert all(
+            fingering.right_mask == Mask(((False, False, False), (False, False, False)))
+            for fingering in fingerings)
+
+    def test_mixed_layout_union_invalid(self):
+        u_fingering = set(u_layout.get_fingerings(Pitch.from_name('C4'))).pop()
+        weird_fingering = set(weird_layout.get_fingerings(Pitch.from_name('C4'))).pop()
+        with pytest.raises(ValueError):
+            u_fingering | weird_fingering
 
 
 b_layout = BisonoricLayout(
@@ -86,17 +94,17 @@ class TestBisonoricLayout:
     def test_str(self):
         assert str(b_layout) == \
             'PUSH:\n' \
-            'C4  E4  G4      C5  E5  G5 \n' \
-            'G4  B4  D5      G5  B5  D6 \n' \
+            'C4  E4  G4      C5  E5  G5\n' \
+            'G4  B4  D5      G5  B5  D6\n' \
             'PULL:\n' \
-            'D4  F4  A4      B4  D5  F5 \n' \
-            'A4  C5  E5      F#5 A5  C6 '
+            'D4  F4  A4      B4  D5  F5\n' \
+            'A4  C5  E5      F#5 A5  C6'
 
     def test_transpose(self):
         assert str(b_layout.transpose(-2)) == \
             'PUSH:\n' \
-            'Bb3 D4  F4      Bb4 D5  F5 \n' \
-            'F4  A4  C5      F5  A5  C6 \n' \
+            'Bb3 D4  F4      Bb4 D5  F5\n' \
+            'F4  A4  C5      F5  A5  C6\n' \
             'PULL:\n' \
             'C4  Eb4 G4      A4  C5  Eb5\n' \
             'G4  Bb4 D5      E5  G5  Bb5'
@@ -141,8 +149,8 @@ class TestUnisonoricFingering:
 
     def test_str(self):
         assert str(u_fingering) == \
-            '--- --- G4     --- --- G5  \n' \
-            'G4  --- ---    G5  --- --- '
+            '--- --- G4     --- --- G5\n' \
+            'G4  --- ---    G5  --- ---'
 
     def test_format_default(self):
         assert u_fingering.format() == \
@@ -153,8 +161,12 @@ class TestUnisonoricFingering:
         assert u_fingering.format(
             button_down_f=lambda pitch: pitch.class_name.ljust(2),
             button_up_f=lambda _: '. ') == \
-            '. . G    . . G \n' \
-            'G . .    G . . '
+            '. . G    . . G\n' \
+            'G . .    G . .'
+
+    def test_invalid_union(self):
+        with pytest.raises(TypeError):
+            u_fingering | 'not a fingering!'
 
 
 b_fingering = BisonoricFingering(Direction.PUSH, u_fingering)
@@ -169,8 +181,8 @@ class TestBisonoricFingering:
     def test_str(self):
         assert str(b_fingering) == \
             'PUSH:\n' \
-            '--- --- G4     --- --- G5  \n' \
-            'G4  --- ---    G5  --- --- '
+            '--- --- G4     --- --- G5\n' \
+            'G4  --- ---    G5  --- ---'
 
     def test_format_default(self):
         assert b_fingering.format() == \
@@ -183,5 +195,9 @@ class TestBisonoricFingering:
             button_down_f=lambda pitch: pitch.class_name.ljust(2),
             button_up_f=lambda _: '. ') == \
             'PUSH:\n' \
-            '. . G    . . G \n' \
-            'G . .    G . . '
+            '. . G    . . G\n' \
+            'G . .    G . .'
+
+    def test_invalid_union(self):
+        with pytest.raises(TypeError):
+            b_fingering | 'not a fingering!'
