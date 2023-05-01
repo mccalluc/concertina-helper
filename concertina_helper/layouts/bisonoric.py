@@ -131,5 +131,9 @@ class BisonoricFingering:
 
 @dataclass(frozen=True, kw_only=True)
 class AnnotatedBisonoricFingering:
+    '''
+    Adds contextual information to the fingering
+    that is useful in finding the best fingering for a tune.
+    '''
     fingering: BisonoricFingering
     measure: int
