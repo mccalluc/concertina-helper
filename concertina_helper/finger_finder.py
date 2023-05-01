@@ -12,7 +12,7 @@ def find_best_fingerings(all_fingerings: list[set[AnnotatedBisonoricFingering]])
     Given a list of sets of possible fingerings,
     returns a list representing the best fingerings.
     See `concertina_helper.tune_on_layout.TuneOnLayout.get_best_fingerings`
-    for a convenience method that wraps this. 
+    for a convenience method that wraps this.
     '''
     finder = _FingerFinder(all_fingerings)
     return finder.find()
