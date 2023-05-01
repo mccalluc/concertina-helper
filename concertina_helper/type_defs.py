@@ -7,8 +7,9 @@ from pyabc2 import Pitch
 
 @dataclass(frozen=True)
 class PitchProxy:
-    # pyabc2 Pitch is not hashable,
-    # but we want something that is less error prone than just a string.
+    '''
+    Immutable class representing a musical pitch. Wraps pyabc2's `Pitch` class.
+    '''
     name: str
 
     # TODO: post_init validation: fail if name != normalized name
@@ -27,6 +28,10 @@ class PitchProxy:
 
 @dataclass(frozen=True)
 class PitchProxyMatrix:
+    '''
+    Represents the pitches that can be produced by one half of a concertina,
+    on either the push or pull, if bisonoric.
+    '''
     matrix: tuple[tuple[PitchProxy, ...], ...]
 
     def transpose(self, semitones: int) -> PitchProxyMatrix:
@@ -48,5 +53,21 @@ class PitchProxyMatrix:
 
 
 Mask = tuple[tuple[bool, ...], ...]
+'''
+A boolean matix. `True` represents a key held down.
+'''
+
 Shape = tuple[list[int], list[int]]
+'''
+Describes the button arrangement of an instrument:
+respectively the left and right faces, and for each face,
+the number of buttons in each row.
+'''
+
 PitchProxyToStr = Callable[[PitchProxy], str]
+'''
+A function which takes a pitch and returns a string.
+(Should the octave number be printed?
+Should unicode characters be used for accidentals?
+Those sort of details are handled by the function.)
+'''

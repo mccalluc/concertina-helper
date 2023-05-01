@@ -8,10 +8,14 @@ from pyabc2 import Tune
 
 from concertina_helper.layouts.layout_loader import (
     list_layout_names, load_bisonoric_layout_by_path, load_bisonoric_layout_by_name)
+from concertina_helper.layouts.bisonoric import BisonoricLayout
 from concertina_helper.tune_on_layout import TuneOnLayout
 
 
-def from_abc() -> None:  # pragma: no cover
+def _from_abc() -> None:  # pragma: no cover
+    '''
+    Parses command line arguments, finds optimal fingering for tune, and prints.
+    '''
     # Ignore broken pipes, so piping output to "head" will not error.
     # https://stackoverflow.com/a/30091579
     signal(SIGPIPE, SIG_DFL)
@@ -47,12 +51,26 @@ prints possible fingerings.
         load_bisonoric_layout_by_name(args.layout_name)
     ).transpose(args.layout_transpose)
 
-    tune = Tune(args.abc_path.read_text())
+    abc_str = args.abc_path.read_text()
+    from_abc(abc_str, layout, args.verbose)
+
+
+def from_abc(
+    abc_str: str,
+    layout: BisonoricLayout, is_verbose: bool
+) -> None:  # pragma: no cover
+    '''
+    The core of the CLI functionality.
+    - `abc_str`: A multiline string containing ABC notation.
+    - `layout`: A bisonoric layout, either built-in or supplied by user.
+    - `is_verbose`: Should the output show notes, or just whether buttons are down?
+    '''
+    tune = Tune(abc_str)
     t_l = TuneOnLayout(tune, layout)
 
     for annotated_fingering in t_l.get_best_fingerings():
         print(f'Measure {annotated_fingering.measure}')
-        if args.verbose:
+        if is_verbose:
             print(str(annotated_fingering.fingering))
         else:
             print(annotated_fingering.fingering.format())
