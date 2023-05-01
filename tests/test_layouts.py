@@ -58,15 +58,21 @@ class TestUnisonoricLayout:
     def test_get_fingerings(self):
         fingerings = u_layout.get_fingerings(Pitch.from_name('G4'))
         assert len(fingerings) == 2
-        assert any(
+        assert any([
             fingering.left_mask == Mask(((False, False, False), (True, False, False)))
-            for fingering in fingerings)
-        assert any(
+            for fingering in fingerings])
+        assert any([
             fingering.left_mask == Mask(((False, False, True), (False, False, False)))
-            for fingering in fingerings)
+            for fingering in fingerings])
         assert all(
             fingering.right_mask == Mask(((False, False, False), (False, False, False)))
             for fingering in fingerings)
+
+    def test_mixed_layout_union_invalid(self):
+        u_fingering = set(u_layout.get_fingerings(Pitch.from_name('C4'))).pop()
+        weird_fingering = set(weird_layout.get_fingerings(Pitch.from_name('C4'))).pop()
+        with pytest.raises(ValueError):
+            u_fingering | weird_fingering
 
 
 b_layout = BisonoricLayout(
@@ -158,6 +164,9 @@ class TestUnisonoricFingering:
             '. . G    . . G\n' \
             'G . .    G . .'
 
+    def test_invalid_union(self):
+        with pytest.raises(TypeError):
+            u_fingering | 'not a fingering!'
 
 b_fingering = BisonoricFingering(Direction.PUSH, u_fingering)
 
@@ -187,3 +196,7 @@ class TestBisonoricFingering:
             'PUSH:\n' \
             '. . G    . . G\n' \
             'G . .    G . .'
+    
+    def test_invalid_union(self):
+        with pytest.raises(TypeError):
+            b_fingering | 'not a fingering!'

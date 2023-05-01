@@ -51,6 +51,13 @@ class BisonoricLayout:
     --- --- --- --- ---    --- --- --- --- ---
     --- --- C4  E4  ---    --- --- --- --- ---
     --- --- --- --- ---    --- --- --- --- ---
+
+    Fingerings with different bellow directions can not be combined:
+    >>> f = layout.get_fingerings(Pitch.from_name('F4')).pop()
+    >>> print(c | f)
+    Traceback (most recent call last):
+    ...
+    ValueError: different bellows directions
     '''
     push_layout: UnisonoricLayout
     pull_layout: UnisonoricLayout
