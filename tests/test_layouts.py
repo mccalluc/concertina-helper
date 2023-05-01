@@ -11,6 +11,7 @@ from concertina_helper.layouts.bisonoric import (
     Direction)
 from concertina_helper.layouts.layout_loader import (
     _names_to_pitches, load_bisonoric_layout_by_name)
+from concertina_helper.type_defs import Mask
 
 
 u_layout = UnisonoricLayout(
@@ -57,14 +58,15 @@ class TestUnisonoricLayout:
     def test_get_fingerings(self):
         fingerings = u_layout.get_fingerings(Pitch.from_name('G4'))
         assert len(fingerings) == 2
-        fingering_1 = list(fingerings)[0]
-        # TODO: get rid of "or"
-        assert (
-            fingering_1.left_mask == ((False, False, False), (True, False, False))
-            or fingering_1.left_mask == ((False, False, True), (False, False, False))
-        )
-        assert fingering_1.right_mask == (
-            (False, False, False), (False, False, False))
+        assert any(
+            fingering.left_mask == Mask(((False, False, False), (True, False, False)))
+            for fingering in fingerings)
+        assert any(
+            fingering.left_mask == Mask(((False, False, True), (False, False, False)))
+            for fingering in fingerings)
+        assert all(
+            fingering.right_mask == Mask(((False, False, False), (False, False, False)))
+            for fingering in fingerings)
 
 
 b_layout = BisonoricLayout(
@@ -141,8 +143,8 @@ class TestUnisonoricFingering:
 
     def test_str(self):
         assert str(u_fingering) == \
-            '--- --- G4     --- --- G5  \n' \
-            'G4  --- ---    G5  --- --- '
+            '--- --- G4     --- --- G5\n' \
+            'G4  --- ---    G5  --- ---'
 
     def test_format_default(self):
         assert u_fingering.format() == \
@@ -153,8 +155,8 @@ class TestUnisonoricFingering:
         assert u_fingering.format(
             button_down_f=lambda pitch: pitch.class_name.ljust(2),
             button_up_f=lambda _: '. ') == \
-            '. . G    . . G \n' \
-            'G . .    G . . '
+            '. . G    . . G\n' \
+            'G . .    G . .'
 
 
 b_fingering = BisonoricFingering(Direction.PUSH, u_fingering)
@@ -169,8 +171,8 @@ class TestBisonoricFingering:
     def test_str(self):
         assert str(b_fingering) == \
             'PUSH:\n' \
-            '--- --- G4     --- --- G5  \n' \
-            'G4  --- ---    G5  --- --- '
+            '--- --- G4     --- --- G5\n' \
+            'G4  --- ---    G5  --- ---'
 
     def test_format_default(self):
         assert b_fingering.format() == \
@@ -183,5 +185,5 @@ class TestBisonoricFingering:
             button_down_f=lambda pitch: pitch.class_name.ljust(2),
             button_up_f=lambda _: '. ') == \
             'PUSH:\n' \
-            '. . G    . . G \n' \
-            'G . .    G . . '
+            '. . G    . . G\n' \
+            'G . .    G . .'

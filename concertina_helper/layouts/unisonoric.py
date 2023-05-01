@@ -1,5 +1,6 @@
 from __future__ import annotations
 from dataclasses import dataclass
+from typing import Any
 
 from pyabc2 import Pitch
 
@@ -25,17 +26,17 @@ class UnisonoricLayout:
                 if pitch == button.pitch:
                     mutable_mask = [[False] * len(row) for row in ppm]
                     mutable_mask[i][j] = True
-                    mask = tuple(
+                    mask = Mask(tuple(
                         tuple(row) for row in mutable_mask
-                    )
+                    ))
                     masks.add(mask)
         return masks
 
     def get_fingerings(self, pitch: Pitch) -> frozenset[UnisonoricFingering]:
         fingerings = set()
 
-        left_all_false = tuple((False,) * len(row) for row in self.left)
-        right_all_false = tuple((False,) * len(row) for row in self.right)
+        left_all_false = Mask(tuple((False,) * len(row) for row in self.left))
+        right_all_false = Mask(tuple((False,) * len(row) for row in self.right))
 
         for left_mask in self.__make_masks(pitch, self.left):
             fingerings.add(UnisonoricFingering(self, left_mask, right_all_false))
@@ -101,5 +102,16 @@ class UnisonoricFingering:
             cols.append(self.__format_button_row(
                 self.layout.right[i], right_mask_row,
                 button_down_f, button_up_f))
-            lines.append(''.join(cols))
+            lines.append(''.join(cols).strip())
         return '\n'.join(lines)
+
+    def __or__(self, other: Any) -> UnisonoricFingering:
+        if type(self) != type(other):
+            raise TypeError('mixed operand types')
+        if self.layout != other.layout:
+            raise ValueError('different layouts')
+        return UnisonoricFingering(
+            self.layout,
+            self.left_mask | other.left_mask,
+            self.right_mask | other.right_mask
+        )

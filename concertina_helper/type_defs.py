@@ -1,6 +1,7 @@
 from __future__ import annotations
 from collections.abc import Callable, Iterator
 from dataclasses import dataclass
+from typing import Any
 
 from pyabc2 import Pitch
 
@@ -52,10 +53,44 @@ class PitchProxyMatrix:
         return iter(self.matrix)
 
 
-Mask = tuple[tuple[bool, ...], ...]
-'''
-A boolean matix. `True` represents a key held down.
-'''
+@dataclass(frozen=True)
+class Mask:
+    '''
+    A boolean matix. `True` represents a key held down.
+
+    >>> Mask(((True, False),)) | Mask(((False, True),))
+    Mask(bool_matrix=((True, True),))
+    '''
+    bool_matrix: tuple[tuple[bool, ...], ...]
+
+    @property
+    def shape(self) -> list[int]:
+        return [len(row) for row in self.bool_matrix]
+
+    def __getitem__(self, i: int) -> tuple[bool, ...]:
+        return self.bool_matrix[i]
+
+    def __iter__(self) -> Iterator[tuple[bool, ...]]:
+        return iter(self.bool_matrix)
+    
+    def __or__(self, other: Any) -> Mask:
+        if type(self) != type(other):
+            raise TypeError('mixed operand types')
+        if self.shape != other.shape:
+            raise ValueError('different shapes')
+        return Mask(
+            tuple(
+                tuple(
+                    self_bool or other_bool
+                    for self_bool, other_bool
+                    in zip(self_row, other_row)
+                )
+                for self_row, other_row
+                in zip(self, other)
+            )
+        )
+
+
 
 Shape = tuple[list[int], list[int]]
 '''
