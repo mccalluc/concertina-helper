@@ -55,7 +55,10 @@ prints possible fingerings.
     from_abc(abc_str, layout, args.verbose)
 
 
-def from_abc(abc_str: str, layout: BisonoricLayout, is_verbose: bool) -> None:
+def from_abc(
+    abc_str: str,
+    layout: BisonoricLayout, is_verbose: bool
+) -> None:  # pragma: no cover
     '''
     The core of the CLI functionality.
     - `abc_str`: A multiline string containing ABC notation.

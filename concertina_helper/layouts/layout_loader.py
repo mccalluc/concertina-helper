@@ -85,14 +85,11 @@ def load_bisonoric_layout_by_name(layout_name: str) -> BisonoricLayout:
 
 def list_layout_names() -> list[str]:
     '''
-    Lists all preconfigured layouts.
-    To change the key of a layout, use
+    Lists all preconfigured layouts. To change the key of a layout, use
     `concertina_helper.layouts.bisonoric.BisonoricLayout.transpose`.
 
-    ```
     >>> list_layout_names()
     ['wheatstone_cg']
-    ```
     '''
     return [path.stem for path in Path(__file__).parent.glob('*.yaml')]
 
