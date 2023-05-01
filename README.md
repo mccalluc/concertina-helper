@@ -14,7 +14,7 @@ from-abc --help
 ```
 ```
 usage: from-abc [-h] [--verbose] [--layout_transpose SEMITONES]
-                (--layout_path PATH | --layout_name {20_cg,30_wheatstone_cg,30_jefferies_cg})
+                (--layout_path PATH | --layout_name {20_cg,30_jefferies_cg,30_wheatstone_cg})
                 abc_path
 
 Given a file containing ABC notation, and a concertina type, prints possible
@@ -30,7 +30,7 @@ options:
                         Semitones to transpose the layout; Negative transposes
                         down
   --layout_path PATH    Path of YAML file with concertina layout
-  --layout_name {20_cg,30_wheatstone_cg,30_jefferies_cg}
+  --layout_name {20_cg,30_jefferies_cg,30_wheatstone_cg}
                         Name of concertina layout
 ```
 
