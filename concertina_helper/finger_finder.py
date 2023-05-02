@@ -31,6 +31,20 @@ class _FingerFinder(AStar):
             for i, f_set in enumerate(fingerings)
         }
 
+        def penalize_bellows_change(
+                f1: AnnotatedBisonoricFingering,
+                f2: AnnotatedBisonoricFingering) -> float:
+            return 1 if f1.fingering.direction != f2.fingering.direction else 0
+
+        # TODO: Penalize finger shifts
+        # TODO: Penalize outer columns
+        # TODO: Penalize top row?
+        # TODO: Penalize pull at the start of a measure?
+
+        self.penalty_functions = [
+            penalize_bellows_change
+        ]
+
     def find(self) -> list[AnnotatedBisonoricFingering]:
         start = _Node(-1, None)
         max_index = max(self.index.keys())
@@ -49,18 +63,15 @@ class _FingerFinder(AStar):
 
     def distance_between(self, n1: _Node, n2: _Node) -> float:
         # TODO: Make the weightings here configurable.
-        distance = abs(n1.position - n2.position)
-        assert distance == 1  # Should only be used with immediate neighbors
+        distance = float(abs(n1.position - n2.position))
+        assert distance == 1.0  # Should only be used with immediate neighbors
+
         if n1.annotated_fingering is not None and n2.annotated_fingering is not None:
-            f1 = n1.annotated_fingering.fingering
-            f2 = n2.annotated_fingering.fingering
-            if f1.direction != f2.direction:
-                # Maybe the cost of bellows change should depend on note length?
-                distance += 1
-            # TODO: Penalize finger shifts
-            # TODO: Penalize outer columns
-            # TODO: Penalize top row?
-            # TODO: Penalize pull at the start of a measure?
+            # If either is an end node, thers is no additional transition cost.
+            f1 = n1.annotated_fingering
+            f2 = n2.annotated_fingering
+            for function in self.penalty_functions:
+                distance += function(f1, f2)
         return distance
 
     def neighbors(self, node: _Node) -> Iterable[_Node]:

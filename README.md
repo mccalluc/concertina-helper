@@ -8,8 +8,8 @@ See [`demo-cli.sh`](https://github.com/mccalluc/concertina-helper/blob/main/demo
 for examples of CLI usage.
 ```
 usage: concertina-helper [-h] [--verbose] [--layout_transpose SEMITONES]
-                (--layout_path PATH | --layout_name {20_cg,30_jefferies_cg,30_wheatstone_cg})
-                abc_path
+                         (--layout_path PATH | --layout_name {20_cg,30_jefferies_cg,30_wheatstone_cg})
+                         abc_path
 
 Given a file containing ABC notation, and a concertina type, prints possible
 fingerings.
