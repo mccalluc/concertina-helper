@@ -26,7 +26,7 @@ dependencies = [
 ]
 
 [project.scripts]
-from-abc = "concertina_helper.cli:_from_abc"
+concertina-helper = "concertina_helper.cli:_from_abc"
 
 [project.urls]
 Home = "https://github.com/mccalluc/concertina-helper"
