@@ -35,18 +35,22 @@ def test_make_mask():
     assert make_mask([1, 2], 1, 0).bool_matrix == ((False,), (True, False))
     assert make_mask([1, 2], 0, 0).bool_matrix == ((True,), (False, False))
 
+
 c_left = AnnotatedBisonoricFingering(
     fingering=BisonoricFingering(Direction.PUSH, UnisonoricFingering(
-        layout.push_layout, make_mask(layout.shape[0], 1, 2), make_mask(layout.shape[1], -1, -1) 
+        layout.push_layout, make_mask(
+            layout.shape[0], 1, 2), make_mask(layout.shape[1], -1, -1)
     )),
     measure=1
 )
 a_left = AnnotatedBisonoricFingering(
     fingering=BisonoricFingering(Direction.PULL, UnisonoricFingering(
-        layout.pull_layout, make_mask(layout.shape[0], 2, 2), make_mask(layout.shape[1], -1, -1)
+        layout.pull_layout, make_mask(
+            layout.shape[0], 2, 2), make_mask(layout.shape[1], -1, -1)
     )),
     measure=2
 )
+
 
 def test_fixture_values():
     assert str(c_left) == \
@@ -61,6 +65,7 @@ PULL:
 --- --- --- --- ---    --- --- --- --- ---
 --- --- --- --- ---    --- --- --- --- ---
 --- --- A4  --- ---    --- --- --- --- ---'''
+
 
 def test_penalize_bellows_change():
     assert penalize_bellows_change(42)(c_left, c_left) == 0

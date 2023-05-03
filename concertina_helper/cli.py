@@ -13,7 +13,7 @@ from concertina_helper.tune_on_layout import TuneOnLayout
 from concertina_helper.penalties import (
     PenaltyFunction,
     penalize_bellows_change,
-    penalize_finger_in_same_column, 
+    penalize_finger_in_same_column,
     penalize_pull_at_start_of_measure)
 
 
@@ -47,7 +47,7 @@ prints possible fingerings.
     layout_group.add_argument(
         '--layout_name', choices=list_layout_names(),
         help='Name of concertina layout')
-    
+
     parser.add_argument(
         '--bellows_change_cost', type=float,
         metavar='N', default=2)
@@ -74,7 +74,7 @@ prints possible fingerings.
     ]
     from_abc(
         abc_str, layout,
-        is_verbose = args.verbose,
+        is_verbose=args.verbose,
         penalty_functions=penalty_functions)
 
 

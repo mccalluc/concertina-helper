@@ -135,9 +135,9 @@ class TestBisonoricLayout:
 u_fingering = UnisonoricFingering(
     u_layout,
     Mask(((False, False, True),
-     (True, False, False))),
+          (True, False, False))),
     Mask(((False, False, True),
-     (True, False, False))))
+          (True, False, False))))
 
 
 class TestUnisonoricFingering:

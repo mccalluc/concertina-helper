@@ -1,6 +1,7 @@
 from collections.abc import Callable
 
-from .layouts.bisonoric import AnnotatedBisonoricFingering, BisonoricFingering, Direction
+from .layouts.bisonoric import (
+    AnnotatedBisonoricFingering, BisonoricFingering, Direction)
 
 
 PenaltyFunction = Callable[[
@@ -26,7 +27,10 @@ def penalize_finger_in_same_column(cost: float) -> PenaltyFunction:
         This assumes fingers should be moving between notes: It will need to change
         if this is extended to cover sustained bass notes under a melody.
         '''
-        return cost if _find_columns_used(f1.fingering) == _find_columns_used(f2.fingering) else 0
+        return (
+            cost if _find_columns_used(f1.fingering) ==
+            _find_columns_used(f2.fingering)
+            else 0)
     return calculate
 
 
