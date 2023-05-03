@@ -134,10 +134,10 @@ class TestBisonoricLayout:
 
 u_fingering = UnisonoricFingering(
     u_layout,
-    [[False, False, True],
-     [True, False, False]],
-    [[False, False, True],
-     [True, False, False]])
+    Mask(((False, False, True),
+     (True, False, False))),
+    Mask(((False, False, True),
+     (True, False, False))))
 
 
 class TestUnisonoricFingering:
@@ -145,7 +145,7 @@ class TestUnisonoricFingering:
         r = repr(u_fingering)
         assert "UnisonoricFingering(layout=UnisonoricLayout(" \
             "left=PitchProxyMatrix(matrix=" in r
-        assert "left_mask=[[False, False, True], [True, False, False]]" in r
+        assert "bool_matrix=((False, False, True), (True, False, False))" in r
 
     def test_str(self):
         assert str(u_fingering) == \

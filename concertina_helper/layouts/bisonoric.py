@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from pyabc2 import Pitch
 
 from .unisonoric import UnisonoricFingering, UnisonoricLayout
-from ..type_defs import Shape, PitchProxyToStr
+from ..type_defs import Shape, PitchProxyToStr, Mask
 
 
 class Direction(Enum):
@@ -110,11 +110,11 @@ class BisonoricFingering:
     _fingering: UnisonoricFingering
 
     @property
-    def left_mask(self):
+    def left_mask(self) -> Mask:
         return self._fingering.left_mask
 
     @property
-    def right_mask(self):
+    def right_mask(self) -> Mask:
         return self._fingering.right_mask
 
     def __str__(self) -> str:
@@ -145,3 +145,6 @@ class AnnotatedBisonoricFingering:
     '''
     fingering: BisonoricFingering
     measure: int
+
+    def __str__(self) -> str:
+        return f'Measure {self.measure}\n{self.fingering}'
