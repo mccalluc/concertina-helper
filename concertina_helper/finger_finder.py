@@ -39,11 +39,11 @@ def penalize_pull_at_start_of_measure(
 def _find_columns_used(fingering: BisonoricFingering) -> set[int]:
     used = set()
     # TODO: Make this a method.
-    for row in fingering.fingering.left_mask:
+    for row in fingering.left_mask:
         for i, button in enumerate(reversed(row)):
             if button:
                 used.add(-(i+1))
-    for row in fingering.fingering.right_mask:
+    for row in fingering.right_mask:
         for i, button in enumerate(row):
             if button:
                 used.add(i+1)

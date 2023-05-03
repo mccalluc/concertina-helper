@@ -124,11 +124,11 @@ class TestBisonoricLayout:
         fingerings = b_layout.get_fingerings(Pitch.from_name('B4'))
         assert len(fingerings) == 2
         fingering_1 = list(fingerings)[0]
+        left_11 = fingering_1.left_mask[1][1]
+        right_00 = fingering_1.right_mask[0][0]
         assert (
-            fingering_1.direction == Direction.PUSH
-            and fingering_1.fingering.left_mask[1][1]
-            or fingering_1.direction == Direction.PULL
-            and fingering_1.fingering.right_mask[0][0]
+            fingering_1.direction == Direction.PUSH and left_11
+            or fingering_1.direction == Direction.PULL and right_00
         )
 
 
@@ -175,7 +175,7 @@ b_fingering = BisonoricFingering(Direction.PUSH, u_fingering)
 class TestBisonoricFingering:
     def test_repr(self):
         assert 'BisonoricFingering(direction=Direction.PUSH, ' \
-            'fingering=UnisonoricFingering(' \
+            '_fingering=UnisonoricFingering(' \
             in repr(b_fingering)
 
     def test_str(self):
