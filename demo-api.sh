@@ -12,6 +12,7 @@ pytest --verbose --doctest-modules \
        --no-cov-on-fail
 
 mypy concertina_helper --disallow-untyped-defs
+mypy tests
 
 flake8
 

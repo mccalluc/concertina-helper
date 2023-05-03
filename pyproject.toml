@@ -11,8 +11,6 @@ license = {file = "LICENSE"}
 classifiers = [
   "Private :: Do Not Upload",
   "License :: OSI Approved :: MIT License",
-  "Typing :: Typed",
-  "Topic :: Artistic Software"
 ]
 dynamic = ["version", "description"]
 
@@ -26,7 +24,7 @@ dependencies = [
 ]
 
 [project.scripts]
-from-abc = "concertina_helper.cli:_from_abc"
+concertina-helper = "concertina_helper.cli:_from_abc"
 
 [project.urls]
 Home = "https://github.com/mccalluc/concertina-helper"

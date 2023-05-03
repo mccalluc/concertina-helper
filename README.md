@@ -7,9 +7,12 @@ Python script to find good fingerings on bisonoric concertinas for tunes in
 See [`demo-cli.sh`](https://github.com/mccalluc/concertina-helper/blob/main/demo-cli.sh)
 for examples of CLI usage.
 ```
-usage: from-abc [-h] [--verbose] [--layout_transpose SEMITONES]
-                (--layout_path PATH | --layout_name {20_cg,30_jefferies_cg,30_wheatstone_cg})
-                abc_path
+usage: concertina-helper [-h] [--verbose] [--layout_transpose SEMITONES]
+                         (--layout_path PATH | --layout_name {20_cg,30_jefferies_cg,30_wheatstone_cg})
+                         [--bellows_change_cost N]
+                         [--finger_in_same_column_cost N]
+                         [--pull_at_start_of_measure_cost N]
+                         abc_path
 
 Given a file containing ABC notation, and a concertina type, prints possible
 fingerings.
@@ -26,6 +29,15 @@ options:
   --layout_path PATH    Path of YAML file with concertina layout
   --layout_name {20_cg,30_jefferies_cg,30_wheatstone_cg}
                         Name of concertina layout
+  --bellows_change_cost N
+                        Penalize fingerings where the bellows changes
+                        direction between notes
+  --finger_in_same_column_cost N
+                        Penalize fingerings where one finger changes rows
+                        between notes
+  --pull_at_start_of_measure_cost N
+                        Penalize fingerings where a pull begins a measure;
+                        Hitting the downbeat with a push can be more musical.
 ```
 
 ## API usage

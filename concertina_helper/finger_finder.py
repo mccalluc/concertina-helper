@@ -4,17 +4,20 @@ from dataclasses import dataclass
 from astar import AStar  # type: ignore
 
 from .layouts.bisonoric import AnnotatedBisonoricFingering
+from .penalties import PenaltyFunction
 
 
-def find_best_fingerings(all_fingerings: list[set[AnnotatedBisonoricFingering]]) \
-        -> list[AnnotatedBisonoricFingering]:
+def find_best_fingerings(
+    all_fingerings: list[set[AnnotatedBisonoricFingering]],
+    penalty_functions: list[PenaltyFunction]
+) -> list[AnnotatedBisonoricFingering]:
     '''
     Given a list of sets of possible fingerings,
     returns a list representing the best fingerings.
     See `concertina_helper.tune_on_layout.TuneOnLayout.get_best_fingerings`
     for a convenience method that wraps this.
     '''
-    finder = _FingerFinder(all_fingerings)
+    finder = _FingerFinder(all_fingerings, penalty_functions)
     return finder.find()
 
 
@@ -25,7 +28,11 @@ class _Node:
 
 
 class _FingerFinder(AStar):
-    def __init__(self, fingerings: list[set[AnnotatedBisonoricFingering]]):
+    def __init__(
+            self,
+            fingerings: list[set[AnnotatedBisonoricFingering]],
+            penalty_functions: list[PenaltyFunction]):
+        self.penalty_functions = penalty_functions
         self.index: dict[int, set[_Node]] = {
             i: {_Node(i, f) for f in f_set}
             for i, f_set in enumerate(fingerings)
@@ -49,18 +56,15 @@ class _FingerFinder(AStar):
 
     def distance_between(self, n1: _Node, n2: _Node) -> float:
         # TODO: Make the weightings here configurable.
-        distance = abs(n1.position - n2.position)
-        assert distance == 1  # Should only be used with immediate neighbors
+        distance = float(abs(n1.position - n2.position))
+        assert distance == 1.0  # Should only be used with immediate neighbors
+
         if n1.annotated_fingering is not None and n2.annotated_fingering is not None:
-            f1 = n1.annotated_fingering.fingering
-            f2 = n2.annotated_fingering.fingering
-            if f1.direction != f2.direction:
-                # Maybe the cost of bellows change should depend on note length?
-                distance += 1
-            # TODO: Penalize finger shifts
-            # TODO: Penalize outer columns
-            # TODO: Penalize top row?
-            # TODO: Penalize pull at the start of a measure?
+            # If either is an end node, thers is no additional transition cost.
+            f1 = n1.annotated_fingering
+            f2 = n2.annotated_fingering
+            for function in self.penalty_functions:
+                distance += function(f1, f2)
         return distance
 
     def neighbors(self, node: _Node) -> Iterable[_Node]:

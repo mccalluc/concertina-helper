@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from pyabc2 import Pitch
 
 from .unisonoric import UnisonoricFingering, UnisonoricLayout
-from ..type_defs import Shape, PitchProxyToStr
+from ..type_defs import Shape, PitchProxyToStr, Mask
 
 
 class Direction(Enum):
@@ -107,10 +107,18 @@ class BisonoricFingering:
     Represents a fingering on a bisonoric concertina.
     '''
     direction: Direction
-    fingering: UnisonoricFingering
+    _fingering: UnisonoricFingering
+
+    @property
+    def left_mask(self) -> Mask:
+        return self._fingering.left_mask
+
+    @property
+    def right_mask(self) -> Mask:
+        return self._fingering.right_mask
 
     def __str__(self) -> str:
-        return f'{self.direction.name}:\n{self.fingering}'
+        return f'{self.direction.name}:\n{self._fingering}'
 
     def format(
         self,
@@ -119,14 +127,14 @@ class BisonoricFingering:
         direction_f: Callable[[Direction], str] =
             lambda direction: direction.name) -> str:
         return f'{direction_f(self.direction)}:\n' \
-            f'{self.fingering.format(button_down_f, button_up_f)}'
+            f'{self._fingering.format(button_down_f, button_up_f)}'
 
     def __or__(self, other: Any) -> BisonoricFingering:
         if type(self) != type(other):
             raise TypeError('mixed operand types')
         if self.direction != other.direction:
             raise ValueError('different bellows directions')
-        return BisonoricFingering(self.direction, self.fingering | other.fingering)
+        return BisonoricFingering(self.direction, self._fingering | other._fingering)
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -137,3 +145,6 @@ class AnnotatedBisonoricFingering:
     '''
     fingering: BisonoricFingering
     measure: int
+
+    def __str__(self) -> str:
+        return f'Measure {self.measure}\n{self.fingering}'
