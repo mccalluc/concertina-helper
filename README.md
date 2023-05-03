@@ -30,8 +30,14 @@ options:
   --layout_name {20_cg,30_jefferies_cg,30_wheatstone_cg}
                         Name of concertina layout
   --bellows_change_cost N
+                        Penalize fingerings where the bellows changes
+                        direction between notes
   --finger_in_same_column_cost N
+                        Penalize fingerings where one finger changes rows
+                        between notes
   --pull_at_start_of_measure_cost N
+                        Penalize fingerings where a pull begins a measure;
+                        Hitting the downbeat with a push can be more musical.
 ```
 
 ## API usage

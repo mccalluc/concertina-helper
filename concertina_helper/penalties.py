@@ -12,6 +12,9 @@ PenaltyFunction = Callable[[
 
 
 def penalize_bellows_change(cost: float) -> PenaltyFunction:
+    '''
+    Penalize fingerings where the bellows changes direction between notes
+    '''
     def calculate(
             f1: AnnotatedBisonoricFingering,
             f2: AnnotatedBisonoricFingering) -> float:
@@ -20,6 +23,9 @@ def penalize_bellows_change(cost: float) -> PenaltyFunction:
 
 
 def penalize_finger_in_same_column(cost: float) -> PenaltyFunction:
+    '''
+    Penalize fingerings where one finger changes rows between notes
+    '''
     def calculate(
             f1: AnnotatedBisonoricFingering,
             f2: AnnotatedBisonoricFingering) -> float:
@@ -35,6 +41,9 @@ def penalize_finger_in_same_column(cost: float) -> PenaltyFunction:
 
 
 def penalize_pull_at_start_of_measure(cost: float) -> PenaltyFunction:
+    '''
+    Penalize fingerings where a pull begins a measure;
+    Hitting the downbeat with a push can be more musical.'''
     def calculate(
             f1: AnnotatedBisonoricFingering,
             f2: AnnotatedBisonoricFingering) -> float:
@@ -44,7 +53,6 @@ def penalize_pull_at_start_of_measure(cost: float) -> PenaltyFunction:
 
 def _find_columns_used(fingering: BisonoricFingering) -> set[int]:
     used = set()
-    # TODO: Make this a method.
     for row in fingering.left_mask:
         for i, button in enumerate(reversed(row)):
             if button:
