@@ -9,6 +9,9 @@ for examples of CLI usage.
 ```
 usage: concertina-helper [-h] [--verbose] [--layout_transpose SEMITONES]
                          (--layout_path PATH | --layout_name {20_cg,30_jefferies_cg,30_wheatstone_cg})
+                         [--bellows_change_cost N]
+                         [--finger_in_same_column_cost N]
+                         [--pull_at_start_of_measure_cost N]
                          abc_path
 
 Given a file containing ABC notation, and a concertina type, prints possible
@@ -26,6 +29,9 @@ options:
   --layout_path PATH    Path of YAML file with concertina layout
   --layout_name {20_cg,30_jefferies_cg,30_wheatstone_cg}
                         Name of concertina layout
+  --bellows_change_cost N
+  --finger_in_same_column_cost N
+  --pull_at_start_of_measure_cost N
 ```
 
 ## API usage

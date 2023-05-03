@@ -14,11 +14,13 @@ def test_get_all_fingerings():
     all_fingerings = t_l.get_all_fingerings()
     assert len(all_fingerings) == 8
     assert len(all_fingerings[0]) == 3
-    # TODO: Add a stronger assertion when we can get pitches from layout.
+    # TODO: Add a stronger assertion when we can get pitches from fingering.
+    # https://github.com/mccalluc/concertina-helper/issues/44
 
 
 def test_get_best_fingerings():
     t_l = TuneOnLayout(tune, layout)
-    best_fingerings = t_l.get_best_fingerings()
+    best_fingerings = t_l.get_best_fingerings([])
     assert len(best_fingerings) == 8
-    # TODO: Add a stronger assertion when we can get pitches from layout.
+    # TODO: Add a stronger assertion when we can get pitches from fingering.
+    # https://github.com/mccalluc/concertina-helper/issues/44
