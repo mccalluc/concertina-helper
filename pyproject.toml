@@ -11,8 +11,6 @@ license = {file = "LICENSE"}
 classifiers = [
   "Private :: Do Not Upload",
   "License :: OSI Approved :: MIT License",
-  "Typing :: Typed",
-  "Topic :: Artistic Software"
 ]
 dynamic = ["version", "description"]
 
