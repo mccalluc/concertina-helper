@@ -3,7 +3,7 @@ from collections.abc import Callable, Iterator
 from dataclasses import dataclass
 from typing import Any
 
-from pyabc2 import Pitch
+from pyabc2 import Pitch as AbcPitch
 
 
 @dataclass(frozen=True)
@@ -16,15 +16,15 @@ class PitchProxy:
     # TODO: post_init validation: fail if name != normalized name
 
     @property
-    def pitch(self) -> Pitch:
-        return Pitch.from_name(self.name)
+    def pitch(self) -> AbcPitch:
+        return AbcPitch.from_name(self.name)
 
     @property
     def class_name(self) -> str:
         return self.pitch.class_name
 
     def transpose(self, semitones: int) -> PitchProxy:
-        return PitchProxy(Pitch(self.pitch.value + semitones).name)
+        return PitchProxy(AbcPitch(self.pitch.value + semitones).name)
 
 
 @dataclass(frozen=True)

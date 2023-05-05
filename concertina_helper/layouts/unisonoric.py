@@ -2,7 +2,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any
 
-from pyabc2 import Pitch
+from pyabc2 import Pitch as AbcPitch
 
 from ..type_defs import Shape, PitchProxy, PitchProxyToStr, PitchProxyMatrix, Mask
 
@@ -19,7 +19,7 @@ class UnisonoricLayout:
             [len(row) for row in self.right],
         )
 
-    def __make_masks(self, pitch: Pitch, ppm: PitchProxyMatrix) -> set[Mask]:
+    def __make_masks(self, pitch: AbcPitch, ppm: PitchProxyMatrix) -> set[Mask]:
         masks = set()
         for i, row in enumerate(ppm):
             for j, button in enumerate(row):
@@ -32,7 +32,7 @@ class UnisonoricLayout:
                     masks.add(mask)
         return masks
 
-    def get_fingerings(self, pitch: Pitch) -> frozenset[UnisonoricFingering]:
+    def get_fingerings(self, pitch: AbcPitch) -> frozenset[UnisonoricFingering]:
         fingerings = set()
 
         left_all_false = Mask(tuple((False,) * len(row) for row in self.left))
