@@ -9,22 +9,25 @@ from pyabc2 import Pitch as AbcPitch
 @dataclass(frozen=True)
 class Pitch:
     '''
-    Immutable class representing a musical pitch. Wraps pyabc2's `Pitch` class.
+    Immutable class representing a musical pitch.
     '''
     name: str
 
     # TODO: post_init validation: fail if name != normalized name
 
     @property
-    def pitch(self) -> AbcPitch:
+    def _pitch(self) -> AbcPitch:
         return AbcPitch.from_name(self.name)
 
     @property
     def class_name(self) -> str:
-        return self.pitch.class_name
+        return self._pitch.class_name
 
     def transpose(self, semitones: int) -> Pitch:
-        return Pitch(AbcPitch(self.pitch.value + semitones).name)
+        return Pitch(AbcPitch(self._pitch.value + semitones).name)
+
+    def __str__(self) -> str:
+        return self.name
 
 
 @dataclass(frozen=True)

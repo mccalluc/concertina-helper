@@ -2,8 +2,6 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any
 
-from pyabc2 import Pitch as AbcPitch
-
 from ..type_defs import Shape, Pitch, PitchToStr, PitchMatrix, Mask
 
 
@@ -19,12 +17,12 @@ class UnisonoricLayout:
             [len(row) for row in self.right],
         )
 
-    def __make_masks(self, pitch: AbcPitch, ppm: PitchMatrix) -> set[Mask]:
+    def __make_masks(self, pitch: Pitch, pm: PitchMatrix) -> set[Mask]:
         masks = set()
-        for i, row in enumerate(ppm):
+        for i, row in enumerate(pm):
             for j, button in enumerate(row):
-                if pitch == button.pitch:
-                    mutable_mask = [[False] * len(row) for row in ppm]
+                if pitch == button:
+                    mutable_mask = [[False] * len(row) for row in pm]
                     mutable_mask[i][j] = True
                     mask = Mask(tuple(
                         tuple(row) for row in mutable_mask
@@ -32,7 +30,7 @@ class UnisonoricLayout:
                     masks.add(mask)
         return masks
 
-    def get_fingerings(self, pitch: AbcPitch) -> frozenset[UnisonoricFingering]:
+    def get_fingerings(self, pitch: Pitch) -> frozenset[UnisonoricFingering]:
         fingerings = set()
 
         left_all_false = Mask(tuple((False,) * len(row) for row in self.left))
@@ -49,10 +47,10 @@ class UnisonoricLayout:
         for left_row, right_row in zip(self.left, self.right):
             cols = []
             for button in left_row:
-                cols.append(button.name.ljust(3))
+                cols.append(str(button).ljust(3))
             cols.append('   ')
             for button in right_row:
-                cols.append(button.name.ljust(3))
+                cols.append(str(button).ljust(3))
             lines.append(' '.join(cols).strip())
         return '\n'.join(lines)
 
@@ -72,7 +70,7 @@ class UnisonoricFingering:
         filler = '--- '
 
         def button_down_f(pitch: Pitch) -> str:
-            return pitch.name.ljust(len(filler))
+            return str(pitch).ljust(len(filler))
 
         def button_up_f(pitch: Pitch) -> str:
             return filler

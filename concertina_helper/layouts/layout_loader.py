@@ -11,8 +11,8 @@ from .unisonoric import UnisonoricLayout
 def _names_to_pitches(matrix: list[list[str]]) -> PitchMatrix:
     '''
     >>> pitch_matrix = _names_to_pitches([['C4']])
-    >>> pitch_matrix[0][0].name
-    'C4'
+    >>> print(pitch_matrix[0][0])
+    C4
     '''
     return PitchMatrix(
         tuple(
@@ -26,8 +26,8 @@ def _names_to_pitches(matrix: list[list[str]]) -> PitchMatrix:
 def _parse_matrix(rows: list[str]) -> PitchMatrix:
     '''
     >>> pitch_matrix = _parse_matrix(['C4 E4 G4'])
-    >>> pitch_matrix[0][0].name
-    'C4'
+    >>> print(pitch_matrix[0][0])
+    C4
     '''
     return _names_to_pitches([re.split(r'\s+', row.strip()) for row in rows])
 

@@ -4,8 +4,6 @@ from typing import Any
 from collections.abc import Callable
 from dataclasses import dataclass
 
-from pyabc2 import Pitch as AbcPitch
-
 from .unisonoric import UnisonoricFingering, UnisonoricLayout
 from ..type_defs import Shape, PitchToStr, Mask, Pitch
 
@@ -45,8 +43,8 @@ class BisonoricLayout:
     With a layout, you can get all fingerings for a particular pitch.
     Fingerings can be combined to produce chords:
 
-    >>> c = layout.get_fingerings(AbcPitch.from_name('C4')).pop()
-    >>> e = layout.get_fingerings(AbcPitch.from_name('E4')).pop()
+    >>> c = layout.get_fingerings(Pitch('C4')).pop()
+    >>> e = layout.get_fingerings(Pitch('E4')).pop()
     >>> print(c | e)
     PUSH:
     --- --- --- --- ---    --- --- --- --- ---
@@ -54,7 +52,7 @@ class BisonoricLayout:
     --- --- --- --- ---    --- --- --- --- ---
 
     Fingerings with different bellow directions can not be combined:
-    >>> f = layout.get_fingerings(AbcPitch.from_name('F4')).pop()
+    >>> f = layout.get_fingerings(Pitch('F4')).pop()
     >>> print(c | f)
     Traceback (most recent call last):
     ...
@@ -76,7 +74,7 @@ class BisonoricLayout:
             [len(row) for row in self.push_layout.right],
         )
 
-    def get_fingerings(self, pitch: AbcPitch) -> set[BisonoricFingering]:
+    def get_fingerings(self, pitch: Pitch) -> set[BisonoricFingering]:
         '''
         Given a pitch, return all possible fingerings as a set.
         '''

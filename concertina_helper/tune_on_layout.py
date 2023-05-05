@@ -5,6 +5,7 @@ from itertools import chain
 from .layouts.bisonoric import BisonoricLayout, AnnotatedBisonoricFingering
 from .finger_finder import find_best_fingerings
 from .penalties import PenaltyFunction
+from .type_defs import Pitch
 
 from pyabc2 import Tune
 
@@ -25,7 +26,7 @@ class TuneOnLayout:
             [
                 {
                     AnnotatedBisonoricFingering(fingering=f, measure=i + 1)
-                    for f in self.layout.get_fingerings(note.to_pitch())
+                    for f in self.layout.get_fingerings(Pitch(note.to_pitch().name))
                 }
                 for note in measure
             ]

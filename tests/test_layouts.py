@@ -2,8 +2,6 @@ import re
 
 import pytest
 
-from pyabc2 import Pitch as AbcPitch
-
 from concertina_helper.layouts.unisonoric import (
     UnisonoricLayout, UnisonoricFingering)
 from concertina_helper.layouts.bisonoric import (
@@ -56,7 +54,7 @@ class TestUnisonoricLayout:
         assert weird_layout.shape == ([1, 2], [3, 4])
 
     def test_get_fingerings(self):
-        fingerings = u_layout.get_fingerings(AbcPitch.from_name('G4'))
+        fingerings = u_layout.get_fingerings(Pitch('G4'))
         assert len(fingerings) == 2
         assert any([
             fingering.left_mask == Mask(((False, False, False), (True, False, False)))
@@ -71,9 +69,9 @@ class TestUnisonoricLayout:
 
     def test_mixed_layout_union_invalid(self):
         u_fingering = set(u_layout.get_fingerings(
-            AbcPitch.from_name('C4'))).pop()
+            Pitch('C4'))).pop()
         weird_fingering = set(weird_layout.get_fingerings(
-            AbcPitch.from_name('C4'))).pop()
+            Pitch('C4'))).pop()
         with pytest.raises(ValueError):
             u_fingering | weird_fingering
 
@@ -124,7 +122,7 @@ class TestBisonoricLayout:
             BisonoricLayout(push_layout=u_layout, pull_layout=weird_layout)
 
     def test_get_fingerings(self):
-        fingerings = b_layout.get_fingerings(AbcPitch.from_name('B4'))
+        fingerings = b_layout.get_fingerings(Pitch('B4'))
         assert len(fingerings) == 2
         fingering_1 = list(fingerings)[0]
         left_11 = fingering_1.left_mask[1][1]
