@@ -2,15 +2,13 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any
 
-from pyabc2 import Pitch
-
-from ..type_defs import Shape, PitchProxy, PitchProxyToStr, PitchProxyMatrix, Mask
+from ..type_defs import Shape, Pitch, PitchToStr, PitchMatrix, Mask
 
 
 @dataclass(frozen=True)
 class UnisonoricLayout:
-    left: PitchProxyMatrix
-    right: PitchProxyMatrix
+    left: PitchMatrix
+    right: PitchMatrix
 
     @property
     def shape(self) -> Shape:
@@ -19,12 +17,12 @@ class UnisonoricLayout:
             [len(row) for row in self.right],
         )
 
-    def __make_masks(self, pitch: Pitch, ppm: PitchProxyMatrix) -> set[Mask]:
+    def __make_masks(self, pitch: Pitch, pm: PitchMatrix) -> set[Mask]:
         masks = set()
-        for i, row in enumerate(ppm):
+        for i, row in enumerate(pm):
             for j, button in enumerate(row):
-                if pitch == button.pitch:
-                    mutable_mask = [[False] * len(row) for row in ppm]
+                if pitch == button:
+                    mutable_mask = [[False] * len(row) for row in pm]
                     mutable_mask[i][j] = True
                     mask = Mask(tuple(
                         tuple(row) for row in mutable_mask
@@ -49,10 +47,10 @@ class UnisonoricLayout:
         for left_row, right_row in zip(self.left, self.right):
             cols = []
             for button in left_row:
-                cols.append(button.name.ljust(3))
+                cols.append(str(button).ljust(3))
             cols.append('   ')
             for button in right_row:
-                cols.append(button.name.ljust(3))
+                cols.append(str(button).ljust(3))
             lines.append(' '.join(cols).strip())
         return '\n'.join(lines)
 
@@ -71,17 +69,17 @@ class UnisonoricFingering:
     def __str__(self) -> str:
         filler = '--- '
 
-        def button_down_f(pitch: PitchProxy) -> str:
-            return pitch.name.ljust(len(filler))
+        def button_down_f(pitch: Pitch) -> str:
+            return str(pitch).ljust(len(filler))
 
-        def button_up_f(pitch: PitchProxy) -> str:
+        def button_up_f(pitch: Pitch) -> str:
             return filler
         return self.format(button_down_f, button_up_f)
 
     def __format_button_row(
             self,
-            layout_row: tuple[PitchProxy, ...], mask_row: tuple[bool, ...],
-            button_down_f: PitchProxyToStr, button_up_f: PitchProxyToStr) -> str:
+            layout_row: tuple[Pitch, ...], mask_row: tuple[bool, ...],
+            button_down_f: PitchToStr, button_up_f: PitchToStr) -> str:
         return ''.join(
             (button_down_f if button else button_up_f)(pitch)
             for pitch, button in zip(layout_row, mask_row)
@@ -89,8 +87,8 @@ class UnisonoricFingering:
 
     def format(
             self,
-            button_down_f: PitchProxyToStr = lambda pitch: '@',
-            button_up_f: PitchProxyToStr = lambda pitch: '.') -> str:
+            button_down_f: PitchToStr = lambda pitch: '@',
+            button_up_f: PitchToStr = lambda pitch: '.') -> str:
         lines = []
         enumerated_mask_rows = enumerate(zip(self.left_mask, self.right_mask))
         for i, (left_mask_row, right_mask_row) in enumerated_mask_rows:
@@ -115,3 +113,16 @@ class UnisonoricFingering:
             self.left_mask | other.left_mask,
             self.right_mask | other.right_mask
         )
+
+    def get_pitches(self) -> set[Pitch]:
+        pitches = set()
+        sides = [
+            (self.layout.left, self.left_mask),
+            (self.layout.right, self.right_mask),
+        ]
+        for side in sides:
+            for layout_row, mask_row in zip(*side):
+                for pitch, button in zip(layout_row, mask_row):
+                    if button:
+                        pitches.add(pitch)
+        return pitches

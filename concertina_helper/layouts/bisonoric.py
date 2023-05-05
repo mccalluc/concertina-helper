@@ -4,10 +4,8 @@ from typing import Any
 from collections.abc import Callable
 from dataclasses import dataclass
 
-from pyabc2 import Pitch
-
 from .unisonoric import UnisonoricFingering, UnisonoricLayout
-from ..type_defs import Shape, PitchProxyToStr, Mask
+from ..type_defs import Shape, PitchToStr, Mask, Pitch
 
 
 class Direction(Enum):
@@ -45,8 +43,8 @@ class BisonoricLayout:
     With a layout, you can get all fingerings for a particular pitch.
     Fingerings can be combined to produce chords:
 
-    >>> c = layout.get_fingerings(Pitch.from_name('C4')).pop()
-    >>> e = layout.get_fingerings(Pitch.from_name('E4')).pop()
+    >>> c = layout.get_fingerings(Pitch('C4')).pop()
+    >>> e = layout.get_fingerings(Pitch('E4')).pop()
     >>> print(c | e)
     PUSH:
     --- --- --- --- ---    --- --- --- --- ---
@@ -54,7 +52,7 @@ class BisonoricLayout:
     --- --- --- --- ---    --- --- --- --- ---
 
     Fingerings with different bellow directions can not be combined:
-    >>> f = layout.get_fingerings(Pitch.from_name('F4')).pop()
+    >>> f = layout.get_fingerings(Pitch('F4')).pop()
     >>> print(c | f)
     Traceback (most recent call last):
     ...
@@ -122,8 +120,8 @@ class BisonoricFingering:
 
     def format(
         self,
-        button_down_f: PitchProxyToStr = lambda pitch: '@',
-        button_up_f: PitchProxyToStr = lambda pitch: '.',
+        button_down_f: PitchToStr = lambda pitch: '@',
+        button_up_f: PitchToStr = lambda pitch: '.',
         direction_f: Callable[[Direction], str] =
             lambda direction: direction.name) -> str:
         return f'{direction_f(self.direction)}:\n' \
@@ -135,6 +133,9 @@ class BisonoricFingering:
         if self.direction != other.direction:
             raise ValueError('different bellows directions')
         return BisonoricFingering(self.direction, self._fingering | other._fingering)
+
+    def get_pitches(self) -> set[Pitch]:
+        return self._fingering.get_pitches()
 
 
 @dataclass(frozen=True, kw_only=True)

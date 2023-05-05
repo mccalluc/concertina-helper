@@ -2,8 +2,6 @@ import re
 
 import pytest
 
-from pyabc2 import Pitch
-
 from concertina_helper.layouts.unisonoric import (
     UnisonoricLayout, UnisonoricFingering)
 from concertina_helper.layouts.bisonoric import (
@@ -11,7 +9,7 @@ from concertina_helper.layouts.bisonoric import (
     Direction)
 from concertina_helper.layouts.layout_loader import (
     _names_to_pitches, load_bisonoric_layout_by_name)
-from concertina_helper.type_defs import Mask
+from concertina_helper.type_defs import Mask, Pitch
 
 
 u_layout = UnisonoricLayout(
@@ -45,7 +43,7 @@ def test_load_bisonoric_layout_by_name_missing():
 
 class TestUnisonoricLayout:
     def test_repr(self):
-        assert "UnisonoricLayout(left=PitchProxyMatrix" in repr(u_layout)
+        assert "UnisonoricLayout(left=PitchMatrix" in repr(u_layout)
 
     def test_str(self):
         assert str(u_layout) == \
@@ -56,7 +54,7 @@ class TestUnisonoricLayout:
         assert weird_layout.shape == ([1, 2], [3, 4])
 
     def test_get_fingerings(self):
-        fingerings = u_layout.get_fingerings(Pitch.from_name('G4'))
+        fingerings = u_layout.get_fingerings(Pitch('G4'))
         assert len(fingerings) == 2
         assert any([
             fingering.left_mask == Mask(((False, False, False), (True, False, False)))
@@ -67,10 +65,13 @@ class TestUnisonoricLayout:
         assert all(
             fingering.right_mask == Mask(((False, False, False), (False, False, False)))
             for fingering in fingerings)
+        assert all(fingering.get_pitches() == {Pitch('G4')} for fingering in fingerings)
 
     def test_mixed_layout_union_invalid(self):
-        u_fingering = set(u_layout.get_fingerings(Pitch.from_name('C4'))).pop()
-        weird_fingering = set(weird_layout.get_fingerings(Pitch.from_name('C4'))).pop()
+        u_fingering = set(u_layout.get_fingerings(
+            Pitch('C4'))).pop()
+        weird_fingering = set(weird_layout.get_fingerings(
+            Pitch('C4'))).pop()
         with pytest.raises(ValueError):
             u_fingering | weird_fingering
 
@@ -89,7 +90,7 @@ b_layout = BisonoricLayout(
 class TestBisonoricLayout:
     def test_repr(self):
         assert "BisonoricLayout(push_layout=UnisonoricLayout(" \
-            + "left=PitchProxyMatrix" in repr(b_layout)
+            + "left=PitchMatrix" in repr(b_layout)
 
     def test_str(self):
         assert str(b_layout) == \
@@ -121,7 +122,7 @@ class TestBisonoricLayout:
             BisonoricLayout(push_layout=u_layout, pull_layout=weird_layout)
 
     def test_get_fingerings(self):
-        fingerings = b_layout.get_fingerings(Pitch.from_name('B4'))
+        fingerings = b_layout.get_fingerings(Pitch('B4'))
         assert len(fingerings) == 2
         fingering_1 = list(fingerings)[0]
         left_11 = fingering_1.left_mask[1][1]
@@ -130,6 +131,7 @@ class TestBisonoricLayout:
             fingering_1.direction == Direction.PUSH and left_11
             or fingering_1.direction == Direction.PULL and right_00
         )
+        assert all(fingering.get_pitches() == {Pitch('B4')} for fingering in fingerings)
 
 
 u_fingering = UnisonoricFingering(
@@ -144,7 +146,7 @@ class TestUnisonoricFingering:
     def test_repr(self):
         r = repr(u_fingering)
         assert "UnisonoricFingering(layout=UnisonoricLayout(" \
-            "left=PitchProxyMatrix(matrix=" in r
+            "left=PitchMatrix(matrix=" in r
         assert "bool_matrix=((False, False, True), (True, False, False))" in r
 
     def test_str(self):
