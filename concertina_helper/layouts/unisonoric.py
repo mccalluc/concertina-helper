@@ -115,3 +115,16 @@ class UnisonoricFingering:
             self.left_mask | other.left_mask,
             self.right_mask | other.right_mask
         )
+
+    def get_pitches(self) -> set[Pitch]:
+        pitches = set()
+        sides = [
+            (self.layout.left, self.left_mask),
+            (self.layout.right, self.right_mask),
+        ]
+        for side in sides:
+            for layout_row, mask_row in zip(*side):
+                for pitch, button in zip(layout_row, mask_row):
+                    if button:
+                        pitches.add(pitch)
+        return pitches

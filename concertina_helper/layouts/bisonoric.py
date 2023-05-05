@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from pyabc2 import Pitch as AbcPitch
 
 from .unisonoric import UnisonoricFingering, UnisonoricLayout
-from ..type_defs import Shape, PitchToStr, Mask
+from ..type_defs import Shape, PitchToStr, Mask, Pitch
 
 
 class Direction(Enum):
@@ -135,6 +135,9 @@ class BisonoricFingering:
         if self.direction != other.direction:
             raise ValueError('different bellows directions')
         return BisonoricFingering(self.direction, self._fingering | other._fingering)
+
+    def get_pitches(self) -> set[Pitch]:
+        return self._fingering.get_pitches()
 
 
 @dataclass(frozen=True, kw_only=True)

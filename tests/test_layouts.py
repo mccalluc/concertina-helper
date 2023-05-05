@@ -11,7 +11,7 @@ from concertina_helper.layouts.bisonoric import (
     Direction)
 from concertina_helper.layouts.layout_loader import (
     _names_to_pitches, load_bisonoric_layout_by_name)
-from concertina_helper.type_defs import Mask
+from concertina_helper.type_defs import Mask, Pitch
 
 
 u_layout = UnisonoricLayout(
@@ -67,6 +67,7 @@ class TestUnisonoricLayout:
         assert all(
             fingering.right_mask == Mask(((False, False, False), (False, False, False)))
             for fingering in fingerings)
+        assert all(fingering.get_pitches() == {Pitch('G4')} for fingering in fingerings)
 
     def test_mixed_layout_union_invalid(self):
         u_fingering = set(u_layout.get_fingerings(
@@ -132,6 +133,7 @@ class TestBisonoricLayout:
             fingering_1.direction == Direction.PUSH and left_11
             or fingering_1.direction == Direction.PULL and right_00
         )
+        assert all(fingering.get_pitches() == {Pitch('B4')} for fingering in fingerings)
 
 
 u_fingering = UnisonoricFingering(
