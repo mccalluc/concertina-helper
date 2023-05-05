@@ -7,7 +7,7 @@ from pyabc2 import Pitch as AbcPitch
 
 
 @dataclass(frozen=True)
-class PitchProxy:
+class Pitch:
     '''
     Immutable class representing a musical pitch. Wraps pyabc2's `Pitch` class.
     '''
@@ -23,20 +23,20 @@ class PitchProxy:
     def class_name(self) -> str:
         return self.pitch.class_name
 
-    def transpose(self, semitones: int) -> PitchProxy:
-        return PitchProxy(AbcPitch(self.pitch.value + semitones).name)
+    def transpose(self, semitones: int) -> Pitch:
+        return Pitch(AbcPitch(self.pitch.value + semitones).name)
 
 
 @dataclass(frozen=True)
-class PitchProxyMatrix:
+class PitchMatrix:
     '''
     Represents the pitches that can be produced by one half of a concertina,
     on either the push or pull, if bisonoric.
     '''
-    matrix: tuple[tuple[PitchProxy, ...], ...]
+    matrix: tuple[tuple[Pitch, ...], ...]
 
-    def transpose(self, semitones: int) -> PitchProxyMatrix:
-        return PitchProxyMatrix(
+    def transpose(self, semitones: int) -> PitchMatrix:
+        return PitchMatrix(
             tuple(
                 tuple(
                     proxy.transpose(semitones)
@@ -46,10 +46,10 @@ class PitchProxyMatrix:
             )
         )
 
-    def __getitem__(self, i: int) -> tuple[PitchProxy, ...]:
+    def __getitem__(self, i: int) -> tuple[Pitch, ...]:
         return self.matrix[i]
 
-    def __iter__(self) -> Iterator[tuple[PitchProxy, ...]]:
+    def __iter__(self) -> Iterator[tuple[Pitch, ...]]:
         return iter(self.matrix)
 
 
@@ -98,7 +98,7 @@ respectively the left and right faces, and for each face,
 the number of buttons in each row.
 '''
 
-PitchProxyToStr = Callable[[PitchProxy], str]
+PitchToStr = Callable[[Pitch], str]
 '''
 A function which takes a pitch and returns a string.
 (Should the octave number be printed?

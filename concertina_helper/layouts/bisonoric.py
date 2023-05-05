@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from pyabc2 import Pitch as AbcPitch
 
 from .unisonoric import UnisonoricFingering, UnisonoricLayout
-from ..type_defs import Shape, PitchProxyToStr, Mask
+from ..type_defs import Shape, PitchToStr, Mask
 
 
 class Direction(Enum):
@@ -122,8 +122,8 @@ class BisonoricFingering:
 
     def format(
         self,
-        button_down_f: PitchProxyToStr = lambda pitch: '@',
-        button_up_f: PitchProxyToStr = lambda pitch: '.',
+        button_down_f: PitchToStr = lambda pitch: '@',
+        button_up_f: PitchToStr = lambda pitch: '.',
         direction_f: Callable[[Direction], str] =
             lambda direction: direction.name) -> str:
         return f'{direction_f(self.direction)}:\n' \

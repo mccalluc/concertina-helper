@@ -3,27 +3,27 @@ import re
 
 from yaml import safe_load
 
-from ..type_defs import PitchProxy, PitchProxyMatrix
+from ..type_defs import Pitch, PitchMatrix
 from .bisonoric import BisonoricLayout
 from .unisonoric import UnisonoricLayout
 
 
-def _names_to_pitches(matrix: list[list[str]]) -> PitchProxyMatrix:
+def _names_to_pitches(matrix: list[list[str]]) -> PitchMatrix:
     '''
     >>> pitch_matrix = _names_to_pitches([['C4']])
     >>> pitch_matrix[0][0].name
     'C4'
     '''
-    return PitchProxyMatrix(
+    return PitchMatrix(
         tuple(
             tuple(
-                PitchProxy(name) for name in row
+                Pitch(name) for name in row
             ) for row in matrix
         )
     )
 
 
-def _parse_matrix(rows: list[str]) -> PitchProxyMatrix:
+def _parse_matrix(rows: list[str]) -> PitchMatrix:
     '''
     >>> pitch_matrix = _parse_matrix(['C4 E4 G4'])
     >>> pitch_matrix[0][0].name

@@ -45,7 +45,7 @@ def test_load_bisonoric_layout_by_name_missing():
 
 class TestUnisonoricLayout:
     def test_repr(self):
-        assert "UnisonoricLayout(left=PitchProxyMatrix" in repr(u_layout)
+        assert "UnisonoricLayout(left=PitchMatrix" in repr(u_layout)
 
     def test_str(self):
         assert str(u_layout) == \
@@ -91,7 +91,7 @@ b_layout = BisonoricLayout(
 class TestBisonoricLayout:
     def test_repr(self):
         assert "BisonoricLayout(push_layout=UnisonoricLayout(" \
-            + "left=PitchProxyMatrix" in repr(b_layout)
+            + "left=PitchMatrix" in repr(b_layout)
 
     def test_str(self):
         assert str(b_layout) == \
@@ -146,7 +146,7 @@ class TestUnisonoricFingering:
     def test_repr(self):
         r = repr(u_fingering)
         assert "UnisonoricFingering(layout=UnisonoricLayout(" \
-            "left=PitchProxyMatrix(matrix=" in r
+            "left=PitchMatrix(matrix=" in r
         assert "bool_matrix=((False, False, True), (True, False, False))" in r
 
     def test_str(self):
