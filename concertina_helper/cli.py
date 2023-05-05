@@ -3,19 +3,54 @@
 import argparse
 from pathlib import Path
 from signal import signal, SIGPIPE, SIG_DFL
+from enum import auto, Enum
+from collections.abc import Callable
 
 from pyabc2 import Tune
 
 from concertina_helper.layouts.layout_loader import (
     list_layout_names, load_bisonoric_layout_by_path, load_bisonoric_layout_by_name)
-from concertina_helper.layouts.bisonoric import BisonoricLayout
+from concertina_helper.layouts.bisonoric import BisonoricLayout, Direction
 from concertina_helper.tune_on_layout import TuneOnLayout
 from concertina_helper.penalties import (
     PenaltyFunction,
     penalize_bellows_change,
     penalize_finger_in_same_column,
     penalize_pull_at_start_of_measure)
+from concertina_helper.type_defs import PitchToStr
 
+
+class Format(Enum):
+    def __init__(
+        self,
+        doc: str,
+        button_down_f: PitchToStr,
+        button_up_f: PitchToStr,
+        direction_f: Callable[[Direction], str]
+    ):
+        self.doc = doc
+        self.button_down_f = button_down_f
+        self.button_up_f = button_up_f
+        self.direction_f = direction_f
+    # Enums are usually all caps, but these will come from the user.
+    unicode = (
+        'Uses "○" and "●" to represent button state',
+        lambda pitch: '●',
+        lambda pitch: '○',
+        lambda direction: direction.name
+    )
+    ascii = (
+        'Uses "." and "@" to represent button state',
+        lambda pitch: '@',
+        lambda pitch: '.',
+        lambda direction: direction.name
+    )
+    long = (
+        'Spells out the names of pressed buttons',
+        lambda pitch: str(pitch).ljust(4),
+        lambda pitch: '--- ',
+        lambda direction: direction.name
+    )
 
 def _from_abc() -> None:  # pragma: no cover
     '''
@@ -35,7 +70,9 @@ prints possible fingerings.
         'abc_path', type=Path,
         help='Path of ABC file')
     parser.add_argument(
-        '--verbose', action='store_true')
+        '--format', choices=[f.name for f in Format],
+        default=Format.long.name,
+        help='Output format. ' + ' / '.join(f'"{f.name}": {f.doc}' for f in Format))
     parser.add_argument(
         '--layout_transpose', default=0, type=int, metavar='SEMITONES',
         help='Semitones to transpose the layout; Negative transposes down')
@@ -75,16 +112,21 @@ prints possible fingerings.
         penalize_finger_in_same_column(args.finger_in_same_column_cost),
         penalize_pull_at_start_of_measure(args.pull_at_start_of_measure_cost)
     ]
+    format = Format[args.format]
     from_abc(
         abc_str, layout,
-        is_verbose=args.verbose,
+        button_down_f=format.button_down_f,
+        button_up_f=format.button_up_f,
+        direction_f=format.direction_f,
         penalty_functions=penalty_functions)
 
 
 def from_abc(
     abc_str: str,
     layout: BisonoricLayout,
-    is_verbose: bool = False,
+    button_down_f: PitchToStr = lambda _: '@',
+    button_up_f: PitchToStr = lambda _: '.',
+    direction_f: Callable[[Direction], str] = lambda direction: direction.name,
     penalty_functions: list[PenaltyFunction] = []
 ) -> None:  # pragma: no cover
     '''
@@ -99,7 +141,8 @@ def from_abc(
 
     for annotated_fingering in t_l.get_best_fingerings(penalty_functions):
         print(f'Measure {annotated_fingering.measure}')
-        if is_verbose:
-            print(str(annotated_fingering.fingering))
-        else:
-            print(annotated_fingering.fingering.format())
+        print(annotated_fingering.fingering.format(
+            button_down_f=button_down_f,
+            button_up_f=button_up_f,
+            direction_f=direction_f
+        ))
