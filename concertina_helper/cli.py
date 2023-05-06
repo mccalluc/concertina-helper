@@ -134,7 +134,8 @@ def print_fingerings(
     The core of the CLI functionality.
     - `abc_str`: A multiline string containing ABC notation.
     - `layout`: A bisonoric layout, either built-in or supplied by user.
-    - `button_down_f`, `button_up_f`, `direction_f`: Functions that determine output style.
+    - `button_down_f`, `button_up_f`, `direction_f`:
+      Functions that determine output style.
     - `penalty_functions`: Heuristic functions that define what makes a good fingering.
     '''
     if not penalty_functions:
