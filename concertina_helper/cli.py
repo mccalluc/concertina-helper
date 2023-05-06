@@ -86,18 +86,13 @@ prints possible fingerings.
         '--layout_name', choices=list_layout_names(),
         help='Name of concertina layout')
 
-    parser.add_argument(
-        '--bellows_change_cost', type=float,
-        metavar='N', default=2,
-        help=penalize_bellows_change.__doc__)
-    parser.add_argument(
-        '--finger_in_same_column_cost', type=float,
-        metavar='N', default=5,
-        help=penalize_finger_in_same_column.__doc__)
-    parser.add_argument(
-        '--pull_at_start_of_measure_cost', type=float,
-        metavar='N', default=0.5,
-        help=penalize_pull_at_start_of_measure.__doc__)
+    for name in globals():
+        if name.startswith('penalize_'):
+            param_name = name.replace('penalize_', '') + '_cost'
+            parser.add_argument(
+                f'--{param_name}', type=float,
+                metavar='N', default=1,
+                help=globals()[name].__doc__)
 
     args = parser.parse_args()
 

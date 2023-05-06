@@ -11,8 +11,9 @@ concertina-helper tests/g-major.abc \
   --format long
 
 perl -ne 'print if /usage:/../```/ and ! /```/' README.md > /tmp/expected.txt
-concertina-helper --help > /tmp/actual.txt
-diff /tmp/expected.txt /tmp/actual.txt || die "Update CLI usage in README.md"
+ACTUAL=/tmp/actual.txt
+concertina-helper --help > $ACTUAL
+diff /tmp/expected.txt $ACTUAL || die "Update CLI usage in README.md with $ACTUAL"
 
 echo 'PASS!'
 
