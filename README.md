@@ -7,7 +7,8 @@ Python script to find good fingerings on bisonoric concertinas for tunes in
 See [`demo-cli.sh`](https://github.com/mccalluc/concertina-helper/blob/main/demo-cli.sh)
 for examples of CLI usage.
 ```
-usage: concertina-helper [-h] [--verbose] [--layout_transpose SEMITONES]
+usage: concertina-helper [-h] [--format {unicode,ascii,long}]
+                         [--layout_transpose SEMITONES]
                          (--layout_path PATH | --layout_name {20_cg,30_jefferies_cg,30_wheatstone_cg})
                          [--bellows_change_cost N]
                          [--finger_in_same_column_cost N]
@@ -22,7 +23,11 @@ positional arguments:
 
 options:
   -h, --help            show this help message and exit
-  --verbose
+  --format {unicode,ascii,long}
+                        Output format. "unicode" uses "○" and "●" to represent
+                        button state / "ascii" uses "." and "@" to represent
+                        button state / "long" spells out the names of pressed
+                        buttons
   --layout_transpose SEMITONES
                         Semitones to transpose the layout; Negative transposes
                         down
