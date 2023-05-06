@@ -3,7 +3,7 @@
 import argparse
 from pathlib import Path
 from signal import signal, SIGPIPE, SIG_DFL
-from enum import auto, Enum
+from enum import Enum
 from collections.abc import Callable
 
 from pyabc2 import Tune
@@ -34,25 +34,26 @@ class Format(Enum):
         self.direction_f = direction_f
     # Enums are usually all caps, but these will come from the user.
     unicode = (
-        'Uses "○" and "●" to represent button state',
+        'uses "○" and "●" to represent button state',
         lambda pitch: '●',
         lambda pitch: '○',
         lambda direction: direction.name
     )
     ascii = (
-        'Uses "." and "@" to represent button state',
+        'uses "." and "@" to represent button state',
         lambda pitch: '@',
         lambda pitch: '.',
         lambda direction: direction.name
     )
     long = (
-        'Spells out the names of pressed buttons',
+        'spells out the names of pressed buttons',
         lambda pitch: str(pitch).ljust(4),
         lambda pitch: '--- ',
         lambda direction: direction.name
     )
 
-def _from_abc() -> None:  # pragma: no cover
+
+def _parse_and_print_fingerings() -> None:
     '''
     Parses command line arguments, finds optimal fingering for tune, and prints.
     '''
@@ -72,7 +73,7 @@ prints possible fingerings.
     parser.add_argument(
         '--format', choices=[f.name for f in Format],
         default=Format.long.name,
-        help='Output format. ' + ' / '.join(f'"{f.name}": {f.doc}' for f in Format))
+        help='Output format. ' + ' / '.join(f'"{f.name}" {f.doc}' for f in Format))
     parser.add_argument(
         '--layout_transpose', default=0, type=int, metavar='SEMITONES',
         help='Semitones to transpose the layout; Negative transposes down')
@@ -105,7 +106,6 @@ prints possible fingerings.
         if args.layout_path else
         load_bisonoric_layout_by_name(args.layout_name)
     ).transpose(args.layout_transpose)
-
     abc_str = args.abc_path.read_text()
     penalty_functions = [
         penalize_bellows_change(args.bellows_change_cost),
@@ -113,7 +113,8 @@ prints possible fingerings.
         penalize_pull_at_start_of_measure(args.pull_at_start_of_measure_cost)
     ]
     format = Format[args.format]
-    from_abc(
+
+    print_fingerings(
         abc_str, layout,
         button_down_f=format.button_down_f,
         button_up_f=format.button_up_f,
@@ -121,21 +122,23 @@ prints possible fingerings.
         penalty_functions=penalty_functions)
 
 
-def from_abc(
+def print_fingerings(
     abc_str: str,
     layout: BisonoricLayout,
     button_down_f: PitchToStr = lambda _: '@',
     button_up_f: PitchToStr = lambda _: '.',
     direction_f: Callable[[Direction], str] = lambda direction: direction.name,
     penalty_functions: list[PenaltyFunction] = []
-) -> None:  # pragma: no cover
+) -> None:
     '''
     The core of the CLI functionality.
     - `abc_str`: A multiline string containing ABC notation.
     - `layout`: A bisonoric layout, either built-in or supplied by user.
-    - `is_verbose`: Should the output show notes, or just whether buttons are down?
-    - `penalty_functions`: Encapsulate heuristics about what makes a good fingering.
+    - `button_down_f`, `button_up_f`, `direction_f`: Functions that determine output style.
+    - `penalty_functions`: Heuristic functions that define what makes a good fingering.
     '''
+    if not penalty_functions:
+        raise ValueError('At least one penalty function must be provided')
     tune = Tune(abc_str)
     t_l = TuneOnLayout(tune, layout)
 

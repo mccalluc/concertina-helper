@@ -24,7 +24,7 @@ dependencies = [
 ]
 
 [project.scripts]
-concertina-helper = "concertina_helper.cli:_from_abc"
+concertina-helper = "concertina_helper.cli:_parse_and_print_fingerings"
 
 [project.urls]
 Home = "https://github.com/mccalluc/concertina-helper"
