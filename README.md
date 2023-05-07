@@ -8,8 +8,8 @@ See [`demo-cli.sh`](https://github.com/mccalluc/concertina-helper/blob/main/demo
 for examples of CLI usage.
 ```
 usage: concertina-helper [-h] [--format {unicode,ascii,long}]
-                         [--layout_transpose SEMITONES]
                          (--layout_path PATH | --layout_name {20_cg,30_jefferies_cg,30_wheatstone_cg})
+                         [--layout_transpose SEMITONES]
                          [--bellows_change_cost N]
                          [--finger_in_same_column_cost N]
                          [--pull_at_start_of_measure_cost N]
@@ -27,22 +27,32 @@ options:
                         Output format. "unicode" uses "○" and "●" to represent
                         button state / "ascii" uses "." and "@" to represent
                         button state / "long" spells out the names of pressed
-                        buttons
+                        buttons (default: long)
+
+Layout options:
+  Supply your own layout, or use a predefined one, optionally transposed
+
+  --layout_path PATH    Path of YAML file with concertina layout (default:
+                        None)
+  --layout_name {20_cg,30_jefferies_cg,30_wheatstone_cg}
+                        Name of concertina layout (default: None)
   --layout_transpose SEMITONES
                         Semitones to transpose the layout; Negative transposes
-                        down
-  --layout_path PATH    Path of YAML file with concertina layout
-  --layout_name {20_cg,30_jefferies_cg,30_wheatstone_cg}
-                        Name of concertina layout
+                        down (default: 0)
+
+Cost options:
+  Configure the relative costs of different transitions between fingerings
+
   --bellows_change_cost N
                         Penalize fingerings where the bellows changes
-                        direction between notes
+                        direction between notes (default: 1)
   --finger_in_same_column_cost N
                         Penalize fingerings where one finger changes rows
-                        between notes
+                        between notes (default: 1)
   --pull_at_start_of_measure_cost N
                         Penalize fingerings where a pull begins a measure;
                         Hitting the downbeat with a push can be more musical.
+                        (default: 1)
 ```
 
 ## API usage

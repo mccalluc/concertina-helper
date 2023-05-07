@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 import argparse
 from pathlib import Path
 from signal import signal, SIGPIPE, SIG_DFL
@@ -62,6 +60,7 @@ def _parse_and_print_fingerings() -> None:
     signal(SIGPIPE, SIG_DFL)
 
     parser = argparse.ArgumentParser(
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
         description='''
 Given a file containing ABC notation,
 and a concertina type,
@@ -74,22 +73,28 @@ prints possible fingerings.
         '--format', choices=[f.name for f in Format],
         default=Format.long.name,
         help='Output format. ' + ' / '.join(f'"{f.name}" {f.doc}' for f in Format))
-    parser.add_argument(
+
+    layout_group = parser.add_argument_group(
+        'Layout options',
+        'Supply your own layout, or use a predefined one, optionally transposed\n')
+    layout_source_group = layout_group.add_mutually_exclusive_group(required=True)
+    layout_source_group.add_argument(
+        '--layout_path', type=Path, metavar='PATH',
+        help='Path of YAML file with concertina layout')
+    layout_source_group.add_argument(
+        '--layout_name', choices=list_layout_names(),
+        help='Name of concertina layout')
+    layout_group.add_argument(
         '--layout_transpose', default=0, type=int, metavar='SEMITONES',
         help='Semitones to transpose the layout; Negative transposes down')
 
-    layout_group = parser.add_mutually_exclusive_group(required=True)
-    layout_group.add_argument(
-        '--layout_path', type=Path, metavar='PATH',
-        help='Path of YAML file with concertina layout')
-    layout_group.add_argument(
-        '--layout_name', choices=list_layout_names(),
-        help='Name of concertina layout')
-
+    cost_group = parser.add_argument_group(
+        'Cost options',
+        'Configure the relative costs of different transitions between fingerings\n')
     for name in globals():
         if name.startswith('penalize_'):
             param_name = name.replace('penalize_', '') + '_cost'
-            parser.add_argument(
+            cost_group.add_argument(
                 f'--{param_name}', type=float,
                 metavar='N', default=1,
                 help=globals()[name].__doc__)
