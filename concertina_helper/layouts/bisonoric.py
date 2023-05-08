@@ -156,3 +156,16 @@ class AnnotatedBisonoricFingering:
     def __str__(self) -> str:
         a = self.annotation
         return f'Measure {a.measure} - {a.pitch}\n{self.fingering}'
+
+    def format(
+            self,
+            button_down_f: PitchToStr = lambda pitch: '@',
+            button_up_f: PitchToStr = lambda pitch: '.',
+            direction_f: Callable[[Direction], str] =
+            lambda direction: direction.name) -> str:
+        a = self.annotation
+        formatted = self.fingering.format(
+            button_down_f=button_down_f,
+            button_up_f=button_up_f,
+            direction_f=direction_f)
+        return f'Measure {a.measure} - {a.pitch}\n{formatted}'

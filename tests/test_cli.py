@@ -72,11 +72,20 @@ def test_no_format_functions(capsys):
     assert '.....' in captured
 
 
-def test_default_render(capsys):
+def test_render_with_penalty(capsys):
     print_fingerings(
         abc,
         load_bisonoric_layout_by_name('30_wheatstone_cg'),
         penalty_functions=[penalize_bellows_change(1)])
     captured = capsys.readouterr().out
-    assert 'Measure 1' in captured
+    assert 'Measure 1 - G4\n' in captured
+    assert '.....' in captured
+
+
+def test_render_without_penalty(capsys):
+    print_fingerings(
+        abc,
+        load_bisonoric_layout_by_name('30_wheatstone_cg'))
+    captured = capsys.readouterr().out
+    assert 'Measure 1 - G4\n' in captured
     assert '.....' in captured
