@@ -19,7 +19,8 @@ class TuneOnLayout:
     tune: Tune
     layout: BisonoricLayout
 
-    def get_all_fingerings(self) -> Iterable[tuple[Annotation,set[AnnotatedBisonoricFingering]]]:
+    def get_all_fingerings(self) -> \
+            Iterable[tuple[Annotation, set[AnnotatedBisonoricFingering]]]:
         '''
         For each note in the tune, returns all possible fingerings.
         '''
