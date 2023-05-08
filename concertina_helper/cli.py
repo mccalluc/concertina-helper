@@ -144,21 +144,20 @@ def print_fingerings(
     '''
     tune = Tune(abc_str)
     t_l = TuneOnLayout(tune, layout)
-    kwargs = {
-        'button_down_f': button_down_f,
-        'button_up_f': button_up_f,
-        'direction_f': direction_f
-    }
 
     if penalty_functions:
         for annotated_fingering in t_l.get_best_fingerings(penalty_functions):
-            print(f'Measure {annotated_fingering.measure}')
-            print(annotated_fingering.fingering.format(**kwargs))
+            print(f'Measure {annotated_fingering.annotation.measure}')
+            print(annotated_fingering.fingering.format(button_down_f=button_down_f,
+                                                       button_up_f=button_up_f,
+                                                       direction_f=direction_f))
     else:
         for annotated_fingering_set in t_l.get_all_fingerings():
             if not annotated_fingering_set:
                 print('No fingerings')
                 continue
-            print(f'Measure {list(annotated_fingering_set)[0].measure}')
+            print(f'Measure {list(annotated_fingering_set)[0].annotation.measure}')
             for annotated_fingering in annotated_fingering_set:
-                print(annotated_fingering.fingering.format(**kwargs))
+                print(annotated_fingering.fingering.format(button_down_f=button_down_f,
+                                                           button_up_f=button_up_f,
+                                                           direction_f=direction_f))

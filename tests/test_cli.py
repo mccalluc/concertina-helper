@@ -60,19 +60,21 @@ def test_cli_unicode_render(capsys):
     assert '○○○○○' in captured
 
 
-def test_no_format_functions():
-    with pytest.raises(ValueError, match=r'one penalty function must be provided'):
-        print_fingerings(
-            'abc-not-read',
-            load_bisonoric_layout_by_name('30_wheatstone_cg'))
+abc = (Path(__file__).parent / 'g-major.abc').read_text()
 
 
-abc_path = (Path(__file__).parent / 'g-major.abc').read_text()
+def test_no_format_functions(capsys):
+    print_fingerings(
+        abc,
+        load_bisonoric_layout_by_name('30_wheatstone_cg'))
+    captured = capsys.readouterr().out
+    assert 'Measure 1' in captured
+    assert '.....' in captured
 
 
 def test_default_render(capsys):
     print_fingerings(
-        abc_path,
+        abc,
         load_bisonoric_layout_by_name('30_wheatstone_cg'),
         penalty_functions=[penalize_bellows_change(1)])
     captured = capsys.readouterr().out

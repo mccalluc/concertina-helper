@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from itertools import chain
 from collections.abc import Iterable
 
-from .layouts.bisonoric import BisonoricLayout, AnnotatedBisonoricFingering
+from .layouts.bisonoric import BisonoricLayout, AnnotatedBisonoricFingering, Annotation
 from .finger_finder import find_best_fingerings
 from .penalties import PenaltyFunction
 from .type_defs import Pitch
@@ -26,7 +26,7 @@ class TuneOnLayout:
         return list(chain(*[
             [
                 {
-                    AnnotatedBisonoricFingering(fingering=f, measure=i + 1)
+                    AnnotatedBisonoricFingering(fingering=f, annotation=Annotation(measure=i + 1, pitch=Pitch(note.to_pitch().name)))
                     for f in self.layout.get_fingerings(Pitch(note.to_pitch().name))
                 }
                 for note in measure

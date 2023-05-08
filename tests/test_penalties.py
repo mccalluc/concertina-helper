@@ -4,8 +4,8 @@ from concertina_helper.layouts.bisonoric import (
     AnnotatedBisonoricFingering,
     BisonoricFingering,
     UnisonoricFingering,
-    Direction)
-from concertina_helper.type_defs import Mask
+    Direction, Annotation)
+from concertina_helper.type_defs import Mask, Pitch
 from concertina_helper.layouts.layout_loader import (
     load_bisonoric_layout_by_name)
 from concertina_helper.penalties import (
@@ -43,26 +43,26 @@ c_left = AnnotatedBisonoricFingering(
         layout.push_layout, make_mask(
             layout.shape[0], 1, 2), make_mask(layout.shape[1], -1, -1)
     )),
-    measure=1
+    annotation=Annotation(measure=1, pitch=Pitch('C4'))
 )
 a_left = AnnotatedBisonoricFingering(
     fingering=BisonoricFingering(Direction.PULL, UnisonoricFingering(
         layout.pull_layout, make_mask(
             layout.shape[0], 2, 2), make_mask(layout.shape[1], -1, -1)
     )),
-    measure=2
+    annotation=Annotation(measure=2, pitch=Pitch('A4'))
 )
 
 
 def test_fixture_values():
     assert str(c_left) == \
-        '''Measure 1
+        '''Measure 1 - C4
 PUSH:
 --- --- --- --- ---    --- --- --- --- ---
 --- --- C4  --- ---    --- --- --- --- ---
 --- --- --- --- ---    --- --- --- --- ---'''
     assert str(a_left) == \
-        '''Measure 2
+        '''Measure 2 - A4
 PULL:
 --- --- --- --- ---    --- --- --- --- ---
 --- --- --- --- ---    --- --- --- --- ---
