@@ -33,9 +33,12 @@ class Format(Enum):
     # Enums are usually all caps, but these will come from the user.
     unicode = (
         'uses "○" and "●" to represent button state',
-        lambda pitch: '●',
-        lambda pitch: '○',
-        lambda direction: direction.name
+        lambda pitch: '● ',
+        lambda pitch: '○ ',
+        lambda direction: (
+            f'-> {direction.name} <-'
+            if direction == Direction.PUSH
+            else f'<- {direction.name} ->')
     )
     ascii = (
         'uses "." and "@" to represent button state',
