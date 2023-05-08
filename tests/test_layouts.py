@@ -75,6 +75,9 @@ class TestUnisonoricLayout:
         with pytest.raises(ValueError):
             u_fingering | weird_fingering
 
+    def test_out_of_range(self):
+        assert u_layout.get_fingerings(Pitch('C0')) == set()
+
 
 b_layout = BisonoricLayout(
     push_layout=u_layout,

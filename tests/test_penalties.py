@@ -1,3 +1,5 @@
+from collections.abc import Iterable
+
 from concertina_helper.layouts.bisonoric import (
     AnnotatedBisonoricFingering,
     BisonoricFingering,
@@ -14,7 +16,7 @@ from concertina_helper.penalties import (
 layout = load_bisonoric_layout_by_name('30_wheatstone_cg')
 
 
-def make_mask(half_shape: list[int], row: int, column: int) -> Mask:
+def make_mask(half_shape: Iterable[int], row: int, column: int) -> Mask:
     return Mask(
         tuple(
             tuple(

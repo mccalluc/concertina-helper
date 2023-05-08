@@ -2,7 +2,7 @@ import argparse
 from pathlib import Path
 from signal import signal, SIGPIPE, SIG_DFL
 from enum import Enum
-from collections.abc import Callable
+from collections.abc import Callable, Iterable
 
 from pyabc2 import Tune
 
@@ -128,7 +128,7 @@ def print_fingerings(
     button_down_f: PitchToStr = lambda _: '@',
     button_up_f: PitchToStr = lambda _: '.',
     direction_f: Callable[[Direction], str] = lambda direction: direction.name,
-    penalty_functions: list[PenaltyFunction] = []
+    penalty_functions: Iterable[PenaltyFunction] = []
 ) -> None:
     '''
     The core of the CLI functionality.

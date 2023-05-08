@@ -1,6 +1,7 @@
 from __future__ import annotations
 from dataclasses import dataclass
 from itertools import chain
+from collections.abc import Iterable
 
 from .layouts.bisonoric import BisonoricLayout, AnnotatedBisonoricFingering
 from .finger_finder import find_best_fingerings
@@ -18,7 +19,7 @@ class TuneOnLayout:
     tune: Tune
     layout: BisonoricLayout
 
-    def get_all_fingerings(self) -> list[set[AnnotatedBisonoricFingering]]:
+    def get_all_fingerings(self) -> Iterable[set[AnnotatedBisonoricFingering]]:
         '''
         For each note in the tune, returns all possible fingerings.
         '''
@@ -33,8 +34,8 @@ class TuneOnLayout:
             for i, measure in enumerate(self.tune.measures)
         ]))
 
-    def get_best_fingerings(self, penalty_functions: list[PenaltyFunction]) \
-            -> list[AnnotatedBisonoricFingering]:
+    def get_best_fingerings(self, penalty_functions: Iterable[PenaltyFunction]) \
+            -> Iterable[AnnotatedBisonoricFingering]:
         '''
         Returns a list of fingerings that minimizes the cost for the entire tune,
         as measured by the provided `penalty_functions`.
