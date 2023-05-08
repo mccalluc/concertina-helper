@@ -1,6 +1,8 @@
 from pathlib import Path
 from unittest.mock import patch
 
+import pytest
+
 from concertina_helper.cli import (_parse_and_print_fingerings, print_fingerings)
 from concertina_helper.layouts.layout_loader import load_bisonoric_layout_by_name
 from concertina_helper.penalties import penalize_bellows_change
@@ -79,6 +81,14 @@ def test_render_with_penalty(capsys):
     assert 'Measure 1 - G4\n' in captured
     assert '.....' in captured
     assert 'No fingerings' not in captured
+
+
+def test_render_with_penalty_out_of_range():
+    with pytest.raises(ValueError, match=r'No fingerings for G4 in measure 1'):
+        print_fingerings(
+            abc,
+            load_bisonoric_layout_by_name('30_wheatstone_cg').transpose(24),
+            penalty_functions=[penalize_bellows_change(1)])
 
 
 def test_render_without_penalty(capsys):

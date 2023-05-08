@@ -152,9 +152,10 @@ def print_fingerings(
                 button_up_f=button_up_f,
                 direction_f=direction_f))
     else:
-        for annotated_fingering_set in t_l.get_all_fingerings():
+        for annotation, annotated_fingering_set in t_l.get_all_fingerings():
             if not annotated_fingering_set:
-                print('No fingerings')
+                a = annotation
+                print(f'No fingerings for {a.pitch} in measure {a.measure}')
                 continue
             for annotated_fingering in annotated_fingering_set:
                 print(annotated_fingering.format(
