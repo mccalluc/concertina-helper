@@ -57,7 +57,7 @@ def test_cli_unicode_render(capsys):
         _parse_and_print_fingerings()
     captured = capsys.readouterr().out
     assert 'Measure 1' in captured
-    assert '○○○○○' in captured
+    assert '○ ○ ○ ○ ○' in captured
 
 
 abc = (Path(__file__).parent / 'g-major.abc').read_text()

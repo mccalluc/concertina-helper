@@ -29,6 +29,11 @@ class Pitch:
     def __str__(self) -> str:
         return self.name
 
+    def __eq__(self, other: Any) -> bool:
+        if type(self) != type(other):
+            raise TypeError('mixed operand types')
+        return self._pitch.value == other._pitch.value
+
 
 @dataclass(frozen=True)
 class PitchMatrix:
