@@ -6,16 +6,16 @@ from collections.abc import Callable, Iterable
 
 from pyabc2 import Tune
 
-from concertina_helper.layouts.layout_loader import (
+from .layouts.layout_loader import (
     list_layout_names, load_bisonoric_layout_by_path, load_bisonoric_layout_by_name)
-from concertina_helper.layouts.bisonoric import BisonoricLayout, Direction
-from concertina_helper.tune_on_layout import TuneOnLayout
-from concertina_helper.penalties import (
+from .layouts.bisonoric import BisonoricLayout, Direction
+from .tune_on_layout import TuneOnLayout
+from .penalties import (
     PenaltyFunction,
     penalize_bellows_change,
     penalize_finger_in_same_column,
     penalize_pull_at_start_of_measure)
-from concertina_helper.type_defs import PitchToStr
+from .type_defs import PitchToStr
 
 
 class Format(Enum):
