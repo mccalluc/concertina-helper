@@ -1,7 +1,7 @@
 from __future__ import annotations
 from enum import Enum, auto
 from typing import Any
-from collections.abc import Callable
+from collections.abc import Callable, Iterable
 from dataclasses import dataclass
 
 from .unisonoric import UnisonoricFingering, UnisonoricLayout

@@ -98,6 +98,9 @@ prints possible fingerings.
                 f'--{param_name}', type=float,
                 metavar='N', default=1,
                 help=globals()[name].__doc__)
+    cost_group.add_argument(
+        '--show_all', action='store_true',
+        help='Ignore cost options and just show all possible fingerings')
 
     args = parser.parse_args()
 
@@ -107,7 +110,7 @@ prints possible fingerings.
         load_bisonoric_layout_by_name(args.layout_name)
     ).transpose(args.layout_transpose)
     abc_str = args.abc_path.read_text()
-    penalty_functions = [
+    penalty_functions = [] if args.show_all else [
         penalize_bellows_change(args.bellows_change_cost),
         penalize_finger_in_same_column(args.finger_in_same_column_cost),
         penalize_pull_at_start_of_measure(args.pull_at_start_of_measure_cost)
@@ -137,16 +140,25 @@ def print_fingerings(
     - `button_down_f`, `button_up_f`, `direction_f`:
       Functions that determine output style.
     - `penalty_functions`: Heuristic functions that define what makes a good fingering.
+      If empty, all fingerings will be printed.
     '''
-    if not penalty_functions:
-        raise ValueError('At least one penalty function must be provided')
     tune = Tune(abc_str)
     t_l = TuneOnLayout(tune, layout)
+    kwargs = {
+        'button_down_f': button_down_f,
+        'button_up_f': button_up_f,
+        'direction_f': direction_f
+    }
 
-    for annotated_fingering in t_l.get_best_fingerings(penalty_functions):
-        print(f'Measure {annotated_fingering.measure}')
-        print(annotated_fingering.fingering.format(
-            button_down_f=button_down_f,
-            button_up_f=button_up_f,
-            direction_f=direction_f
-        ))
+    if penalty_functions:
+        for annotated_fingering in t_l.get_best_fingerings(penalty_functions):
+            print(f'Measure {annotated_fingering.measure}')
+            print(annotated_fingering.fingering.format(**kwargs))
+    else:
+        for annotated_fingering_set in t_l.get_all_fingerings():
+            if not annotated_fingering_set:
+                print('No fingerings')
+                continue
+            print(f'Measure {list(annotated_fingering_set)[0].measure}')
+            for annotated_fingering in annotated_fingering_set:
+                print(annotated_fingering.fingering.format(**kwargs))
