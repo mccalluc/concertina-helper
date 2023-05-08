@@ -26,7 +26,11 @@ class TuneOnLayout:
         return list(chain(*[
             [
                 {
-                    AnnotatedBisonoricFingering(fingering=f, annotation=Annotation(measure=i + 1, pitch=Pitch(note.to_pitch().name)))
+                    AnnotatedBisonoricFingering(
+                        fingering=f,
+                        annotation=Annotation(
+                            measure=i + 1,
+                            pitch=Pitch(note.to_pitch().name)))
                     for f in self.layout.get_fingerings(Pitch(note.to_pitch().name))
                 }
                 for note in measure

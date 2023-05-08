@@ -1,7 +1,7 @@
 from __future__ import annotations
 from enum import Enum, auto
 from typing import Any
-from collections.abc import Callable, Iterable
+from collections.abc import Callable
 from dataclasses import dataclass
 
 from .unisonoric import UnisonoricFingering, UnisonoricLayout
@@ -157,7 +157,7 @@ class AnnotatedBisonoricFingering:
         a = self.annotation
         return f'Measure {a.measure} - {a.pitch}\n{self.fingering}'
 
-    def format(
+    def format(  # pragma: no branch
             self,
             button_down_f: PitchToStr = lambda pitch: '@',
             button_up_f: PitchToStr = lambda pitch: '.',
