@@ -139,13 +139,33 @@ class BisonoricFingering:
 
 
 @dataclass(frozen=True, kw_only=True)
+class Annotation:
+    pitch: Pitch
+    measure: int
+
+
+@dataclass(frozen=True, kw_only=True)
 class AnnotatedBisonoricFingering:
     '''
     Adds contextual information to the fingering
     that is useful in finding the best fingering for a tune.
     '''
     fingering: BisonoricFingering
-    measure: int
+    annotation: Annotation
 
     def __str__(self) -> str:
-        return f'Measure {self.measure}\n{self.fingering}'
+        a = self.annotation
+        return f'Measure {a.measure} - {a.pitch}\n{self.fingering}'
+
+    def format(  # pragma: no branch
+            self,
+            button_down_f: PitchToStr = lambda pitch: '@',
+            button_up_f: PitchToStr = lambda pitch: '.',
+            direction_f: Callable[[Direction], str] =
+            lambda direction: direction.name) -> str:
+        a = self.annotation
+        formatted = self.fingering.format(
+            button_down_f=button_down_f,
+            button_up_f=button_up_f,
+            direction_f=direction_f)
+        return f'Measure {a.measure} - {a.pitch}\n{formatted}'

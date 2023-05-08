@@ -60,21 +60,52 @@ def test_cli_unicode_render(capsys):
     assert '○○○○○' in captured
 
 
-def test_no_format_functions():
-    with pytest.raises(ValueError, match=r'one penalty function must be provided'):
-        print_fingerings(
-            'abc-not-read',
-            load_bisonoric_layout_by_name('30_wheatstone_cg'))
+abc = (Path(__file__).parent / 'g-major.abc').read_text()
 
 
-abc_path = (Path(__file__).parent / 'g-major.abc').read_text()
-
-
-def test_default_render(capsys):
+def test_no_format_functions(capsys):
     print_fingerings(
-        abc_path,
-        load_bisonoric_layout_by_name('30_wheatstone_cg'),
-        penalty_functions=[penalize_bellows_change(1)])
+        abc,
+        load_bisonoric_layout_by_name('30_wheatstone_cg'))
     captured = capsys.readouterr().out
     assert 'Measure 1' in captured
     assert '.....' in captured
+
+
+def test_render_with_penalty(capsys):
+    print_fingerings(
+        abc,
+        load_bisonoric_layout_by_name('30_wheatstone_cg'),
+        penalty_functions=[penalize_bellows_change(1)])
+    captured = capsys.readouterr().out
+    assert 'Measure 1 - G4\n' in captured
+    assert '.....' in captured
+    assert 'No fingerings' not in captured
+
+
+def test_render_with_penalty_out_of_range():
+    with pytest.raises(ValueError, match=r'No fingerings for G4 in measure 1'):
+        print_fingerings(
+            abc,
+            load_bisonoric_layout_by_name('30_wheatstone_cg').transpose(24),
+            penalty_functions=[penalize_bellows_change(1)])
+
+
+def test_render_without_penalty(capsys):
+    print_fingerings(
+        abc,
+        load_bisonoric_layout_by_name('30_wheatstone_cg'))
+    captured = capsys.readouterr().out
+    assert 'Measure 1 - G4\n' in captured
+    assert '.....' in captured
+    assert 'No fingerings' not in captured
+
+
+def test_render_without_penalty_out_of_range(capsys):
+    print_fingerings(
+        abc,
+        load_bisonoric_layout_by_name('30_wheatstone_cg').transpose(-24))
+    captured = capsys.readouterr().out
+    assert 'Measure 1 - G4\n' in captured
+    assert '.....' in captured
+    assert 'No fingerings' in captured

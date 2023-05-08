@@ -1,7 +1,7 @@
 from __future__ import annotations
 from collections.abc import Callable, Iterator
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, Iterable
 
 from pyabc2 import Pitch as AbcPitch
 
@@ -67,7 +67,7 @@ class Mask:
     bool_matrix: tuple[tuple[bool, ...], ...]
 
     @property
-    def shape(self) -> list[int]:
+    def shape(self) -> Iterable[int]:
         return [len(row) for row in self.bool_matrix]
 
     def __getitem__(self, i: int) -> tuple[bool, ...]:
@@ -94,7 +94,7 @@ class Mask:
         )
 
 
-Shape = tuple[list[int], list[int]]
+Shape = tuple[Iterable[int], Iterable[int]]
 '''
 Describes the button arrangement of an instrument:
 respectively the left and right faces, and for each face,

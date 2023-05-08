@@ -8,9 +8,9 @@ from .penalties import PenaltyFunction
 
 
 def find_best_fingerings(
-    all_fingerings: list[set[AnnotatedBisonoricFingering]],
-    penalty_functions: list[PenaltyFunction]
-) -> list[AnnotatedBisonoricFingering]:
+    all_fingerings: Iterable[set[AnnotatedBisonoricFingering]],
+    penalty_functions: Iterable[PenaltyFunction]
+) -> Iterable[AnnotatedBisonoricFingering]:
     '''
     Given a list of sets of possible fingerings,
     returns a list representing the best fingerings.
@@ -30,15 +30,15 @@ class _Node:
 class _FingerFinder(AStar):
     def __init__(
             self,
-            fingerings: list[set[AnnotatedBisonoricFingering]],
-            penalty_functions: list[PenaltyFunction]):
+            fingerings: Iterable[set[AnnotatedBisonoricFingering]],
+            penalty_functions: Iterable[PenaltyFunction]):
         self.penalty_functions = penalty_functions
         self.index: dict[int, set[_Node]] = {
             i: {_Node(i, f) for f in f_set}
             for i, f_set in enumerate(fingerings)
         }
 
-    def find(self) -> list[AnnotatedBisonoricFingering]:
+    def find(self) -> Iterable[AnnotatedBisonoricFingering]:
         start = _Node(-1, None)
         max_index = max(self.index.keys())
         goal = list(self.index[max_index])[0]

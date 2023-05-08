@@ -2,20 +2,20 @@ import argparse
 from pathlib import Path
 from signal import signal, SIGPIPE, SIG_DFL
 from enum import Enum
-from collections.abc import Callable
+from collections.abc import Callable, Iterable
 
 from pyabc2 import Tune
 
-from concertina_helper.layouts.layout_loader import (
+from .layouts.layout_loader import (
     list_layout_names, load_bisonoric_layout_by_path, load_bisonoric_layout_by_name)
-from concertina_helper.layouts.bisonoric import BisonoricLayout, Direction
-from concertina_helper.tune_on_layout import TuneOnLayout
-from concertina_helper.penalties import (
+from .layouts.bisonoric import BisonoricLayout, Direction
+from .tune_on_layout import TuneOnLayout
+from .penalties import (
     PenaltyFunction,
     penalize_bellows_change,
     penalize_finger_in_same_column,
     penalize_pull_at_start_of_measure)
-from concertina_helper.type_defs import PitchToStr
+from .type_defs import PitchToStr
 
 
 class Format(Enum):
@@ -98,6 +98,9 @@ prints possible fingerings.
                 f'--{param_name}', type=float,
                 metavar='N', default=1,
                 help=globals()[name].__doc__)
+    cost_group.add_argument(
+        '--show_all', action='store_true',
+        help='Ignore cost options and just show all possible fingerings')
 
     args = parser.parse_args()
 
@@ -107,7 +110,7 @@ prints possible fingerings.
         load_bisonoric_layout_by_name(args.layout_name)
     ).transpose(args.layout_transpose)
     abc_str = args.abc_path.read_text()
-    penalty_functions = [
+    penalty_functions = [] if args.show_all else [
         penalize_bellows_change(args.bellows_change_cost),
         penalize_finger_in_same_column(args.finger_in_same_column_cost),
         penalize_pull_at_start_of_measure(args.pull_at_start_of_measure_cost)
@@ -128,7 +131,7 @@ def print_fingerings(
     button_down_f: PitchToStr = lambda _: '@',
     button_up_f: PitchToStr = lambda _: '.',
     direction_f: Callable[[Direction], str] = lambda direction: direction.name,
-    penalty_functions: list[PenaltyFunction] = []
+    penalty_functions: Iterable[PenaltyFunction] = []
 ) -> None:
     '''
     The core of the CLI functionality.
@@ -137,16 +140,25 @@ def print_fingerings(
     - `button_down_f`, `button_up_f`, `direction_f`:
       Functions that determine output style.
     - `penalty_functions`: Heuristic functions that define what makes a good fingering.
+      If empty, all fingerings will be printed.
     '''
-    if not penalty_functions:
-        raise ValueError('At least one penalty function must be provided')
     tune = Tune(abc_str)
     t_l = TuneOnLayout(tune, layout)
 
-    for annotated_fingering in t_l.get_best_fingerings(penalty_functions):
-        print(f'Measure {annotated_fingering.measure}')
-        print(annotated_fingering.fingering.format(
-            button_down_f=button_down_f,
-            button_up_f=button_up_f,
-            direction_f=direction_f
-        ))
+    if penalty_functions:
+        for annotated_fingering in t_l.get_best_fingerings(penalty_functions):
+            print(annotated_fingering.format(
+                button_down_f=button_down_f,
+                button_up_f=button_up_f,
+                direction_f=direction_f))
+    else:
+        for annotation, annotated_fingering_set in t_l.get_all_fingerings():
+            if not annotated_fingering_set:
+                a = annotation
+                print(f'No fingerings for {a.pitch} in measure {a.measure}')
+                continue
+            for annotated_fingering in annotated_fingering_set:
+                print(annotated_fingering.format(
+                    button_down_f=button_down_f,
+                    button_up_f=button_up_f,
+                    direction_f=direction_f))

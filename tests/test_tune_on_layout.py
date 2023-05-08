@@ -13,7 +13,9 @@ def test_get_all_fingerings():
     t_l = TuneOnLayout(tune, layout)
     all_fingerings = t_l.get_all_fingerings()
     assert len(all_fingerings) == 8
-    assert len(all_fingerings[0]) == 3
+    annotation, f_set = all_fingerings[0]
+    assert len(f_set) == 3
+    assert str(annotation) == "Annotation(pitch=Pitch(name='G4'), measure=1)"
     # TODO: Add a stronger assertion when we can get pitches from fingering.
     # https://github.com/mccalluc/concertina-helper/issues/44
 

@@ -1,4 +1,6 @@
 from pathlib import Path
+from collections.abc import Iterable
+
 import re
 
 from yaml import safe_load
@@ -8,7 +10,7 @@ from .bisonoric import BisonoricLayout
 from .unisonoric import UnisonoricLayout
 
 
-def _names_to_pitches(matrix: list[list[str]]) -> PitchMatrix:
+def _names_to_pitches(matrix: Iterable[Iterable[str]]) -> PitchMatrix:
     '''
     >>> pitch_matrix = _names_to_pitches([['C4']])
     >>> print(pitch_matrix[0][0])
@@ -23,7 +25,7 @@ def _names_to_pitches(matrix: list[list[str]]) -> PitchMatrix:
     )
 
 
-def _parse_matrix(rows: list[str]) -> PitchMatrix:
+def _parse_matrix(rows: Iterable[str]) -> PitchMatrix:
     '''
     >>> pitch_matrix = _parse_matrix(['C4 E4 G4'])
     >>> print(pitch_matrix[0][0])
@@ -83,7 +85,7 @@ def load_bisonoric_layout_by_name(layout_name: str) -> BisonoricLayout:
     return load_bisonoric_layout_by_path(layout_path)
 
 
-def list_layout_names() -> list[str]:
+def list_layout_names() -> Iterable[str]:
     '''
     Lists all preconfigured layouts. To change the key of a layout, use
     `concertina_helper.layouts.bisonoric.BisonoricLayout.transpose`.
