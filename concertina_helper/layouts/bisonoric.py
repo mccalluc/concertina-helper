@@ -1,27 +1,15 @@
 from __future__ import annotations
-from enum import Enum, auto
 from typing import Any
 from collections.abc import Callable
 from dataclasses import dataclass
 
 from .unisonoric import UnisonoricFingering, UnisonoricLayout
-from ..type_defs import Shape, PitchToStr, Mask, Pitch
-
-
-class Direction(Enum):
-    '''
-    `PUSH` and `PULL`are paired with a unisonoric fingering
-    to create a bisonoric fingering
-    '''
-    PUSH = auto()
-    PULL = auto()
-
-    def __repr__(self) -> str:
-        return f'Direction.{self.name}'
+from ..type_defs import Shape, PitchToStr, Mask, Pitch, Direction
+from .base_classes import Layout, Fingering
 
 
 @dataclass(frozen=True, kw_only=True)
-class BisonoricLayout:
+class BisonoricLayout(Layout['BisonoricFingering']):
     '''
     Represents a bisonoric concertina layout:
     the layout of the buttons on the left and right,
@@ -100,7 +88,7 @@ class BisonoricLayout:
 
 
 @dataclass(frozen=True)
-class BisonoricFingering:
+class BisonoricFingering(Fingering):
     '''
     Represents a fingering on a bisonoric concertina.
     '''

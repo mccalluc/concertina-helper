@@ -1,6 +1,7 @@
 from __future__ import annotations
 from collections.abc import Callable, Iterator
 from dataclasses import dataclass
+from enum import Enum, auto
 from typing import Any, Iterable
 
 from pyabc2 import Pitch as AbcPitch
@@ -113,3 +114,15 @@ A function which takes a pitch and returns a string.
 Should unicode characters be used for accidentals?
 Those sort of details are handled by the function.)
 '''
+
+
+class Direction(Enum):
+    '''
+    `PUSH` and `PULL`are paired with a unisonoric fingering
+    to create a bisonoric fingering
+    '''
+    PUSH = auto()
+    PULL = auto()
+
+    def __repr__(self) -> str:
+        return f'Direction.{self.name}'

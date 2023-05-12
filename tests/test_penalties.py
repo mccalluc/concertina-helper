@@ -4,8 +4,8 @@ from concertina_helper.layouts.bisonoric import (
     AnnotatedBisonoricFingering,
     BisonoricFingering,
     UnisonoricFingering,
-    Direction, Annotation)
-from concertina_helper.type_defs import Mask, Pitch
+    Annotation)
+from concertina_helper.type_defs import Mask, Pitch, Direction
 from concertina_helper.layouts.layout_loader import (
     load_bisonoric_layout_by_name)
 from concertina_helper.penalties import (

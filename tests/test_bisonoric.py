@@ -5,11 +5,10 @@ import pytest
 from concertina_helper.layouts.unisonoric import (
     UnisonoricLayout, UnisonoricFingering)
 from concertina_helper.layouts.bisonoric import (
-    BisonoricLayout, BisonoricFingering,
-    Direction)
+    BisonoricLayout, BisonoricFingering)
 from concertina_helper.layouts.layout_loader import (
     _names_to_pitches, load_bisonoric_layout_by_name)
-from concertina_helper.type_defs import Mask, Pitch
+from concertina_helper.type_defs import Mask, Pitch, Direction
 
 
 u_layout = UnisonoricLayout(

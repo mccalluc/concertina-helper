@@ -8,14 +8,14 @@ from pyabc2 import Tune
 
 from .layouts.layout_loader import (
     list_layout_names, load_bisonoric_layout_by_path, load_bisonoric_layout_by_name)
-from .layouts.bisonoric import BisonoricLayout, Direction
+from .layouts.bisonoric import BisonoricLayout
 from .tune_on_layout import TuneOnLayout
 from .penalties import (
     PenaltyFunction,
     penalize_bellows_change,
     penalize_finger_in_same_column,
     penalize_pull_at_start_of_measure)
-from .type_defs import PitchToStr
+from .type_defs import Direction, PitchToStr
 
 
 class Format(Enum):

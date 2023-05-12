@@ -1,7 +1,9 @@
 from collections.abc import Callable
 
+from .type_defs import Direction
+
 from .layouts.bisonoric import (
-    AnnotatedBisonoricFingering, BisonoricFingering, Direction)
+    AnnotatedBisonoricFingering, BisonoricFingering)
 
 
 PenaltyFunction = Callable[[
