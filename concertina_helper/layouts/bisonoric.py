@@ -157,4 +157,3 @@ class AnnotatedBisonoricFingering:
             button_up_f=button_up_f,
             direction_f=direction_f)
         return f'Measure {a.measure} - {a.pitch}\n{formatted}'
-

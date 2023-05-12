@@ -126,4 +126,3 @@ class Direction(Enum):
 
     def __repr__(self) -> str:
         return f'Direction.{self.name}'
-
