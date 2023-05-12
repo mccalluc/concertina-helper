@@ -9,7 +9,7 @@ from .base_classes import Layout, Fingering
 
 
 @dataclass(frozen=True, kw_only=True)
-class BisonoricLayout(Layout):
+class BisonoricLayout(Layout['BisonoricFingering']):
     '''
     Represents a bisonoric concertina layout:
     the layout of the buttons on the left and right,

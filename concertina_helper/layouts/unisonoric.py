@@ -8,7 +8,7 @@ from .base_classes import Layout, Fingering
 
 
 @dataclass(frozen=True)
-class UnisonoricLayout(Layout):
+class UnisonoricLayout(Layout['UnisonoricFingering']):
     left: PitchMatrix
     right: PitchMatrix
 
@@ -32,7 +32,7 @@ class UnisonoricLayout(Layout):
                     masks.add(mask)
         return masks
 
-    def get_fingerings(self, pitch: Pitch) -> frozenset[UnisonoricFingering]:
+    def get_fingerings(self, pitch: Pitch) -> set[UnisonoricFingering]:
         fingerings = set()
 
         left_all_false = Mask(tuple((False,) * len(row) for row in self.left))
@@ -42,7 +42,7 @@ class UnisonoricLayout(Layout):
             fingerings.add(UnisonoricFingering(self, left_mask, right_all_false))
         for right_mask in self.__make_masks(pitch, self.right):
             fingerings.add(UnisonoricFingering(self, left_all_false, right_mask))
-        return frozenset(fingerings)
+        return fingerings
 
     def __str__(self) -> str:
         lines = []

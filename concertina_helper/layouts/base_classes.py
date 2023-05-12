@@ -1,8 +1,12 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
 from collections.abc import Callable
+from typing import TypeVar, Generic
 
 from ..type_defs import Shape, Pitch, PitchToStr
+
+
+T = TypeVar('T')
 
 
 class Fingering(ABC):
@@ -21,7 +25,7 @@ class Fingering(ABC):
         '''
 
 
-class Layout(ABC):
+class Layout(ABC, Generic[T]):
     @property
     @abstractmethod
     def shape(self) -> Shape:
@@ -30,7 +34,7 @@ class Layout(ABC):
         '''
 
     @abstractmethod
-    def get_fingerings(self, pitch: Pitch) -> set[Fingering]:
+    def get_fingerings(self, pitch: Pitch) -> set[T]:
         '''
         Returns a set of possible fingerings on the layout for a given pitch
         '''
