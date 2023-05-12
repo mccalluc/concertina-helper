@@ -1,12 +1,14 @@
 from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any
+from collections.abc import Callable
 
-from ..type_defs import Shape, Pitch, PitchToStr, PitchMatrix, Mask
+from ..type_defs import Shape, Pitch, PitchToStr, PitchMatrix, Mask, Direction
+from .base_classes import Layout, Fingering
 
 
 @dataclass(frozen=True)
-class UnisonoricLayout:
+class UnisonoricLayout(Layout):
     left: PitchMatrix
     right: PitchMatrix
 
@@ -61,7 +63,7 @@ class UnisonoricLayout:
 
 
 @dataclass(frozen=True)
-class UnisonoricFingering:
+class UnisonoricFingering(Fingering):
     layout: UnisonoricLayout
     left_mask: Mask
     right_mask: Mask
@@ -88,7 +90,9 @@ class UnisonoricFingering:
     def format(
             self,
             button_down_f: PitchToStr = lambda pitch: '@',
-            button_up_f: PitchToStr = lambda pitch: '.') -> str:
+            button_up_f: PitchToStr = lambda pitch: '.',
+            direction_f: Callable[[Direction], str] =
+            lambda direction: direction.name) -> str:
         lines = []
         enumerated_mask_rows = enumerate(zip(self.left_mask, self.right_mask))
         for i, (left_mask_row, right_mask_row) in enumerated_mask_rows:
