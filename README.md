@@ -66,6 +66,12 @@ See [API documentation](https://mccalluc.github.io/concertina-helper) for detail
 See [`demo-api.sh`](https://github.com/mccalluc/concertina-helper/blob/main/demo-cli.sh)
 for for typical developer setup. The demo scripts are also used for CI.
 
+To release a new version:
+- Make a feature branch
+- Update `__version__` in `__init__.py`
+- Run `flit publish`
+- Make a PR with the updated version and merge.
+
 ## Related tools
 
 ### Generate fingerings for tunes
