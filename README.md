@@ -1,11 +1,17 @@
 # concertina-helper
-Python script to find good fingerings on bisonoric concertinas for tunes in
-[ABC notation](https://abcnotation.com/), and a supporting API.
+
+[![PyPI version](https://badge.fury.io/py/concertina_helper.svg)](https://pypi.org/project/concertina_helper/)
+
+**concertina_helper** is a python script and supporting API
+to find good fingerings on bisonoric concertinas for
+tunes in [ABC notation](https://abcnotation.com/).
 
 ## CLI usage
 
-See [`demo-cli.sh`](https://github.com/mccalluc/concertina-helper/blob/main/demo-cli.sh)
-for examples of CLI usage.
+```
+pip install concertina-helper
+concertina-helper --help
+```
 ```
 usage: concertina-helper [-h] [--format {unicode,ascii,long}]
                          (--layout_path PATH | --layout_name {20_cg,30_jefferies_cg,30_wheatstone_cg})
@@ -57,6 +63,9 @@ Cost options:
                         fingerings (default: False)
 ```
 
+See [`demo-cli.sh`](https://github.com/mccalluc/concertina-helper/blob/main/demo-cli.sh)
+for examples of CLI usage.
+
 ## API usage
 
 See [API documentation](https://mccalluc.github.io/concertina-helper) for details.
@@ -64,7 +73,13 @@ See [API documentation](https://mccalluc.github.io/concertina-helper) for detail
 ## Development
 
 See [`demo-api.sh`](https://github.com/mccalluc/concertina-helper/blob/main/demo-cli.sh)
-for for typical developer setup. The demo scripts are also used for CI.
+for typical developer setup. The demo scripts are also used for CI.
+
+To release a new version:
+- Make a feature branch
+- Update `__version__` in `__init__.py`
+- Run `flit publish`
+- Make a PR with the updated version and merge.
 
 ## Related tools
 
@@ -76,4 +91,4 @@ for for typical developer setup. The demo scripts are also used for CI.
 ### Notes and chords
 
 - [Anglo Piano](https://anglopiano.com/): Web page with piano and a variety of concertina layouts. Shows all possible fingerings for notes and chords.
-- [KonzertinaNetz](https://www.konzertinanetz.de/): Auf Deutsch. Includes windows `.exe` for download.
+- [KonzertinaNetz](https://www.konzertinanetz.de/): In German. Includes windows `.exe` for download.

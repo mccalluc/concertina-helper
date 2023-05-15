@@ -9,10 +9,10 @@ readme = "README.md"
 requires-python = "~=3.10"
 license = {file = "LICENSE"}
 classifiers = [
-  "Private :: Do Not Upload",
   "License :: OSI Approved :: MIT License",
 ]
-dynamic = ["version", "description"]
+description = "Script and supporting API to find good fingerings on bisonoric concertinas"
+dynamic = ["version"]
 
 # In general, dependencies should not be pinned to exact versions,
 # but because these are both < v1.0, their interfaces could change
