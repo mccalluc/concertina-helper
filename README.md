@@ -8,8 +8,10 @@ tunes in [ABC notation](https://abcnotation.com/).
 
 ## CLI usage
 
-See [`demo-cli.sh`](https://github.com/mccalluc/concertina-helper/blob/main/demo-cli.sh)
-for examples of CLI usage.
+```
+pip install concertina-helper
+concertina-helper --help
+```
 ```
 usage: concertina-helper [-h] [--format {unicode,ascii,long}]
                          (--layout_path PATH | --layout_name {20_cg,30_jefferies_cg,30_wheatstone_cg})
@@ -61,6 +63,9 @@ Cost options:
                         fingerings (default: False)
 ```
 
+See [`demo-cli.sh`](https://github.com/mccalluc/concertina-helper/blob/main/demo-cli.sh)
+for examples of CLI usage.
+
 ## API usage
 
 See [API documentation](https://mccalluc.github.io/concertina-helper) for details.
@@ -68,7 +73,7 @@ See [API documentation](https://mccalluc.github.io/concertina-helper) for detail
 ## Development
 
 See [`demo-api.sh`](https://github.com/mccalluc/concertina-helper/blob/main/demo-cli.sh)
-for for typical developer setup. The demo scripts are also used for CI.
+for typical developer setup. The demo scripts are also used for CI.
 
 To release a new version:
 - Make a feature branch
