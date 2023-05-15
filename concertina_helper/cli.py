@@ -18,7 +18,7 @@ from .penalties import (
 from .type_defs import Direction, PitchToStr
 
 
-class Format(Enum):
+class _Format(Enum):
     def __init__(
         self,
         doc: str,
@@ -73,9 +73,9 @@ prints possible fingerings.
         'abc_path', type=Path,
         help='Path of ABC file')
     parser.add_argument(
-        '--format', choices=[f.name for f in Format],
-        default=Format.long.name,
-        help='Output format. ' + ' / '.join(f'"{f.name}" {f.doc}' for f in Format))
+        '--format', choices=[f.name for f in _Format],
+        default=_Format.long.name,
+        help='Output format. ' + ' / '.join(f'"{f.name}" {f.doc}' for f in _Format))
 
     layout_group = parser.add_argument_group(
         'Layout options',
@@ -118,7 +118,7 @@ prints possible fingerings.
         penalize_finger_in_same_column(args.finger_in_same_column_cost),
         penalize_pull_at_start_of_measure(args.pull_at_start_of_measure_cost)
     ]
-    format = Format[args.format]
+    format = _Format[args.format]
 
     print_fingerings(
         abc_str, layout,
