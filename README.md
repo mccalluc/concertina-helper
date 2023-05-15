@@ -82,4 +82,4 @@ To release a new version:
 ### Notes and chords
 
 - [Anglo Piano](https://anglopiano.com/): Web page with piano and a variety of concertina layouts. Shows all possible fingerings for notes and chords.
-- [KonzertinaNetz](https://www.konzertinanetz.de/): Auf Deutsch. Includes windows `.exe` for download.
+- [KonzertinaNetz](https://www.konzertinanetz.de/): In German. Includes windows `.exe` for download.
