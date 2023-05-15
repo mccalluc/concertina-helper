@@ -1,6 +1,7 @@
 # concertina-helper
-Python script to find good fingerings on bisonoric concertinas for tunes in
-[ABC notation](https://abcnotation.com/), and a supporting API.
+**concertina_helper** is a python script and supporting API
+to find good fingerings on bisonoric concertinas for
+tunes in [ABC notation](https://abcnotation.com/).
 
 ## CLI usage
 
