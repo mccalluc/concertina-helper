@@ -47,4 +47,4 @@ Functions that encapsulate heuristics about what makes a "good" fingering are in
 `concertina_helper.penalties`, or you can provide your own penalty functions.
 """
 
-__version__ = "0.0.2"
+__version__ = "0.0.3"
