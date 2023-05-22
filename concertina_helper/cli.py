@@ -9,7 +9,7 @@ from pyabc2 import Tune
 from .layouts.layout_loader import (
     list_layout_names, load_bisonoric_layout_by_path, load_bisonoric_layout_by_name)
 from .layouts.bisonoric import BisonoricLayout
-from .tune_on_layout import TuneOnLayout
+from .notes_on_layout import NotesOnLayout
 from .penalties import (
     PenaltyFunction,
     penalize_bellows_change,
@@ -146,7 +146,7 @@ def print_fingerings(
       If empty, all fingerings will be printed.
     '''
     tune = Tune(abc_str)
-    t_l = TuneOnLayout(tune, layout)
+    t_l = NotesOnLayout(tune, layout)
 
     if penalty_functions:
         for annotated_fingering in t_l.get_best_fingerings(penalty_functions):

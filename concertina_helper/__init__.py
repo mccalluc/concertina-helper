@@ -7,18 +7,18 @@ This is the API documentation; For help with the CLI,
 see the [README](https://github.com/mccalluc/concertina-helper#readme).
 
 The CLI is a thin wrapper around
-`concertina_helper.tune_on_layout.TuneOnLayout.get_best_fingerings`:
+`concertina_helper.notes_on_layout.TuneOnLayout.get_best_fingerings`:
 
 >>> from pathlib import Path
 >>> from pyabc2 import Tune
->>> from concertina_helper.tune_on_layout import TuneOnLayout
+>>> from concertina_helper.notes_on_layout import NotesOnLayout
 >>> from concertina_helper.layouts.layout_loader import load_bisonoric_layout_by_name
 >>> from concertina_helper.penalties import (
 ...     penalize_finger_in_same_column, penalize_bellows_change)
 >>> tune = Tune(Path('tests/g-major.abc').read_text())
 >>> layout = load_bisonoric_layout_by_name('30_wheatstone_cg')
->>> t_l = TuneOnLayout(tune, layout)
->>> best = t_l.get_best_fingerings([
+>>> n_l = NotesOnLayout(tune, layout)
+>>> best = n_l.get_best_fingerings([
 ...     penalize_finger_in_same_column(3),
 ...     penalize_bellows_change(2)])
 >>> len(best)

@@ -12,9 +12,9 @@ from pyabc2 import Tune
 
 
 @dataclass
-class TuneOnLayout:
+class NotesOnLayout:
     '''
-    Represents a particular tune on a particular layout
+    Represents a sequence of notes on a particular layout
     '''
     tune: Tune
     layout: BisonoricLayout
