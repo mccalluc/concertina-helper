@@ -4,7 +4,7 @@ from collections.abc import Callable
 from dataclasses import dataclass
 
 from .unisonoric import UnisonoricFingering, UnisonoricLayout
-from ..type_defs import Shape, PitchToStr, Mask, Pitch, Direction
+from ..type_defs import Shape, PitchToStr, Mask, Pitch, Direction, Annotation
 from .base_classes import Layout, Fingering
 
 
@@ -124,12 +124,6 @@ class BisonoricFingering(Fingering):
 
     def get_pitches(self) -> set[Pitch]:
         return self._fingering.get_pitches()
-
-
-@dataclass(frozen=True, kw_only=True)
-class Annotation:
-    pitch: Pitch
-    measure: int
 
 
 @dataclass(frozen=True, kw_only=True)

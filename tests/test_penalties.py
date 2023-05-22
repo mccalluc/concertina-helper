@@ -3,14 +3,14 @@ from collections.abc import Iterable
 from concertina_helper.layouts.bisonoric import (
     AnnotatedBisonoricFingering,
     BisonoricFingering,
-    UnisonoricFingering,
-    Annotation)
+    UnisonoricFingering)
 from concertina_helper.type_defs import Mask, Pitch, Direction
 from concertina_helper.layouts.layout_loader import (
     load_bisonoric_layout_by_name)
 from concertina_helper.penalties import (
     penalize_bellows_change, penalize_finger_in_same_column,
     penalize_pull_at_start_of_measure, _find_columns_used)
+from concertina_helper.type_defs import Annotation
 
 
 layout = load_bisonoric_layout_by_name('30_wheatstone_cg')

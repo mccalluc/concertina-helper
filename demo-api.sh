@@ -4,7 +4,7 @@ set -o errexit
 die() { set +v; echo "$*" 1>&2 ; exit 1; }
 
 pip install -r requirements.txt
-pip install -r requirements-dev.txt 
+pip install -r requirements-dev.txt
 
 pytest --verbose --doctest-modules \
        --cov=. --cov-fail-under=100 --cov-branch \
