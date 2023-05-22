@@ -42,6 +42,9 @@ with each possible fingering for a given note a node in that graph. It then uses
 (wrapped in `concertina_helper.finger_finder`)
 to find the best path through this graph.
 
+Utilities to load ABC tunes and plain lists of pitches
+are in `concertina_helper.note_generators`.
+
 Classes representing uni- and bisonoric layouts, fingerings on those layouts,
 and utilities to create layouts, are in `concertina_helper.layouts`.
 
