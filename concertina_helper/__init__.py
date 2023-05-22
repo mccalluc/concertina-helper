@@ -12,12 +12,14 @@ The CLI is a thin wrapper around
 >>> from pathlib import Path
 >>> from pyabc2 import Tune
 >>> from concertina_helper.notes_on_layout import NotesOnLayout
+>>> from concertina_helper.note_generators import notes_from_tune
 >>> from concertina_helper.layouts.layout_loader import load_bisonoric_layout_by_name
 >>> from concertina_helper.penalties import (
 ...     penalize_finger_in_same_column, penalize_bellows_change)
 >>> tune = Tune(Path('tests/g-major.abc').read_text())
+>>> notes = notes_from_tune(tune)
 >>> layout = load_bisonoric_layout_by_name('30_wheatstone_cg')
->>> n_l = NotesOnLayout(tune, layout)
+>>> n_l = NotesOnLayout(notes, layout)
 >>> best = n_l.get_best_fingerings([
 ...     penalize_finger_in_same_column(3),
 ...     penalize_bellows_change(2)])

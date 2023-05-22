@@ -14,7 +14,7 @@ def find_best_fingerings(
     '''
     Given a list of sets of possible fingerings,
     returns a list representing the best fingerings.
-    See `concertina_helper.tune_on_layout.TuneOnLayout.get_best_fingerings`
+    See `concertina_helper.notes_on_layout.NotesOnLayout.get_best_fingerings`
     for a convenience method that wraps this.
     '''
     finder = _FingerFinder(all_fingerings, penalty_functions)

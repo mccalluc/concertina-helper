@@ -10,6 +10,7 @@ from .layouts.layout_loader import (
     list_layout_names, load_bisonoric_layout_by_path, load_bisonoric_layout_by_name)
 from .layouts.bisonoric import BisonoricLayout
 from .notes_on_layout import NotesOnLayout
+from .note_generators import notes_from_tune
 from .penalties import (
     PenaltyFunction,
     penalize_bellows_change,
@@ -146,7 +147,7 @@ def print_fingerings(
       If empty, all fingerings will be printed.
     '''
     tune = Tune(abc_str)
-    t_l = NotesOnLayout(tune, layout)
+    t_l = NotesOnLayout(notes_from_tune(tune), layout)
 
     if penalty_functions:
         for annotated_fingering in t_l.get_best_fingerings(penalty_functions):

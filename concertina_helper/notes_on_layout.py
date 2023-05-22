@@ -16,7 +16,7 @@ class NotesOnLayout:
     '''
     Represents a sequence of notes on a particular layout
     '''
-    tune: Tune
+    notes: Iterable[Annotation]
     layout: BisonoricLayout
 
     def get_all_fingerings(self) -> \
@@ -34,7 +34,7 @@ class NotesOnLayout:
                     for f in self.layout.get_fingerings(annotation.pitch)
                 }
             )
-            for annotation in notes_from_tune(self.tune)
+            for annotation in self.notes
         ]
 
     def get_best_fingerings(self, penalty_functions: Iterable[PenaltyFunction]) \
