@@ -126,3 +126,9 @@ class Direction(Enum):
 
     def __repr__(self) -> str:
         return f'Direction.{self.name}'
+
+
+@dataclass(frozen=True, kw_only=True)
+class Annotation:
+    pitch: Pitch
+    measure: int
