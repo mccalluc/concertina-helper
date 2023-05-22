@@ -1,13 +1,13 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
-from collections.abc import Generator, Iterable
+from collections.abc import Iterable
 
 from pyabc2 import Tune
 
 from .type_defs import Annotation, Pitch
 
 
-def notes_from_tune(tune: Tune) -> Generator[Annotation]:
+def notes_from_tune(tune: Tune) -> Iterable[Annotation]:
     for i, measure in enumerate(tune.measures):
         for note in measure:
             yield Annotation(
@@ -16,10 +16,9 @@ def notes_from_tune(tune: Tune) -> Generator[Annotation]:
             )
 
 
-def notes_from_pitches(pitch_names: Iterable[str]) -> Generator[Annotation]:
-    measure = 1
+def notes_from_pitches(pitch_names: Iterable[str]) -> Iterable[Annotation]:
     for name in pitch_names:
         yield Annotation(
-            measure=measure,
+            measure=1,
             pitch=Pitch(name.strip())
         )
