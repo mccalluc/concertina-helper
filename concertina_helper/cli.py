@@ -19,7 +19,27 @@ from .penalties import (
 from .type_defs import Direction, PitchToStr, Annotation
 
 
-class _Format(Enum):
+# Enums are usually all caps, but using lower-case
+
+class _InputFormat(Enum):
+    def __init__(
+        self,
+        doc: str,
+        parse_f: Callable[[str], Iterable[Annotation]]
+    ):
+        self.doc = doc
+        self.parse_f = parse_f
+    ABC = (
+        'parses the input as an ABC file',
+        lambda text: notes_from_tune(Tune(text))
+    )
+    TXT = (
+        'parses the input as a sequence of scientific pitch names, one per line',
+        lambda text: notes_from_pitches(text.split('\n'))
+    )
+
+
+class _OutputFormat(Enum):
     def __init__(
         self,
         doc: str,
@@ -31,8 +51,7 @@ class _Format(Enum):
         self.button_down_f = button_down_f
         self.button_up_f = button_up_f
         self.direction_f = direction_f
-    # Enums are usually all caps, but these will come from the user.
-    unicode = (
+    UNICODE = (
         'uses "○" and "●" to represent button state',
         lambda pitch: '● ',
         lambda pitch: '○ ',
@@ -41,18 +60,22 @@ class _Format(Enum):
             if direction == Direction.PUSH
             else f'<- {direction.name} ->')
     )
-    ascii = (
+    ASCII = (
         'uses "." and "@" to represent button state',
         lambda pitch: '@',
         lambda pitch: '.',
         lambda direction: direction.name
     )
-    long = (
+    LONG = (
         'spells out the names of pressed buttons',
         lambda pitch: str(pitch).ljust(4),
         lambda pitch: '--- ',
         lambda direction: direction.name
     )
+
+
+def _format_enum(enum: Iterable) -> str:
+    return ' / '.join(f'"{opt.name}" {opt.doc}' for opt in enum)  # type: ignore
 
 
 def _parse_and_print_fingerings() -> None:
@@ -72,12 +95,15 @@ prints possible fingerings.
 ''')
     parser.add_argument(
         'input', type=Path,
-        help='Input file: If extension is ".abc", interpretted as ABC; '
-        'if ".txt", as a sequence of scientific pitch names, one per line')
+        help='Input file: Parsing determined by the "--input" flag')
     parser.add_argument(
-        '--format', choices=[f.name for f in _Format],
-        default=_Format.long.name,
-        help='Output format. ' + ' / '.join(f'"{f.name}" {f.doc}' for f in _Format))
+        '--input_format', choices=[f.name for f in _InputFormat],
+        default=_InputFormat.TXT.name,
+        help='Input format. ' + _format_enum(_InputFormat))
+    parser.add_argument(
+        '--output_format', choices=[f.name for f in _OutputFormat],
+        default=_OutputFormat.LONG.name,
+        help='Output format. ' + _format_enum(_OutputFormat))
 
     layout_group = parser.add_argument_group(
         'Layout options',
@@ -109,15 +135,8 @@ prints possible fingerings.
 
     args = parser.parse_args()
 
-    input_suffix = args.input.suffix
     input_text = args.input.read_text()
-    if input_suffix == '.abc':
-        notes = notes_from_tune(Tune(input_text))
-    elif input_suffix == '.txt':
-        notes = notes_from_pitches(input_text.split('\n'))
-    else:
-        parser.print_help()
-        raise SystemExit
+    notes = _InputFormat[args.input_format].parse_f(input_text)
 
     layout = (
         load_bisonoric_layout_by_path(args.layout_path)
@@ -130,13 +149,13 @@ prints possible fingerings.
         penalize_finger_in_same_column(args.finger_in_same_column_cost),
         penalize_pull_at_start_of_measure(args.pull_at_start_of_measure_cost)
     ]
-    format = _Format[args.format]
+    output_format = _OutputFormat[args.output_format]
 
     print_fingerings(
         notes, layout,
-        button_down_f=format.button_down_f,
-        button_up_f=format.button_up_f,
-        direction_f=format.direction_f,
+        button_down_f=output_format.button_down_f,
+        button_up_f=output_format.button_up_f,
+        direction_f=output_format.direction_f,
         penalty_functions=penalty_functions)
 
 

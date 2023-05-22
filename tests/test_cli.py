@@ -32,7 +32,7 @@ def test_cli_missing_layout(capsys):   # pragma: no cover
 
 def test_cli_default_render(capsys):
     with patch('argparse._sys.argv',
-               ['concertina-helper', str(Path(__file__).parent / 'g-major.abc'),
+               ['concertina-helper', str(Path(__file__).parent / 'g-major.txt'),
                 '--layout_name', '30_wheatstone_cg']):
         _parse_and_print_fingerings()
     captured = capsys.readouterr().out
@@ -42,8 +42,8 @@ def test_cli_default_render(capsys):
 
 def test_cli_ascii_render(capsys):
     with patch('argparse._sys.argv',
-               ['concertina-helper', str(Path(__file__).parent / 'g-major.abc'),
-                '--layout_name', '30_wheatstone_cg', '--format', 'ascii']):
+               ['concertina-helper', str(Path(__file__).parent / 'g-major.txt'),
+                '--layout_name', '30_wheatstone_cg', '--output_format', 'ASCII']):
         _parse_and_print_fingerings()
     captured = capsys.readouterr().out
     assert 'Measure 1' in captured
@@ -52,8 +52,8 @@ def test_cli_ascii_render(capsys):
 
 def test_cli_unicode_render(capsys):
     with patch('argparse._sys.argv',
-               ['concertina-helper', str(Path(__file__).parent / 'g-major.abc'),
-                '--layout_name', '30_wheatstone_cg', '--format', 'unicode']):
+               ['concertina-helper', str(Path(__file__).parent / 'g-major.txt'),
+                '--layout_name', '30_wheatstone_cg', '--output_format', 'UNICODE']):
         _parse_and_print_fingerings()
     captured = capsys.readouterr().out
     assert 'Measure 1' in captured
