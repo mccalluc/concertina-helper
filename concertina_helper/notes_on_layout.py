@@ -5,10 +5,7 @@ from collections.abc import Iterable
 from .layouts.bisonoric import BisonoricLayout, AnnotatedBisonoricFingering
 from .finger_finder import find_best_fingerings
 from .penalties import PenaltyFunction
-from .type_defs import Annotation, Pitch
-from .note_generators import notes_from_tune
-
-from pyabc2 import Tune
+from .type_defs import Annotation
 
 
 @dataclass
