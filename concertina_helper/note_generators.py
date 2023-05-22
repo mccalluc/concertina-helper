@@ -15,9 +15,9 @@ def notes_from_tune(tune: Tune) -> Iterable[Annotation]:
             )
 
 
-# def notes_from_pitches(pitch_names: Iterable[str]) -> Iterable[Annotation]:
-#     for name in pitch_names:
-#         yield Annotation(
-#             measure=1,
-#             pitch=Pitch(name.strip())
-#         )
+def notes_from_pitches(pitch_names: Iterable[str]) -> Iterable[Annotation]:
+    for name in pitch_names:
+        yield Annotation(
+            measure=1,
+            pitch=Pitch(name.strip())
+        )
