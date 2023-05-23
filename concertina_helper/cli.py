@@ -171,7 +171,7 @@ def print_fingerings(
     layout: BisonoricLayout,
     button_down_f: PitchToStr | None = lambda _: '@',
     button_up_f: PitchToStr | None = lambda _: '.',
-    direction_f: Callable[[Direction], str] | None= lambda direction: direction.name,
+    direction_f: Callable[[Direction], str] | None = lambda direction: direction.name,
     penalty_functions: Iterable[PenaltyFunction] = []
 ) -> None:
     '''
@@ -187,7 +187,7 @@ def print_fingerings(
 
     if penalty_functions:
         best = n_l.get_best_fingerings(penalty_functions)
-        if direction_f == None:
+        if direction_f is None:
             # TODO: split on measures?
             print(condense(best))
         else:
@@ -201,7 +201,7 @@ def print_fingerings(
                     button_up_f=button_up_f,
                     direction_f=direction_f))
     else:
-        if direction_f == None:
+        if direction_f is None:
             raise ValueError('Display functions required to show all fingerings')
         assert (
             button_down_f is not None

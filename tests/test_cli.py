@@ -82,7 +82,8 @@ def test_cli_compact_render_too_long_error():
                 '--output_format', 'COMPACT',
                 '--input_format', 'ABC']):
         with pytest.raises(
-                ValueError, match=r'Length of fingerings \(393\) greater than allowed \(20\)'):
+                ValueError,
+                match=r'Length of fingerings \(393\) greater than allowed \(20\)'):
             _parse_and_print_fingerings()
 
 

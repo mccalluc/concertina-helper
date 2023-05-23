@@ -4,13 +4,14 @@ from collections.abc import Iterable
 from .layouts.bisonoric import AnnotatedBisonoricFingering
 from .type_defs import Direction
 
+
 def condense(fingerings: Iterable[AnnotatedBisonoricFingering]) -> str:
     '''
     Given a sequence of fingerings,
     returns a compact, tab delimitted string representation
     of the entire sequence, up to 20 fingerings.
 
-    Buttons to hit while pushing are represented like this: 
+    Buttons to hit while pushing are represented like this:
     > ➀➁➂
 
     while buttons for the pull are represented:
