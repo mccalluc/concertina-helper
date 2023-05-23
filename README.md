@@ -71,7 +71,7 @@ Cost options:
                         fingerings (default: False)
 ```
 
-See [`demo-cli.sh`](https://github.com/mccalluc/concertina-helper/blob/main/demo-cli.sh)
+See [`EXAMPLES.md`](https://github.com/mccalluc/concertina-helper/blob/main/EXAMPLES.md)
 for examples of CLI usage.
 
 ## API usage
