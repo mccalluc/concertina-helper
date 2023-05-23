@@ -191,12 +191,22 @@ def print_fingerings(
             # TODO: split on measures?
             print(condense(best))
         else:
+            assert (
+                button_down_f is not None
+                and button_up_f is not None
+                and direction_f is not None), 'Either set all or none'
             for annotated_fingering in best:
                 print(annotated_fingering.format(
                     button_down_f=button_down_f,
                     button_up_f=button_up_f,
                     direction_f=direction_f))
     else:
+        if direction_f == None:
+            raise ValueError('Display functions required to show all fingerings')
+        assert (
+            button_down_f is not None
+            and button_up_f is not None
+            and direction_f is not None), 'Either set all or none'
         for annotation, annotated_fingering_set in n_l.get_all_fingerings():
             if not annotated_fingering_set:
                 a = annotation

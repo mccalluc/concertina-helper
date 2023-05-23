@@ -44,10 +44,10 @@ def condense(fingerings: Iterable[AnnotatedBisonoricFingering]) -> str:
     lines = []
     for left_row, right_row in zip(left, right):
         line = []
-        for button in left_row:
-            line.append(button or '.')
+        for finger_string in left_row:
+            line.append(finger_string or '.')
         line.append(' ')
-        for button in right_row:
-            line.append(button or '.')
+        for finger_string in right_row:
+            line.append(finger_string or '.')
         lines.append(' '.join(line))
     return '\n'.join(lines)
