@@ -9,7 +9,8 @@ pip install -r requirements-dev.txt
 pytest --verbose --doctest-modules \
        --cov=. --cov-fail-under=100 --cov-branch \
        --cov-report=html --cov-report=term-missing \
-       --no-cov-on-fail
+       --no-cov-on-fail \
+       --doctest-glob=EXAMPLES.md
 
 mypy concertina_helper --disallow-untyped-defs
 mypy tests
