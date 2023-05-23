@@ -23,7 +23,7 @@ so that they can be tested the same way as other python code.
 Only two arguments are required: An input file, and a layout:
 
 ```
->>> shell('cat tests/g-major.txt | tail')
+>>> shell('cat tests/g-major.txt')
 G4
 A4
 B4
