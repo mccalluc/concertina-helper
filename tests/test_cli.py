@@ -56,8 +56,7 @@ def test_cli_unicode_render(capsys):
     with patch('argparse._sys.argv',
                ['concertina-helper', str(Path(__file__).parent / 'g-major.abc'),
                 '--layout_name', '30_wheatstone_cg',
-                '--output_format', 'UNICODE',
-                '--input_format', 'ABC']):
+                '--output_format', 'UNICODE']):
         _parse_and_print_fingerings()
     captured = capsys.readouterr().out
     assert 'Measure 1' in captured
@@ -68,8 +67,7 @@ def test_cli_compact_render(capsys):
     with patch('argparse._sys.argv',
                ['concertina-helper', str(Path(__file__).parent / 'g-major.abc'),
                 '--layout_name', '30_wheatstone_cg',
-                '--output_format', 'COMPACT',
-                '--input_format', 'ABC']):
+                '--output_format', 'COMPACT']):
         _parse_and_print_fingerings()
     captured = capsys.readouterr().out
     assert '➃ ➅ ➇ . .' in captured
@@ -79,8 +77,7 @@ def test_cli_compact_render_too_long_error():
     with patch('argparse._sys.argv',
                ['concertina-helper', str(Path(__file__).parent / 'amelia-chords.abc'),
                 '--layout_name', '30_wheatstone_cg',
-                '--output_format', 'COMPACT',
-                '--input_format', 'ABC']):
+                '--output_format', 'COMPACT']):
         with pytest.raises(
                 ValueError,
                 match=r'Length of fingerings \(393\) greater than allowed \(20\)'):
@@ -92,7 +89,6 @@ def test_cli_compact_render_show_all_error():
                ['concertina-helper', str(Path(__file__).parent / 'amelia-chords.abc'),
                 '--layout_name', '30_wheatstone_cg',
                 '--output_format', 'COMPACT',
-                '--input_format', 'ABC',
                 '--show_all']):
         with pytest.raises(
                 ValueError, match=r'Display functions required to show all fingerings'):

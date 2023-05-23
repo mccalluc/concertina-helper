@@ -18,7 +18,7 @@ Just remove the wrapping `shell('...')` to use in BASH or another shell.
 Only two arguments are required: An input file, and a layout:
 
 ```
->>> shell('concertina-helper tests/g-major.abc --layout_name 30_wheatstone_cg --input_format ABC | tail')
+>>> shell('concertina-helper tests/g-major.abc --layout_name 30_wheatstone_cg | tail')
 Measure 2 - F#5
 PULL:
 --- --- --- --- ---    --- --- --- --- ---

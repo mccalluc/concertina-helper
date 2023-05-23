@@ -21,26 +21,6 @@ from .type_defs import Direction, PitchToStr, Annotation
 from .output_utils import condense
 
 
-# Enums are usually all caps, but using lower-case
-
-class _InputFormat(Enum):
-    def __init__(
-        self,
-        doc: str,
-        parse_f: Callable[[str], Iterable[Annotation]]
-    ):
-        self.doc = doc
-        self.parse_f = parse_f
-    ABC = (
-        'parses the input as an ABC file',
-        lambda text: notes_from_tune(Tune(text))
-    )
-    TXT = (
-        'parses the input as a sequence of scientific pitch names, one per line',
-        lambda text: notes_from_pitches(text.split('\n'))
-    )
-
-
 class _OutputFormat(Enum):
     def __init__(
         self,
@@ -98,14 +78,10 @@ Given a file containing ABC notation,
 and a concertina type,
 prints possible fingerings.
 ''')
-    input_flag = '--input_format'
     parser.add_argument(
         'input', type=Path,
-        help=f'Input file: Parsing determined by the "{input_flag}" flag')
-    parser.add_argument(
-        input_flag, choices=[f.name for f in _InputFormat],
-        default=_InputFormat.TXT.name,
-        help='Input format. ' + _format_enum(_InputFormat))
+        help='Input file: Parsed either as a list of pitches, one per line, '
+        'or as ABC, if the first lines starts with "X:".')
     parser.add_argument(
         '--output_format', choices=[f.name for f in _OutputFormat],
         default=_OutputFormat.LONG.name,
@@ -142,7 +118,11 @@ prints possible fingerings.
     args = parser.parse_args()
 
     input_text = args.input.read_text()
-    notes = _InputFormat[args.input_format].parse_f(input_text)
+    notes = (
+        notes_from_tune(Tune(input_text))
+        if input_text.startswith('X:') else
+        notes_from_pitches(input_text.split('\n'))
+    )
 
     layout = (
         load_bisonoric_layout_by_path(args.layout_path)
