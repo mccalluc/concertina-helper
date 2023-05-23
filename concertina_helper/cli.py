@@ -18,6 +18,7 @@ from .penalties import (
     penalize_pull_at_start_of_measure,
     penalize_outer_fingers)
 from .type_defs import Direction, PitchToStr, Annotation
+from .output_utils import condense
 
 
 # Enums are usually all caps, but using lower-case
@@ -44,9 +45,9 @@ class _OutputFormat(Enum):
     def __init__(
         self,
         doc: str,
-        button_down_f: PitchToStr,
-        button_up_f: PitchToStr,
-        direction_f: Callable[[Direction], str]
+        button_down_f: PitchToStr | None = None,
+        button_up_f: PitchToStr | None = None,
+        direction_f: Callable[[Direction], str] | None = None
     ):
         self.doc = doc
         self.button_down_f = button_down_f
@@ -72,6 +73,9 @@ class _OutputFormat(Enum):
         lambda pitch: str(pitch).ljust(4),
         lambda pitch: '--- ',
         lambda direction: direction.name
+    )
+    COMPACT = (
+        'multiple fingerings represented in single grid'
     )
 
 
@@ -164,9 +168,9 @@ prints possible fingerings.
 def print_fingerings(
     notes: Iterable[Annotation],
     layout: BisonoricLayout,
-    button_down_f: PitchToStr = lambda _: '@',
-    button_up_f: PitchToStr = lambda _: '.',
-    direction_f: Callable[[Direction], str] = lambda direction: direction.name,
+    button_down_f: PitchToStr | None = lambda _: '@',
+    button_up_f: PitchToStr | None = lambda _: '.',
+    direction_f: Callable[[Direction], str] | None= lambda direction: direction.name,
     penalty_functions: Iterable[PenaltyFunction] = []
 ) -> None:
     '''
@@ -181,11 +185,16 @@ def print_fingerings(
     n_l = NotesOnLayout(notes, layout)
 
     if penalty_functions:
-        for annotated_fingering in n_l.get_best_fingerings(penalty_functions):
-            print(annotated_fingering.format(
-                button_down_f=button_down_f,
-                button_up_f=button_up_f,
-                direction_f=direction_f))
+        best = n_l.get_best_fingerings(penalty_functions)
+        if direction_f == None:
+            # TODO: split on measures?
+            print(condense(best))
+        else:
+            for annotated_fingering in best:
+                print(annotated_fingering.format(
+                    button_down_f=button_down_f,
+                    button_up_f=button_up_f,
+                    direction_f=direction_f))
     else:
         for annotation, annotated_fingering_set in n_l.get_all_fingerings():
             if not annotated_fingering_set:

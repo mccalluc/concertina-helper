@@ -19,7 +19,8 @@ usage: concertina-helper [-h] [--input_format {ABC,TXT}]
                          [--layout_transpose SEMITONES]
                          [--bellows_change_cost N]
                          [--finger_in_same_column_cost N]
-                         [--pull_at_start_of_measure_cost N] [--show_all]
+                         [--pull_at_start_of_measure_cost N]
+                         [--outer_fingers_cost N] [--show_all]
                          input
 
 Given a file containing ABC notation, and a concertina type, prints possible
@@ -63,6 +64,10 @@ Cost options:
   --pull_at_start_of_measure_cost N
                         Penalize fingerings where a pull begins a measure;
                         Hitting the downbeat with a push can be more musical.
+                        (default: 1)
+  --outer_fingers_cost N
+                        Penalize fingerings that use outer fingers of either
+                        hand instead of inner. This is useful as a tiebreaker.
                         (default: 1)
   --show_all            Ignore cost options and just show all possible
                         fingerings (default: False)
