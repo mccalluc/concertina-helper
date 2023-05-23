@@ -15,7 +15,8 @@ from .penalties import (
     PenaltyFunction,
     penalize_bellows_change,
     penalize_finger_in_same_column,
-    penalize_pull_at_start_of_measure)
+    penalize_pull_at_start_of_measure,
+    penalize_outer_fingers)
 from .type_defs import Direction, PitchToStr, Annotation
 
 
@@ -147,7 +148,8 @@ prints possible fingerings.
     penalty_functions = [] if args.show_all else [
         penalize_bellows_change(args.bellows_change_cost),
         penalize_finger_in_same_column(args.finger_in_same_column_cost),
-        penalize_pull_at_start_of_measure(args.pull_at_start_of_measure_cost)
+        penalize_pull_at_start_of_measure(args.pull_at_start_of_measure_cost),
+        penalize_outer_fingers(args.outer_fingers_cost)
     ]
     output_format = _OutputFormat[args.output_format]
 

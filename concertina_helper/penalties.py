@@ -42,6 +42,18 @@ def penalize_finger_in_same_column(cost: float) -> PenaltyFunction:
     return calculate
 
 
+def penalize_outer_fingers(cost: float) -> PenaltyFunction:
+    '''
+    Penalize fingerings that use outer fingers of either hand instead of inner.
+    This is useful as a tiebreaker.
+    '''
+    def calculate(
+            f1: AnnotatedBisonoricFingering,
+            f2: AnnotatedBisonoricFingering) -> float:
+        return cost * sum(1 / abs(i) for i in _find_columns_used(f2.fingering))
+    return calculate
+
+
 def penalize_pull_at_start_of_measure(cost: float) -> PenaltyFunction:
     '''
     Penalize fingerings where a pull begins a measure;
@@ -54,13 +66,23 @@ def penalize_pull_at_start_of_measure(cost: float) -> PenaltyFunction:
 
 
 def _find_columns_used(fingering: BisonoricFingering) -> set[int]:
+    '''
+    Returns a set of integers representing the buttons used.
+    - On the left: 1 2 3 4 5
+    - On the right: -5 -4 -3 -2 -1
+
+    Taking the inverse of the absolute value gives us a number
+    which is small for the inner fingers, but larger for the pinkies.
+
+    This is used in `penalize_outer_fingers`.
+    '''
     used = set()
     for row in fingering.left_mask:
         for i, button in enumerate(reversed(row)):
             if button:
-                used.add(-(i+1))
+                used.add(i+1)
     for row in fingering.right_mask:
         for i, button in enumerate(row):
             if button:
-                used.add(i+1)
+                used.add(-(i+1))
     return used

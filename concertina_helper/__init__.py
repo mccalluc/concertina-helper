@@ -15,14 +15,16 @@ The CLI is a thin wrapper around
 >>> from concertina_helper.note_generators import notes_from_tune
 >>> from concertina_helper.layouts.layout_loader import load_bisonoric_layout_by_name
 >>> from concertina_helper.penalties import (
-...     penalize_finger_in_same_column, penalize_bellows_change)
+...     penalize_finger_in_same_column, penalize_bellows_change, penalize_outer_fingers)
 >>> tune = Tune(Path('tests/g-major.abc').read_text())
 >>> notes = notes_from_tune(tune)
 >>> layout = load_bisonoric_layout_by_name('30_wheatstone_cg')
 >>> n_l = NotesOnLayout(notes, layout)
 >>> best = n_l.get_best_fingerings([
 ...     penalize_finger_in_same_column(3),
-...     penalize_bellows_change(2)])
+...     penalize_bellows_change(2),
+...     penalize_outer_fingers(1)
+... ])
 >>> len(best)
 8
 >>> print(best[0].fingering)
@@ -38,8 +40,8 @@ PULL:
 >>> from concertina_helper.output_utils import condense
 >>> print(condense(best))
 . . . ➊ .   . ➑ . . .
-. . . . ➋   ➌ ➎ . . .
-. . . ➍ ➏   ➐ . . . .
+. . . . .   ➌ ➎ . . .
+. . ➋ ➍ ➏   ➐ . . . .
 
 **concertina_helper** models a tune as a graph,
 with each possible fingering for a given note a node in that graph. It then uses an
