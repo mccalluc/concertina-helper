@@ -14,19 +14,21 @@ concertina-helper --help
 ```
 ```
 usage: concertina-helper [-h] [--input_format {ABC,TXT}]
-                         [--output_format {UNICODE,ASCII,LONG}]
+                         [--output_format {UNICODE,ASCII,LONG,COMPACT}]
                          (--layout_path PATH | --layout_name {20_cg,30_jefferies_cg,30_wheatstone_cg})
                          [--layout_transpose SEMITONES]
                          [--bellows_change_cost N]
                          [--finger_in_same_column_cost N]
-                         [--pull_at_start_of_measure_cost N] [--show_all]
+                         [--pull_at_start_of_measure_cost N]
+                         [--outer_fingers_cost N] [--show_all]
                          input
 
 Given a file containing ABC notation, and a concertina type, prints possible
 fingerings.
 
 positional arguments:
-  input                 Input file: Parsing determined by the "--input" flag
+  input                 Input file: Parsing determined by the "--input_format"
+                        flag
 
 options:
   -h, --help            show this help message and exit
@@ -34,11 +36,12 @@ options:
                         Input format. "ABC" parses the input as an ABC file /
                         "TXT" parses the input as a sequence of scientific
                         pitch names, one per line (default: TXT)
-  --output_format {UNICODE,ASCII,LONG}
+  --output_format {UNICODE,ASCII,LONG,COMPACT}
                         Output format. "UNICODE" uses "○" and "●" to represent
                         button state / "ASCII" uses "." and "@" to represent
                         button state / "LONG" spells out the names of pressed
-                        buttons (default: LONG)
+                        buttons / "COMPACT" multiple fingerings represented in
+                        single grid (default: LONG)
 
 Layout options:
   Supply your own layout, or use a predefined one, optionally transposed
@@ -63,6 +66,10 @@ Cost options:
   --pull_at_start_of_measure_cost N
                         Penalize fingerings where a pull begins a measure;
                         Hitting the downbeat with a push can be more musical.
+                        (default: 1)
+  --outer_fingers_cost N
+                        Penalize fingerings that use outer fingers of either
+                        hand instead of inner. This is useful as a tiebreaker.
                         (default: 1)
   --show_all            Ignore cost options and just show all possible
                         fingerings (default: False)

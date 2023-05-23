@@ -64,6 +64,41 @@ def test_cli_unicode_render(capsys):
     assert '○ ○ ○ ○ ○' in captured
 
 
+def test_cli_compact_render(capsys):
+    with patch('argparse._sys.argv',
+               ['concertina-helper', str(Path(__file__).parent / 'g-major.abc'),
+                '--layout_name', '30_wheatstone_cg',
+                '--output_format', 'COMPACT',
+                '--input_format', 'ABC']):
+        _parse_and_print_fingerings()
+    captured = capsys.readouterr().out
+    assert '➃ ➅ ➇ . .' in captured
+
+
+def test_cli_compact_render_too_long_error():
+    with patch('argparse._sys.argv',
+               ['concertina-helper', str(Path(__file__).parent / 'amelia-chords.abc'),
+                '--layout_name', '30_wheatstone_cg',
+                '--output_format', 'COMPACT',
+                '--input_format', 'ABC']):
+        with pytest.raises(
+                ValueError,
+                match=r'Length of fingerings \(393\) greater than allowed \(20\)'):
+            _parse_and_print_fingerings()
+
+
+def test_cli_compact_render_show_all_error():
+    with patch('argparse._sys.argv',
+               ['concertina-helper', str(Path(__file__).parent / 'amelia-chords.abc'),
+                '--layout_name', '30_wheatstone_cg',
+                '--output_format', 'COMPACT',
+                '--input_format', 'ABC',
+                '--show_all']):
+        with pytest.raises(
+                ValueError, match=r'Display functions required to show all fingerings'):
+            _parse_and_print_fingerings()
+
+
 # Since this is reused between tests,
 # save it into a list to avoid side-effects.
 notes = list(notes_from_pitches(['G4', 'A4', 'B4', 'C5', 'D5', 'E5', 'F#5', 'G5']))

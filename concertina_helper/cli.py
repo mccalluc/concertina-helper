@@ -15,8 +15,10 @@ from .penalties import (
     PenaltyFunction,
     penalize_bellows_change,
     penalize_finger_in_same_column,
-    penalize_pull_at_start_of_measure)
+    penalize_pull_at_start_of_measure,
+    penalize_outer_fingers)
 from .type_defs import Direction, PitchToStr, Annotation
+from .output_utils import condense
 
 
 # Enums are usually all caps, but using lower-case
@@ -43,9 +45,9 @@ class _OutputFormat(Enum):
     def __init__(
         self,
         doc: str,
-        button_down_f: PitchToStr,
-        button_up_f: PitchToStr,
-        direction_f: Callable[[Direction], str]
+        button_down_f: PitchToStr | None = None,
+        button_up_f: PitchToStr | None = None,
+        direction_f: Callable[[Direction], str] | None = None
     ):
         self.doc = doc
         self.button_down_f = button_down_f
@@ -72,6 +74,9 @@ class _OutputFormat(Enum):
         lambda pitch: '--- ',
         lambda direction: direction.name
     )
+    COMPACT = (
+        'multiple fingerings represented in single grid'
+    )
 
 
 def _format_enum(enum: Iterable) -> str:
@@ -93,11 +98,12 @@ Given a file containing ABC notation,
 and a concertina type,
 prints possible fingerings.
 ''')
+    input_flag = '--input_format'
     parser.add_argument(
         'input', type=Path,
-        help='Input file: Parsing determined by the "--input" flag')
+        help=f'Input file: Parsing determined by the "{input_flag}" flag')
     parser.add_argument(
-        '--input_format', choices=[f.name for f in _InputFormat],
+        input_flag, choices=[f.name for f in _InputFormat],
         default=_InputFormat.TXT.name,
         help='Input format. ' + _format_enum(_InputFormat))
     parser.add_argument(
@@ -147,7 +153,8 @@ prints possible fingerings.
     penalty_functions = [] if args.show_all else [
         penalize_bellows_change(args.bellows_change_cost),
         penalize_finger_in_same_column(args.finger_in_same_column_cost),
-        penalize_pull_at_start_of_measure(args.pull_at_start_of_measure_cost)
+        penalize_pull_at_start_of_measure(args.pull_at_start_of_measure_cost),
+        penalize_outer_fingers(args.outer_fingers_cost)
     ]
     output_format = _OutputFormat[args.output_format]
 
@@ -162,9 +169,9 @@ prints possible fingerings.
 def print_fingerings(
     notes: Iterable[Annotation],
     layout: BisonoricLayout,
-    button_down_f: PitchToStr = lambda _: '@',
-    button_up_f: PitchToStr = lambda _: '.',
-    direction_f: Callable[[Direction], str] = lambda direction: direction.name,
+    button_down_f: PitchToStr | None = lambda _: '@',
+    button_up_f: PitchToStr | None = lambda _: '.',
+    direction_f: Callable[[Direction], str] | None = lambda direction: direction.name,
     penalty_functions: Iterable[PenaltyFunction] = []
 ) -> None:
     '''
@@ -179,12 +186,27 @@ def print_fingerings(
     n_l = NotesOnLayout(notes, layout)
 
     if penalty_functions:
-        for annotated_fingering in n_l.get_best_fingerings(penalty_functions):
-            print(annotated_fingering.format(
-                button_down_f=button_down_f,
-                button_up_f=button_up_f,
-                direction_f=direction_f))
+        best = n_l.get_best_fingerings(penalty_functions)
+        if direction_f is None:
+            # TODO: split on measures?
+            print(condense(best))
+        else:
+            assert (
+                button_down_f is not None
+                and button_up_f is not None
+                and direction_f is not None), 'Either set all or none'
+            for annotated_fingering in best:
+                print(annotated_fingering.format(
+                    button_down_f=button_down_f,
+                    button_up_f=button_up_f,
+                    direction_f=direction_f))
     else:
+        if direction_f is None:
+            raise ValueError('Display functions required to show all fingerings')
+        assert (
+            button_down_f is not None
+            and button_up_f is not None
+            and direction_f is not None), 'Either set all or none'
         for annotation, annotated_fingering_set in n_l.get_all_fingerings():
             if not annotated_fingering_set:
                 a = annotation

@@ -11,11 +11,11 @@ def notes_from_tune(tune: Tune) -> Iterable[Annotation]:
     Given a pyabc2 `Tune`,
     returns an iterable of the annotated pitches.
 
-    >>> tune = Tune('\\n'.join([
-    ...     'X: 1',
-    ...     'K: Gmaj',
-    ...     'CEG||'
-    ... ]))
+    >>> tune = Tune("""
+    ... X: 1
+    ... K: Cmaj
+    ... CEG||
+    ... """)
     >>> for note in notes_from_tune(tune):
     ...     print(note)
     Annotation(pitch=Pitch(name='C4'), measure=1)

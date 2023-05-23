@@ -85,4 +85,4 @@ def test_penalize_pull_at_start_of_measure():
 
 
 def test_columns_used():
-    assert _find_columns_used(c_left.fingering) == {-3}
+    assert _find_columns_used(c_left.fingering) == {3}
