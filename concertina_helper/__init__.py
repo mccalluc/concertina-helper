@@ -35,6 +35,11 @@ PULL:
 --- --- --- --- ---    --- G5  --- --- ---
 --- --- --- --- ---    --- --- --- --- ---
 --- --- --- --- ---    --- --- --- --- ---
+>>> from concertina_helper.output_utils import condense
+>>> print(condense(best))
+. . . ➊ .   . ➑ . . .
+. . . . ➋   ➌ ➎ . . .
+. . . ➍ ➏   ➐ . . . .
 
 **concertina_helper** models a tune as a graph,
 with each possible fingering for a given note a node in that graph. It then uses an
