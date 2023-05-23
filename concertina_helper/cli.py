@@ -98,11 +98,12 @@ Given a file containing ABC notation,
 and a concertina type,
 prints possible fingerings.
 ''')
+    input_flag = '--input_format'
     parser.add_argument(
         'input', type=Path,
-        help='Input file: Parsing determined by the "--input" flag')
+        help=f'Input file: Parsing determined by the "{input_flag}" flag')
     parser.add_argument(
-        '--input_format', choices=[f.name for f in _InputFormat],
+        input_flag, choices=[f.name for f in _InputFormat],
         default=_InputFormat.TXT.name,
         help='Input format. ' + _format_enum(_InputFormat))
     parser.add_argument(
