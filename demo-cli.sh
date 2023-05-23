@@ -8,8 +8,7 @@ flit install --symlink
 concertina-helper tests/g-major.abc \
   --layout_name 30_wheatstone_cg \
   --layout_transpose -2 \
-  --output_format COMPACT \
-  --input_format ABC
+  --output_format COMPACT
 
 perl -ne 'print if /usage:/../```/ and ! /```/' README.md > /tmp/expected.txt
 ACTUAL=/tmp/actual.txt

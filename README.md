@@ -13,8 +13,7 @@ pip install concertina-helper
 concertina-helper --help
 ```
 ```
-usage: concertina-helper [-h] [--input_format {ABC,TXT}]
-                         [--output_format {UNICODE,ASCII,LONG,COMPACT}]
+usage: concertina-helper [-h] [--output_format {UNICODE,ASCII,LONG,COMPACT}]
                          (--layout_path PATH | --layout_name {20_cg,30_jefferies_cg,30_wheatstone_cg})
                          [--layout_transpose SEMITONES]
                          [--bellows_change_cost N]
@@ -27,15 +26,12 @@ Given a file containing ABC notation, and a concertina type, prints possible
 fingerings.
 
 positional arguments:
-  input                 Input file: Parsing determined by the "--input_format"
-                        flag
+  input                 Input file: Parsed either as a list of pitches, one
+                        per line, or as ABC, if the first lines starts with
+                        "X:".
 
 options:
   -h, --help            show this help message and exit
-  --input_format {ABC,TXT}
-                        Input format. "ABC" parses the input as an ABC file /
-                        "TXT" parses the input as a sequence of scientific
-                        pitch names, one per line (default: TXT)
   --output_format {UNICODE,ASCII,LONG,COMPACT}
                         Output format. "UNICODE" uses "○" and "●" to represent
                         button state / "ASCII" uses "." and "@" to represent
@@ -75,7 +71,7 @@ Cost options:
                         fingerings (default: False)
 ```
 
-See [`demo-cli.sh`](https://github.com/mccalluc/concertina-helper/blob/main/demo-cli.sh)
+See [`EXAMPLES.md`](https://github.com/mccalluc/concertina-helper/blob/main/EXAMPLES.md)
 for examples of CLI usage.
 
 ## API usage
