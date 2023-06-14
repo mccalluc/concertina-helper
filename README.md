@@ -81,7 +81,7 @@ See [API documentation](https://mccalluc.github.io/concertina-helper) for detail
 ## Development
 
 See [`demo-api.sh`](https://github.com/mccalluc/concertina-helper/blob/main/demo-cli.sh)
-for typical developer setup. The demo scripts are also used for CI.
+for typical developer setup. Code has full type annotations, and 100% test coverage.
 
 To release a new version:
 - Make a feature branch
